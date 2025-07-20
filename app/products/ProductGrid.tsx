@@ -3,7 +3,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaSadTear } from 'react-icons/fa';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { refreshToken } from '../register/refresh';
 import BASE_URL from '@/app/config';
 
 type ProductType = {
@@ -39,22 +41,18 @@ export default function ProductGrid({ filters }: ProductGridProps) {
     async function fetchProducts() {
       setLoading(true);
       try {
-        let url = `${BASE_URL}/api/product/`;
-
+        const url = `${BASE_URL}/api/product/`;
         const params: any = {};
 
         if (filters.category_ids.length > 0) {
           params.category_ids = filters.category_ids.join(',');
         }
-
         if (filters.min_price > 0) {
           params.min_price = filters.min_price;
         }
-
         if (filters.max_price > 0) {
           params.max_price = filters.max_price;
         }
-
         if (filters.q) {
           params.q = filters.q;
         }
@@ -66,6 +64,7 @@ export default function ProductGrid({ filters }: ProductGridProps) {
         }
       } catch (error) {
         console.error('Mahsulotlarni olishda xatolik:', error);
+        toast.error('Mahsulotlarni olishda xatolik');
       } finally {
         setLoading(false);
       }
@@ -78,10 +77,67 @@ export default function ProductGrid({ filters }: ProductGridProps) {
   const startIndex = (currentPage - 1) * productsPerPage;
   const currentProducts = products.slice(startIndex, startIndex + productsPerPage);
 
+  const handleAddToCart = async (productId: number) => {
+    try {
+      const url = `${BASE_URL}/api/cart/`;
+      let access = localStorage.getItem('access');
+
+      const payload = {
+        cart_items: [
+          {
+            product: productId,
+            quantity: 1
+          }
+        ]
+      };
+
+      let response;
+      try {
+        response = await axios.post(url, payload, {
+          headers: {
+            Authorization: `Bearer ${access}`,
+            'Content-Type': 'application/json'
+          }
+        });
+      } catch (err: any) {
+        if (err.response && err.response.status === 401) {
+          // Token muddati tugagan, yangilaymiz
+          const newAccess = await refreshToken();
+          if (!newAccess) {
+            toast.error("Sessiya tugadi. Iltimos, qaytadan tizimga kiring.");
+            return;
+          }
+
+          // Qayta urinish
+          response = await axios.post(url, payload, {
+            headers: {
+              Authorization: `Bearer ${newAccess}`,
+              'Content-Type': 'application/json'
+            }
+          });
+        } else {
+          console.error('Savatchaga qo‘shishda xatolik:', err);
+          toast.error(err.response?.data?.detail || 'Serverda xatolik');
+          return;
+        }
+      }
+
+      // Javobni tekshirish
+      if (response.data.status) {
+        toast.success('✅ Mahsulot savatchaga qo‘shildi');
+      } else {
+        toast.error('❌ Mahsulot qo‘shishda xatolik');
+      }
+
+    } catch (error) {
+      console.error('Savatchaga qo‘shishda xatolik:', error);
+      toast.error('Serverda xatolik');
+    }
+  };
+
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[300px] text-gray-500 px-4 sm:px-6 md:px-12 lg:px-24
-      lg:pl-96">
+      <div className="flex flex-col items-center justify-center min-h-[300px] text-gray-500 px-4 sm:px-6 md:px-12 lg:px-24 lg:pl-96">
         <h2 className="text-xl font-semibold mb-1">Yuklanmoqda...</h2>
       </div>
     );
@@ -99,9 +155,10 @@ export default function ProductGrid({ filters }: ProductGridProps) {
     );
   }
 
-
   return (
     <div className="flex-1 px-4">
+      <ToastContainer position="top-right" autoClose={2000} />
+
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-2xl font-bold text-gray-800">All Products ({products.length})</h2>
       </div>
@@ -130,7 +187,10 @@ export default function ProductGrid({ filters }: ProductGridProps) {
                 </div>
               </div>
 
-              <button className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer">
+              <button
+                onClick={() => handleAddToCart(product.id)}
+                className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer"
+              >
                 Add to Cart
               </button>
             </div>

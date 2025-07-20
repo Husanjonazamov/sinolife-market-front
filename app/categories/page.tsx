@@ -1,10 +1,74 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CategoryGrid from './CategoryGrid';
+import BASE_URL from '@/app/config';
+
+type BannerType = {
+  title: string;
+  desc: string;
+  image: string;
+};
+
+const LOCAL_STORAGE_KEY = 'bannerDataCategory';
+const CACHE_EXPIRY_MS = 1000 * 60 * 60; // 1 soat
+
+const DEFAULT_BANNER: BannerType = {
+  title: 'Product Categories',
+  desc: 'Explore our comprehensive range of herbal solutions organized by health needs.',
+  image: 'https://readdy.ai/api/search-image?query=Various%20herbal%20categories&width=1920&height=600',
+};
 
 export default function CategoriesPage() {
+  const [banner, setBanner] = useState<BannerType>(DEFAULT_BANNER);
+
+  useEffect(() => {
+    const cachedBanner = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (cachedBanner) {
+      try {
+        const { data, timestamp } = JSON.parse(cachedBanner);
+        if (Date.now() - timestamp < CACHE_EXPIRY_MS) {
+          setBanner(data);
+          return;
+        }
+      } catch {
+        // kesh xato bo‘lsa, API dan olamiz
+      }
+    }
+
+    async function fetchBanner() {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/banner/`);
+        if (response.data.status && response.data.data.results.length > 0) {
+          const banners = response.data.data.results;
+
+          const categoryBanner = banners.find((b: any) => b.type === 'category');
+
+          if (categoryBanner) {
+            const bannerObj: BannerType = {
+              title: categoryBanner.title,
+              desc: categoryBanner.description || '',
+              image: categoryBanner.image,
+            };
+            setBanner(bannerObj);
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ data: bannerObj, timestamp: Date.now() }));
+            return;
+          }
+        }
+
+        setBanner(DEFAULT_BANNER);
+      } catch (error) {
+        console.error('Category Banner olishda xatolik:', error);
+        setBanner(DEFAULT_BANNER);
+      }
+    }
+
+    fetchBanner();
+  }, []);
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -13,14 +77,14 @@ export default function CategoriesPage() {
         <section 
           className="relative py-24 bg-cover bg-center"
           style={{
-            backgroundImage: `url('https://readdy.ai/api/search-image?query=Various%20herbal%20categories&width=1920&height=600')`
+            backgroundImage: `url(${banner.image})`,
           }}
         >
           <div className="absolute inset-0 bg-black/50"></div>
           <div className="relative z-10 container mx-auto px-4 text-center text-white">
-            <h1 className="text-5xl font-bold mb-4">Product Categories</h1>
+            <h1 className="text-5xl font-bold mb-4">{banner.title}</h1>
             <p className="text-xl max-w-2xl mx-auto">
-              Explore our comprehensive range of herbal solutions organized by health needs.
+              {banner.desc}
             </p>
           </div>
         </section>

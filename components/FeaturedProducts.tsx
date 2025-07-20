@@ -3,6 +3,10 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { refreshToken } from '@/app/register/refresh';
+
 import BASE_URL from '@/app/config';
 
 type ProductType = {
@@ -46,12 +50,69 @@ export default function FeaturedProducts() {
         }
       } catch (error) {
         console.error('Mahsulotlarni olishda xatolik:', error);
+        toast.error('Mahsulotlarni olishda xatolik');
       } finally {
         setLoading(false);
       }
     }
     fetchProducts();
   }, []);
+
+  const handleAddToCart = async (productId: number) => {
+    try {
+      const url = `${BASE_URL}/api/cart/`;
+      let access = localStorage.getItem('access');
+
+      const payload = {
+        cart_items: [
+          {
+            product: productId,
+            quantity: 1
+          }
+        ]
+      };
+
+      let response;
+      try {
+        response = await axios.post(url, payload, {
+          headers: {
+            Authorization: `Bearer ${access}`,
+            'Content-Type': 'application/json'
+          }
+        });
+      } catch (err: any) {
+        if (err.response && err.response.status === 401) {
+          // Token yangilash
+          const newAccess = await refreshToken();
+          if (!newAccess) {
+            toast.error("Sessiya tugadi. Iltimos, qaytadan tizimga kiring.");
+            return;
+          }
+
+          response = await axios.post(url, payload, {
+            headers: {
+              Authorization: `Bearer ${newAccess}`,
+              'Content-Type': 'application/json'
+            }
+          });
+        } else {
+          console.error('Savatchaga qo‘shishda xatolik:', err);
+          toast.error(err.response?.data?.detail || 'Serverda xatolik');
+          return;
+        }
+      }
+
+      if (response.data.status) {
+        toast.success('✅ Mahsulot savatchaga qo‘shildi');
+      } else {
+        toast.error('❌ Mahsulot qo‘shishda xatolik');
+      }
+
+    } catch (error) {
+      console.error('Savatchaga qo‘shishda xatolik:', error);
+      toast.error('Serverda xatolik');
+    }
+  };
 
   if (loading) {
     return (
@@ -75,6 +136,7 @@ export default function FeaturedProducts() {
 
   return (
     <section className="py-16 bg-gray-50">
+      <ToastContainer position="top-right" autoClose={2000} />
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-800 mb-4">Featured Products</h2>
@@ -92,11 +154,10 @@ export default function FeaturedProducts() {
                   alt={product.title}
                   className="w-full h-64 object-cover object-top"
                 />
-                {/* Badge lar faqat true bo‘lsa ko‘rsatiladi */}
                 <div className="absolute top-4 left-4 flex flex-col gap-1">
                   {product.is_populer && (
                     <span className="px-3 py-1 text-xs font-semibold rounded-full text-white"
-                     style={{ backgroundColor: '#0ef' }}>
+                      style={{ backgroundColor: '#0ef' }}>
                       Best Seller
                     </span>
                   )}
@@ -115,7 +176,7 @@ export default function FeaturedProducts() {
 
               <div className="p-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">{product.title}</h3>
-                
+
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
                     <span className="text-2xl font-bold text-green-600">${product.discounted_price.toFixed(2)}</span>
@@ -123,7 +184,10 @@ export default function FeaturedProducts() {
                   </div>
                 </div>
 
-                <button className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer">
+                <button
+                  onClick={() => handleAddToCart(product.id)}
+                  className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer"
+                >
                   Add to Cart
                 </button>
               </div>

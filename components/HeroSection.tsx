@@ -11,16 +11,15 @@ type BannerType = {
   image: string;
 };
 
-const LOCAL_STORAGE_KEY = 'bannerData';
+const LOCAL_STORAGE_KEY = 'bannerDataHome';
 const CACHE_EXPIRY_MS = 1000 * 60 * 60; // 1 soat
 
-// Default background rasmi URL (siz o'zingiz xohlagan rasm URL sini qo'yishingiz mumkin)
-const DEFAULT_IMAGE = "https://readdy.ai/api/search-image?query=Natural%20herbal%20garden%20with%20green%20herbs%20and%20plants%20growing%20in%20sunlight%2C%20peaceful%20wellness%20atmosphere%20with%20soft%20morning%20light%20filtering%20through%20leaves%2C%20organic%20botanical%20background%20with%20various%20medicinal%20herbs%20like%20lavender%20chamomile%20and%20mint%20in%20wooden%20planters%2C%20serene%20spa-like%20environment%20with%20natural%20textures%20and%20earth%20tones%2C%20professional%20photography%20style%20with%20shallow%20depth%20of%20field&width=1920&height=1080&seq=hero001&orientation=landscape";
+const DEFAULT_IMAGE = "https://readdy.ai/api/search-image?query=Natural%20herbal%20garden%20with%20green%20herbs%20and%20plants%20growing%20in%20sunlight&width=1920&height=1080";
 
 const DEFAULT_BANNER: BannerType = {
-  title: '',
-  subtitle: '',
-  desc: '',
+  title: 'Welcome to Sinolife',
+  subtitle: 'Natural Wellness',
+  desc: 'Discover premium herbal products for your health and lifestyle.',
   image: DEFAULT_IMAGE,
 };
 
@@ -34,10 +33,10 @@ export default function HeroSection() {
         const { data, timestamp } = JSON.parse(cachedBanner);
         if (Date.now() - timestamp < CACHE_EXPIRY_MS) {
           setBanner(data);
-          return; // Kesh mavjud va hali amal qiladi, API ga bormaymiz
+          return;
         }
       } catch {
-        // Kesh noto‘g‘ri bo‘lsa davom etamiz API chaqiruvga
+        // Kesh noto‘g‘ri bo‘lsa, API chaqiramiz
       }
     }
 
@@ -45,29 +44,35 @@ export default function HeroSection() {
       try {
         const response = await axios.get(`${BASE_URL}/api/banner/`);
         if (response.data.status && response.data.data.results.length > 0) {
-          const bannerData = response.data.data.results[0];
-          const bannerObj: BannerType = {
-            title: bannerData.title,
-            subtitle: bannerData.subtitle,
-            desc: bannerData.description || '',
-            image: bannerData.image,
-          };
-          setBanner(bannerObj);
-          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ data: bannerObj, timestamp: Date.now() }));
-        } else {
-          // Agar banner topilmasa, defaultni qo‘yamiz
-          setBanner(DEFAULT_BANNER);
+          const banners = response.data.data.results;
+
+          // Faqat type === 'home' bo'lganini olish
+          const homeBanner = banners.find((b: any) => b.type === 'home');
+
+          if (homeBanner) {
+            const bannerObj: BannerType = {
+              title: homeBanner.title,
+              subtitle: homeBanner.subtitle,
+              desc: homeBanner.description || '',
+              image: homeBanner.image,
+            };
+            setBanner(bannerObj);
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ data: bannerObj, timestamp: Date.now() }));
+            return;
+          }
         }
+
+        // Agar home type topilmasa
+        setBanner(DEFAULT_BANNER);
       } catch (error) {
         console.error('Banner olishda xatolik:', error);
-        setBanner(DEFAULT_BANNER); // Xatolikda ham default banner ko‘rsatamiz
+        setBanner(DEFAULT_BANNER);
       }
     }
 
     fetchBanner();
   }, []);
 
-  // Loading yoki banner bo‘lmasa default bannerni ko‘rsatamiz
   const displayBanner = banner || DEFAULT_BANNER;
 
   return (
@@ -88,12 +93,12 @@ export default function HeroSection() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <a href="/products">
-              <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105 whitespace-nowrap cursor-pointer">
+              <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105">
                 Shop Now
               </button>
             </a>
             <a href="/about">
-              <button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-green-600 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 whitespace-nowrap cursor-pointer">
+              <button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-green-600 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300">
                 Learn More
               </button>
             </a>

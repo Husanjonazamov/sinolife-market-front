@@ -20,6 +20,7 @@
     "react-input-mask": "^2.0.4",
     "react-leaflet": "^5.0.0",
     "react-places-autocomplete": "^7.3.0",
+    "react-toastify": "^11.0.5",
     "react-yandex-maps": "^4.6.0",
     "recharts": "^3.0.2"
   },
