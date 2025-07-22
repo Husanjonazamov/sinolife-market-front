@@ -6,7 +6,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ContactForm from './ContactForm';
 import ContactInfo from './ContactInfo';
-import LocationMap from './LocationMap';
+// import LocationMap from './LocationMap';
 import BASE_URL from '@/app/config';
 
 type BannerType = {
@@ -102,10 +102,10 @@ export default function ContactPage() {
         </section>
 
         {/* Location & Map */}
-        <LocationMap />
+        {/* <LocationMap /> */}
 
         {/* FAQ Section */}
-        <section className="py-16 bg-gray-50">
+        {/* <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-800 mb-4">Frequently Asked Questions</h2>
@@ -138,7 +138,7 @@ export default function ContactPage() {
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
       </main>
       <Footer />
     </div>
