@@ -18,6 +18,11 @@ const CustomSearchMap = dynamic(() => import('./location'), {
 });
 
 
+interface Cart {
+  id: string;
+  total_price: string
+}
+
 interface CartItem {
   id: string;
   name: string;
@@ -32,6 +37,7 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState('payme');
   const [isProcessing, setIsProcessing] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<Cart | null>(null); // Bitta Cart bo'ladi, massiv emas
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,6 +56,15 @@ export default function CheckoutPage() {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      const result = response.data.data.results[0];
+
+      const cartData: Cart = {
+        id: result.id,
+        total_price: result.total_price,
+      };
+
+      setCart(cartData);
 
       const items: CartItem[] = response.data.data.results[0].cart_items.map((item: any) => ({
         id: item.product.id.toString(), 
@@ -195,7 +210,7 @@ export default function CheckoutPage() {
           </div>
 
           <div className="lg:col-span-1">
-            <OrderSummary cartItems={cartItems} subtotal={subtotal} shipping={shipping} tax={tax} total={total} />
+              <OrderSummary cartItems={cartItems} total={cart?.total_price || "0.00"} />
           </div>
         </div>
       </div>
@@ -320,7 +335,7 @@ const PaymentForm = ({ paymentMethod, setPaymentMethod, onNext, onBack }: any) =
             />
             <div className="ml-3 flex items-center">
               <Image src={`/images/${method}.png`} alt={method} width={48} height={32} className="object-contain" />
-              <span className="ml-3 font-medium capitalize">{method}</span>
+              <span className="ml-3 font-medium text-teal-700 capitalize">{method}</span>
             </div>
           </label>
         </div>
@@ -349,33 +364,50 @@ const ReviewOrder = ({ shippingInfo, cartItems, paymentMethod, onBack, onPlaceOr
     <h2 className="text-xl font-semibold text-gray-900 mb-6">Order Review</h2>
     <div className="space-y-6">
       <div>
-        <h3 className="font-medium text-gray-900 mb-3">Shipping Address</h3>
-        <div className="text-gray-600">
-          <p>{shippingInfo.firstName}</p>
-          <p>{shippingInfo.address}</p>
-          <p>{shippingInfo.phone}</p>
+        <h3 className="text-lg font-semibold text-zinc-500 mb-2 flex items-center gap-2">Oluvchi</h3>
+        <div className="bg-grya-50 p-4 rounded-xl shadow-sm space-y-2 border border-gray-200">
+          <p className="text-lg font-semibold text-zinc-900 flex items-center gap-2">
+            <i className="ri-user-line text-teal-600"></i> {shippingInfo.firstName}
+          </p>
+          <p className="text-gray-700 flex items-center gap-2">
+            <i className="ri-phone-line text-green-500"></i> {shippingInfo.phone}
+          </p>
+          <p className="text-gray-700 flex items-start gap-2">
+            <i className="ri-map-pin-line text-red-500 mt-0.5"></i> {shippingInfo.address}
+          </p>
         </div>
       </div>
 
       <div>
-        <h3 className="font-medium text-gray-900 mb-3">Payment Method</h3>
-        <p className="text-gray-600 capitalize">{paymentMethod}</p>
+        <h3 className="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
+          <i className="ri-wallet-3-line text-blue-500"></i> Payment Method
+        </h3>
+        <p className="text-gray-600 pl-6 capitalize">{paymentMethod}</p>
       </div>
 
       <div>
-        <h3 className="font-medium text-gray-900 mb-3">Order Items</h3>
-        <div className="space-y-3">
-          {cartItems.map((item: CartItem) => (
-            <div key={item.id} className="flex items-center space-x-3">
-              <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-lg" />
-              <div className="flex-1">
-                <h4 className="font-medium">{item.name}</h4>
-                <p className="text-gray-600">Qty: {item.quantity}</p>
-              </div>
-              <span className="font-medium">${(item.price * item.quantity).toFixed(2)}</span>
+        <h3 className="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
+          <i className="ri-shopping-cart-2-line text-purple-500"></i> Order Items
+        </h3>
+       <div className="divide-y divide-gray-200 rounded-lg border border-gray-100 overflow-hidden">
+        {cartItems.map((item: CartItem) => (
+          <div key={item.id} className="flex items-center gap-4 p-4">
+            <img
+              src={item.image}
+              alt={item.name}
+              className="w-14 h-14 object-cover rounded-lg border"
+            />
+            <div className="flex-1">
+              <h4 className="font-medium text-gray-800">{item.name}</h4>
+              <p className="text-sm text-gray-500">Soni: {item.quantity}</p>
             </div>
-          ))}
-        </div>
+            <span className="font-semibold text-gray-700">
+              {(item.price * item.quantity).toLocaleString('uz-UZ')} so'm
+            </span>
+          </div>
+        ))}
+      </div>
+
       </div>
     </div>
 
@@ -397,7 +429,8 @@ const ReviewOrder = ({ shippingInfo, cartItems, paymentMethod, onBack, onPlaceOr
   </div>
 );
 
-const OrderSummary = ({ cartItems, subtotal, shipping, tax, total }: any) => (
+
+const OrderSummary = ({ cartItems, total }: any) => (
   <div className="bg-white rounded-lg shadow-sm p-6 sticky top-8">
     <h2 className="text-xl font-semibold text-gray-900 mb-6">Order Summary</h2>
     <div className="space-y-3 mb-6">
@@ -410,28 +443,27 @@ const OrderSummary = ({ cartItems, subtotal, shipping, tax, total }: any) => (
               <p className="text-gray-500 text-sm">Qty: {item.quantity}</p>
             </div>
           </div>
-          <span className="font-medium">${(item.price * item.quantity).toFixed(2)}</span>
+          <span className="font-medium">
+            {(item.price * item.quantity).toLocaleString('uz-UZ')} so'm
+          </span>
         </div>
       ))}
     </div>
 
     <div className="space-y-3 border-t border-gray-200 pt-4">
       <div className="flex justify-between">
-        <span className="text-gray-600">Subtotal</span>
-        <span className="font-medium">${subtotal.toFixed(2)}</span>
+        <span className="text-gray-600">Jami</span>
+        <span className="font-medium">
+          {Number(total).toLocaleString('uz-UZ')} so'm
+        </span>
       </div>
-      <div className="flex justify-between">
-        <span className="text-gray-600">Shipping</span>
-        <span className="font-medium">${shipping.toFixed(2)}</span>
-      </div>
-      <div className="flex justify-between">
-        <span className="text-gray-600">Tax</span>
-        <span className="font-medium">${tax.toFixed(2)}</span>
-      </div>
+    
       <div className="border-t border-gray-200 pt-3">
         <div className="flex justify-between text-lg font-semibold">
-          <span>Total</span>
-          <span>${total.toFixed(2)}</span>
+          <span>Umumiy</span>
+          <span>
+            {Number(total).toLocaleString('uz-UZ')} so'm
+          </span>
         </div>
       </div>
     </div>

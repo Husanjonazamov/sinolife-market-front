@@ -199,14 +199,7 @@ export default function Header() {
                 <span>{lang.flag}</span><span className="ml-2">{lang.name}</span>
               </button>
             ))}
-
-            <div className="text-xs text-gray-500 uppercase mt-4">Currency</div>
-            {currencies.map((curr) => (
-              <button key={curr.code} onClick={() => { setCurrency(curr.code as any); }}
-                className={`w-full flex items-center justify-between px-2 py-2 text-sm rounded ${currency === curr.code ? 'bg-green-50 text-green-700' : 'text-gray-700'} hover:bg-gray-100`}>
-                <span>{curr.code}</span><span>{curr.symbol}</span>
-              </button>
-            ))}
+           
           </div>
 
           {/* Navigation Links (mobile) */}

@@ -123,7 +123,7 @@ export default function CartPage() {
   const discountAmount = subtotal * discount;
   const shipping = subtotal > 50 ? 0 : 9.99;
   const tax = (subtotal - discountAmount) * 0.08;
-  const total = subtotal - discountAmount + shipping + tax;
+  const total = subtotal - discountAmount;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -162,15 +162,15 @@ export default function CartPage() {
                           alt={item.name}
                           className="w-20 h-20 object-cover rounded-lg"
                         />
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-lg font-medium text-gray-900">{item.name}</h3>
-                          <p className="text-sm text-gray-500">{item.category}</p>
-                          <div className="flex items-center mt-2">
-                            <span className="text-lg font-semibold text-green-600">${item.price}</span>
-                            {item.originalPrice && (
-                              <span className="ml-2 text-sm text-gray-400 line-through">${item.originalPrice}</span>
-                            )}
-                          </div>
+                        <div className="flex items-center mt-2">
+                          <span className="text-lg font-semibold text-green-600">
+                            {item.price.toLocaleString('uz-UZ')} so'm
+                          </span>
+                          {item.originalPrice && (
+                            <span className="ml-2 text-sm text-gray-400 line-through">
+                              {item.originalPrice.toLocaleString('uz-UZ')} so'm
+                            </span>
+                          )}
                         </div>
                       </div>
 
@@ -220,34 +220,23 @@ export default function CartPage() {
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Subtotal</span>
-                    <span className="font-medium">${subtotal.toFixed(2)}</span>
+                    <span className="font-medium">{subtotal.toLocaleString('uz-UZ')} so'm</span>
                   </div>
-                  
+
                   {discount > 0 && (
                     <div className="flex justify-between text-green-600">
-                      <span>Discount ({(discount * 100).toFixed(0)}% off)</span>
-                      <span>-${discountAmount.toFixed(2)}</span>
+                      <span>Chegirma ({(discount * 100).toFixed(0)}%)</span>
+                      <span>-{discountAmount.toLocaleString('uz-UZ')} so'm</span>
                     </div>
                   )}
-                  
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Shipping</span>
-                    <span className="font-medium">
-                      {shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}
-                    </span>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Tax</span>
-                    <span className="font-medium">${tax.toFixed(2)}</span>
-                  </div>
-                  
+
                   <div className="border-t border-gray-200 pt-4">
                     <div className="flex justify-between text-lg font-semibold">
-                      <span>Total</span>
-                      <span>${total.toFixed(2)}</span>
+                      <span>Jami</span>
+                      <span>{total.toLocaleString('uz-UZ')} so'm</span>
                     </div>
                   </div>
+
                 </div>
 
                 <Link href="/checkout" className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors text-center block">
