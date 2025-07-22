@@ -4,7 +4,7 @@ import { YMaps, Map, Placemark, GeolocationControl } from '@pbe/react-yandex-map
 import { useState } from 'react';
 
 interface CustomSearchMapProps {
-  onSelect: (address: string) => void;
+  onSelect: (address: string, lat: number, long: number) => void;
 }
 
 export default function CustomSearchMap({ onSelect }: CustomSearchMapProps) {
@@ -19,11 +19,14 @@ export default function CustomSearchMap({ onSelect }: CustomSearchMapProps) {
       const data = await res.json();
 
       if (data.features.length > 0) {
-        const [lon, lat] = data.features[0].geometry.coordinates;
+        const [lon, lat] = data.features[0].geometry.coordinates; // float qiymatlar
         setCoords([lat, lon]);
+
         const foundAddress = data.features[0].properties.name + ', ' + (data.features[0].properties.city || '');
         setAddress(foundAddress);
-        onSelect(foundAddress); // <-- Boshqa komponentga uzatish
+
+        // float ko‘rinishda uzatyapmiz
+        onSelect(foundAddress, lat, lon);
       } else {
         setAddress('Joy topilmadi');
       }
@@ -43,9 +46,12 @@ export default function CustomSearchMap({ onSelect }: CustomSearchMapProps) {
         headers: { 'User-Agent': 'sinolife-frontend/1.0 (info@sinolife.uz)' }
       });
       const data = await res.json();
+
       const foundAddress = data.display_name || 'Manzil topilmadi';
       setAddress(foundAddress);
-      onSelect(foundAddress); // <-- Boshqa komponentga uzatish
+
+      // float ko‘rinishda uzatyapmiz
+      onSelect(foundAddress, lat, lon);
     } catch (err) {
       setAddress('Xatolik yuz berdi');
     }
