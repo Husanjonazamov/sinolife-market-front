@@ -5,46 +5,50 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from '@/lib/LanguageContext';
 import axios from 'axios';
 import BASE_URL from '@/app/config';
-
-
+import { useRouter } from 'next/navigation';
 
 export default function Header() {  
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const { language, currency, setLanguage, setCurrency, t } = useLanguage();
-
+  const { language, setLanguage, t } = useLanguage();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
+  const [cartCount, setCartCount] = useState(0);
 
-  // Bosh harflarni olish funksiyasi (Sh, Ch maxsus holatlar bilan)
-  const getInitials = (name: string): string => {
-    const lower = name.toLowerCase().trim();
+  const router = useRouter();
 
-    if (lower.startsWith('sh')) return 'Sh';
-    if (lower.startsWith('ch')) return 'Ch';
-
-    return name.charAt(0).toUpperCase();
+  const handleLogout = () => {
+    localStorage.removeItem('access');
+    localStorage.removeItem('refresh');
+    localStorage.removeItem('first_name');
+    setIsLoggedIn(false);
+    setUserName(null);
+    setIsUserMenuOpen(false);
+    router.push('/login');
   };
 
- const [cartCount, setCartCount] = useState(0);
+  const getInitials = (name: string): string => {
+    const lower = name.toLowerCase().trim();
+    if (lower.startsWith('sh')) return 'Sh';
+    if (lower.startsWith('ch')) return 'Ch';
+    return name.charAt(0).toUpperCase();
+  };
 
   useEffect(() => {
     const access = localStorage.getItem('access');
     const firstName = localStorage.getItem('first_name');
-    
+
     if (access && firstName) {
       setIsLoggedIn(true);
       setUserName(firstName);
 
       axios.get(`${BASE_URL}/api/cart/`, {
-        headers: {
-          Authorization: `Bearer ${access}`
-        }
+        headers: { Authorization: `Bearer ${access}` }
       })
       .then(res => {
         const results = res.data.data.results;
-
         if (results.length > 0) {
           const cart = results[0];
           setCartCount(cart.cart_items_count);
@@ -53,11 +57,18 @@ export default function Header() {
       .catch(err => {
         console.error("Cart olishda xatolik:", err);
       });
-
-    } else {
-      setIsLoggedIn(false);
-      setUserName(null);
     }
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.user-menu-toggle')) {
+        setIsUserMenuOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -73,25 +84,19 @@ export default function Header() {
     { code: 'ru', name: 'Русский', flag: '🇷🇺' }
   ];
 
-  const currencies = [
-    { code: 'USD', symbol: '$' },
-    { code: 'UZS', symbol: 'сўм' },
-    { code: 'RUB', symbol: '₽' }
-  ];
-
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        
+
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
           <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center">
             <i className="ri-leaf-line text-white text-xl"></i>
           </div>
-          <span className="text-2xl font-pacifico text-green-700">HerbaStore</span>
+          <span className="text-2xl font-pacifico text-green-700">SinoLife</span>
         </Link>
 
-        {/* Desktop Search */}
+        {/* Search */}
         <div className="hidden md:flex flex-1 max-w-md mx-8">
           <form onSubmit={handleSearch} className="w-full relative">
             <input
@@ -105,23 +110,21 @@ export default function Header() {
           </form>
         </div>
 
-        {/* Desktop Nav */}
+        {/* Nav */}
         <nav className="hidden md:flex items-center space-x-8">
-          <Link href="/" className="text-gray-700 hover:text-green-600 transition-colors">{t('home')}</Link>
-          <Link href="/products" className="text-gray-700 hover:text-green-600 transition-colors">{t('products')}</Link>
-          <Link href="/categories" className="text-gray-700 hover:text-green-600 transition-colors">{t('categories')}</Link>
-          <Link href="/about" className="text-gray-700 hover:text-green-600 transition-colors">{t('about')}</Link>
-          <Link href="/contact" className="text-gray-700 hover:text-green-600 transition-colors">{t('contact')}</Link>
+          <Link href="/" className="text-gray-700 hover:text-green-600">{t('home')}</Link>
+          <Link href="/products" className="text-gray-700 hover:text-green-600">{t('products')}</Link>
+          <Link href="/categories" className="text-gray-700 hover:text-green-600">{t('categories')}</Link>
+          <Link href="/contact" className="text-gray-700 hover:text-green-600">{t('contact')}</Link>
         </nav>
 
         {/* Actions */}
         <div className="flex items-center space-x-4">
-          {/* Lang & Currency */}
+
+          {/* Language */}
           <div className="hidden md:block relative">
             <button onClick={() => setIsLanguageOpen(!isLanguageOpen)} className="flex items-center space-x-1 text-gray-700 hover:text-green-600">
               <span>{language.toUpperCase()}</span>
-              {/* <span className="text-xs text-gray-500">|</span> */}
-              {/* <span>{currency}</span> */}
               <i className="ri-arrow-down-s-line text-sm"></i>
             </button>
 
@@ -135,31 +138,38 @@ export default function Header() {
                       <span>{lang.flag}</span><span className="ml-2">{lang.name}</span>
                     </button>
                   ))}
-
-                  {/* <div className="border-t border-gray-100 mt-2 pt-2">
-                    <div className="text-xs font-semibold text-gray-500 uppercase px-2 py-1">Currency</div>
-                    {currencies.map((curr) => (
-                      <button key={curr.code} onClick={() => { setCurrency(curr.code as any); setIsLanguageOpen(false); }}
-                        className={`w-full flex items-center justify-between px-2 py-2 text-sm rounded ${currency === curr.code ? 'bg-green-50 text-green-700' : 'text-gray-700'} hover:bg-gray-100`}>
-                        <span>{curr.code}</span><span>{curr.symbol}</span>
-                      </button>
-                    ))}
-                  </div> */}
                 </div>
               </div>
             )}
           </div>
 
-          {/* User Icon or Initials */}
-          <Link href={isLoggedIn ? "/" : "/login"} className="p-2 text-gray-700 hover:text-green-600 transition-colors">
-            {isLoggedIn && userName ? (
-              <div className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-semibold select-none">
-                {getInitials(userName)}
-              </div>
-            ) : (
-              <i className="ri-user-line text-xl"></i>
-            )}
-          </Link>
+          {/* User */}
+         <div className="relative">
+              {isLoggedIn && userName ? (
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-semibold select-none user-menu-toggle"
+                >
+                  {getInitials(userName)}
+                </button>
+              ) : (
+                <Link href="/login" className="p-2 text-gray-700 hover:text-green-600 transition-colors">
+                  <i className="ri-user-line text-xl"></i>
+                </Link>
+              )}
+
+              {isUserMenuOpen && (
+                <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+
 
           {/* Cart */}
           <Link href="/cart" className="p-2 text-gray-700 hover:text-green-600 relative">
@@ -167,7 +177,7 @@ export default function Header() {
             <span className="absolute -top-1 -right-1 bg-green-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{cartCount}</span>
           </Link>
 
-          {/* Mobile Menu Icon */}
+          {/* Mobile menu icon */}
           <button className="md:hidden p-2 text-gray-700" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             <i className={`ri-${isMenuOpen ? 'close' : 'menu'}-line text-xl`}></i>
           </button>
@@ -190,24 +200,20 @@ export default function Header() {
             </div>
           </form>
 
-          {/* Language & Currency (mobile) */}
           <div className="mb-4 space-y-2">
             <div className="text-xs text-gray-500 uppercase">Language</div>
             {languages.map((lang) => (
-              <button key={lang.code} onClick={() => { setLanguage(lang.code as any); }}
+              <button key={lang.code} onClick={() => setLanguage(lang.code as any)}
                 className={`w-full flex items-center px-2 py-2 text-sm rounded ${language === lang.code ? 'bg-green-50 text-green-700' : 'text-gray-700'} hover:bg-gray-100`}>
                 <span>{lang.flag}</span><span className="ml-2">{lang.name}</span>
               </button>
             ))}
-           
           </div>
 
-          {/* Navigation Links (mobile) */}
           <nav className="flex flex-col space-y-4">
             <Link href="/" className="text-gray-700 hover:text-green-600">{t('home')}</Link>
             <Link href="/products" className="text-gray-700 hover:text-green-600">{t('products')}</Link>
             <Link href="/categories" className="text-gray-700 hover:text-green-600">{t('categories')}</Link>
-            <Link href="/about" className="text-gray-700 hover:text-green-600">{t('about')}</Link>
             <Link href="/contact" className="text-gray-700 hover:text-green-600">{t('contact')}</Link>
             {isLoggedIn ? (
               <Link href="/orders" className="text-gray-700 hover:text-green-600">{t('orders')}</Link>

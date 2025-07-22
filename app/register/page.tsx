@@ -76,31 +76,33 @@ export default function RegisterPage() {
     const cleanedPhone = formData.phone.replace(/[^0-9]/g, ''); // 998781233322 ko‘rinishida
 
     try {
-      // 1️⃣ Register
+      // 1️⃣ Register qilish
       await axios.post(`${BASE_URL}/auth/register/`, {
         first_name: formData.firstName,
         phone: Number(cleanedPhone),
         password: formData.password
       });
 
-      // 2️⃣ Login va token olish
+      // 2️⃣ Login qilish va token olish
       const loginResponse = await axios.post(`${BASE_URL}/auth/token/`, {
         phone: Number(cleanedPhone),
         password: formData.password
       });
 
-      const { access, refresh } = loginResponse.data;
+      const { access, refresh, first_name } = loginResponse.data;
 
       localStorage.setItem('access', access);
       localStorage.setItem('refresh', refresh);
+      localStorage.setItem('first_name', first_name || formData.firstName); // fallback qo'yildi
 
       router.push('/');
 
     } catch (error: any) {
       if (error.response && error.response.data) {
+        const backendErrors = error.response.data;
         setErrors(prev => ({
           ...prev,
-          server: error.response.data.message || 'Registration or login failed'
+          server: backendErrors.detail || backendErrors.message || 'Registration or login failed'
         }));
       } else {
         setErrors(prev => ({
