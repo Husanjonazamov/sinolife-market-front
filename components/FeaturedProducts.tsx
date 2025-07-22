@@ -9,6 +9,7 @@ import { refreshToken } from '@/app/register/refresh';
 
 import BASE_URL from '@/app/config';
 
+
 type ProductType = {
   id: number;
   title: string;

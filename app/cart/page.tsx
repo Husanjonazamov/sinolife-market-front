@@ -1,10 +1,14 @@
-
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import axios from 'axios';
+import BASE_URL from '@/app/config';
+import { refreshToken } from '../register/refresh';
+import { updateCartItemQuantity, removeCartItem } from './cartServices';
+
 
 interface CartItem {
   id: string;
@@ -17,49 +21,90 @@ interface CartItem {
 }
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: '1',
-      name: 'Turmeric Curcumin Complex',
-      price: 29.99,
-      originalPrice: 39.99,
-      image: 'https://readdy.ai/api/search-image?query=premium%20turmeric%20curcumin%20supplement%20bottle%20with%20golden%20capsules%20on%20clean%20white%20background%20with%20soft%20natural%20lighting%20and%20minimal%20modern%20design%20for%20health%20and%20wellness%20product%20photography&width=300&height=300&seq=cart1&orientation=squarish',
-      quantity: 2,
-      category: 'Joint Support'
-    },
-    {
-      id: '2',
-      name: 'Organic Ashwagandha Root',
-      price: 24.99,
-      image: 'https://readdy.ai/api/search-image?query=organic%20ashwagandha%20root%20supplement%20bottle%20with%20natural%20brown%20capsules%20on%20clean%20white%20background%20with%20soft%20natural%20lighting%20and%20minimal%20modern%20design%20for%20herbal%20wellness%20product&width=300&height=300&seq=cart2&orientation=squarish',
-      quantity: 1,
-      category: 'Energy & Focus'
-    },
-    {
-      id: '3',
-      name: 'Elderberry Immune Support',
-      price: 19.99,
-      image: 'https://readdy.ai/api/search-image?query=elderberry%20immune%20support%20supplement%20bottle%20with%20dark%20purple%20capsules%20on%20clean%20white%20background%20with%20soft%20natural%20lighting%20and%20minimal%20modern%20design%20for%20health%20product&width=300&height=300&seq=cart3&orientation=squarish',
-      quantity: 1,
-      category: 'Immune Support'
-    }
-  ]);
-
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [promoCode, setPromoCode] = useState('');
   const [discount, setDiscount] = useState(0);
   const [promoApplied, setPromoApplied] = useState(false);
 
-  const updateQuantity = (id: string, newQuantity: number) => {
-    if (newQuantity < 1) return;
-    setCartItems(items =>
-      items.map(item =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
+  const fetchCart = async () => {
+    try {
+      const url = `${BASE_URL}/api/cart/`;
+      let access = localStorage.getItem('access');
+
+      let response;
+      try {
+        response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${access}`
+          }
+        });
+      } catch (err: any) {
+        if (err.response && err.response.status === 401) {
+          const newAccess = await refreshToken();
+          if (!newAccess) {
+            alert('Sessiya tugadi. Qaytadan kirishingiz kerak.');
+            return;
+          }
+          response = await axios.get(url, {
+            headers: {
+              Authorization: `Bearer ${newAccess}`
+            }
+          });
+        } else {
+          throw err;
+        }
+      }
+
+      const apiCartItems = response.data.data.results[0]?.cart_items || [];
+
+      const formattedItems: CartItem[] = apiCartItems.map((item: any) => ({
+        id: item.id,
+        name: item.product.title,
+        price: item.product.discounted_price,
+        originalPrice: item.product.price !== item.product.discounted_price ? item.product.price : undefined,
+        image: item.product.image,
+        quantity: item.quantity,
+        category: item.product.category.title
+      }));
+
+      setCartItems(formattedItems);
+    } catch (err) {
+      console.error("Savatni olishda xatolik:", err);
+      alert("Savatni olishda xatolik");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const removeItem = (id: string) => {
-    setCartItems(items => items.filter(item => item.id !== id));
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
+  const updateQuantity = async (id: string, newQuantity: number) => {
+    if (newQuantity < 1) return;
+
+    try {
+      await updateCartItemQuantity(id, newQuantity);
+      setCartItems(items =>
+        items.map(item =>
+          item.id === id ? { ...item, quantity: newQuantity } : item
+        )
+      );
+    } catch (err) {
+      console.error(err);
+      alert('Miqdorni yangilashda xatolik yuz berdi');
+    }
+  };
+
+  const removeItem = async (id: string) => {
+    try {
+      await removeCartItem(id);
+      setCartItems(items => items.filter(item => item.id !== id));
+    } catch (err) {
+      console.error(err);
+      alert('Mahsulotni o‘chirishda xatolik yuz berdi');
+    }
   };
 
   const applyPromoCode = () => {
@@ -90,7 +135,9 @@ export default function CartPage() {
           <p className="text-gray-600">Review your items and proceed to checkout</p>
         </div>
 
-        {cartItems.length === 0 ? (
+        {loading ? (
+          <div className="text-center py-16 text-gray-500">Yuklanmoqda...</div>
+        ) : cartItems.length === 0 ? (
           <div className="text-center py-16">
             <i className="ri-shopping-cart-line text-6xl text-gray-300 mb-4"></i>
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">Your cart is empty</h2>
@@ -108,48 +155,51 @@ export default function CartPage() {
                 
                 <div className="space-y-6">
                   {cartItems.map((item) => (
-                    <div key={item.id} className="flex items-center space-x-4 py-4 border-b border-gray-200 last:border-b-0">
-                      <div className="flex-shrink-0">
+                    <div key={item.id} className="flex flex-col md:flex-row md:items-center md:space-x-4 py-4 border-b border-gray-200 last:border-b-0">
+                      <div className="flex items-center space-x-4 w-full">
                         <img 
                           src={item.image} 
                           alt={item.name}
                           className="w-20 h-20 object-cover rounded-lg"
                         />
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-medium text-gray-900">{item.name}</h3>
-                        <p className="text-sm text-gray-500">{item.category}</p>
-                        <div className="flex items-center mt-2">
-                          <span className="text-lg font-semibold text-green-600">${item.price}</span>
-                          {item.originalPrice && (
-                            <span className="ml-2 text-sm text-gray-400 line-through">${item.originalPrice}</span>
-                          )}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-lg font-medium text-gray-900">{item.name}</h3>
+                          <p className="text-sm text-gray-500">{item.category}</p>
+                          <div className="flex items-center mt-2">
+                            <span className="text-lg font-semibold text-green-600">${item.price}</span>
+                            {item.originalPrice && (
+                              <span className="ml-2 text-sm text-gray-400 line-through">${item.originalPrice}</span>
+                            )}
+                          </div>
                         </div>
                       </div>
-                      
-                      <div className="flex items-center space-x-3">
+
+                      <div className="flex items-center justify-between mt-4 md:mt-0 md:justify-end w-full md:w-auto space-x-4">
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 cursor-pointer"
+                          >
+                            <i className="ri-subtract-line text-gray-600"></i>
+                          </button>
+
+                          <span className="min-w-[30px] text-center font-medium text-base">{item.quantity}</span>
+
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 cursor-pointer"
+                          >
+                            <i className="ri-add-line text-gray-600"></i>
+                          </button>
+                        </div>
+
                         <button
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 cursor-pointer"
+                          onClick={() => removeItem(item.id)}
+                          className="text-red-500 hover:text-red-700 p-2 cursor-pointer"
                         >
-                          <i className="ri-subtract-line text-gray-600"></i>
-                        </button>
-                        <span className="w-8 text-center font-medium">{item.quantity}</span>
-                        <button
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 cursor-pointer"
-                        >
-                          <i className="ri-add-line text-gray-600"></i>
+                          <i className="ri-delete-bin-line text-xl"></i>
                         </button>
                       </div>
-                      
-                      <button
-                        onClick={() => removeItem(item.id)}
-                        className="text-red-500 hover:text-red-700 p-2 cursor-pointer"
-                      >
-                        <i className="ri-delete-bin-line text-xl"></i>
-                      </button>
                     </div>
                   ))}
                 </div>
@@ -200,33 +250,9 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                {subtotal < 50 && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6">
-                    <p className="text-sm text-blue-800">
-                      <i className="ri-information-line mr-1"></i>
-                      Add ${(50 - subtotal).toFixed(2)} more for free shipping!
-                    </p>
-                  </div>
-                )}
-
-                <Link href="/checkout" className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 font-medium transition-colors text-center block whitespace-nowrap cursor-pointer">
+                <Link href="/checkout" className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors text-center block">
                   Proceed to Checkout
                 </Link>
-
-                <div className="mt-6 space-y-3">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <i className="ri-shield-check-line text-green-600 mr-2"></i>
-                    <span>Secure checkout</span>
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <i className="ri-truck-line text-green-600 mr-2"></i>
-                    <span>Free shipping on orders over $50</span>
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <i className="ri-refresh-line text-green-600 mr-2"></i>
-                    <span>30-day return policy</span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
