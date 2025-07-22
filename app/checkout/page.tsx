@@ -18,8 +18,6 @@ const CustomSearchMap = dynamic(() => import('./location'), {
 });
 
 
-
-
 interface CartItem {
   id: string;
   name: string;
