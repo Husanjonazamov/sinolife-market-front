@@ -8,6 +8,7 @@ import axios from 'axios';
 import BASE_URL from '@/app/config';
 import { refreshToken } from '../register/refresh';
 import { updateCartItemQuantity, removeCartItem } from './cartServices';
+import { useLanguage } from '@/lib/LanguageContext';
 
 
 interface CartItem {
@@ -26,6 +27,8 @@ export default function CartPage() {
   const [promoCode, setPromoCode] = useState('');
   const [discount, setDiscount] = useState(0);
   const [promoApplied, setPromoApplied] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
+
 
   const fetchCart = async () => {
     try {
@@ -131,8 +134,8 @@ export default function CartPage() {
       
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Shopping Cart</h1>
-          <p className="text-gray-600">Review your items and proceed to checkout</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("cart_title")}</h1>
+          <p className="text-gray-600">{t("cart_description")}</p>
         </div>
 
         {loading ? (
@@ -144,14 +147,14 @@ export default function CartPage() {
             <p className="text-gray-500 mb-8">Add some products to get started</p>
             <Link href="/products" className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors cursor-pointer whitespace-nowrap">
               <i className="ri-shopping-bag-line mr-2"></i>
-              Continue Shopping
+              {t("continue_shopping")}
             </Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
               <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-6">Cart Items ({cartItems.length})</h2>
+                <h2 className="text-xl font-semibold text-gray-900 mb-6">{t("cart_items_title")} ({cartItems.length})</h2>
                 
                 <div className="space-y-6">
                   {cartItems.map((item) => (
@@ -213,7 +216,8 @@ export default function CartPage() {
                 <div className="mt-6 pt-6 border-t border-gray-200">
                   <Link href="/products" className="inline-flex items-center text-green-600 hover:text-green-700 cursor-pointer">
                     <i className="ri-arrow-left-line mr-2"></i>
-                    Continue Shopping
+                    {t("continue_shopping")}
+
                   </Link>
                 </div>
               </div>
@@ -221,11 +225,11 @@ export default function CartPage() {
 
             <div className="lg:col-span-1">
               <div className="bg-white rounded-lg shadow-sm p-6 sticky top-8">
-                <h2 className="text-xl font-semibold text-gray-900 mb-6">Order Summary</h2>
+                <h2 className="text-xl font-semibold text-gray-900 mb-6">{t("subtotal")}</h2>
                 
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Subtotal</span>
+                    <span className="text-gray-600">{t("subtotal")}</span>
                     <span className="font-medium">{subtotal.toLocaleString('uz-UZ')} so'm</span>
                   </div>
 
@@ -238,7 +242,7 @@ export default function CartPage() {
 
                   <div className="border-t border-gray-200 pt-4">
                     <div className="flex justify-between text-lg font-semibold">
-                      <span>Jami</span>
+                      <span>{t("total")}</span>
                       <span>{total.toLocaleString('uz-UZ')} so'm</span>
                     </div>
                   </div>
@@ -246,7 +250,7 @@ export default function CartPage() {
                 </div>
 
                 <Link href="/checkout" className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors text-center block">
-                  Proceed to Checkout
+                  {t("proceed_to_checkout")}
                 </Link>
               </div>
             </div>
