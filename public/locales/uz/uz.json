@@ -1,0 +1,192 @@
+{
+    "product_search": "Mahsulotlarni qidiring...",
+    "home": "Bosh sahifa",
+    "product": "Mahsulotlar",
+    "category": "Kategoriyalar",
+    "contact": "Aloqa",
+    "lang": "Til",
+    "my_orders": "Buyurtmalarim",
+
+    "shop_show": "Mahsulotlarni ko'rish",
+    "featured_product": "Mashhur mahsulotlar",
+    "featured_products_description": "Sifati va samaradorligi uchun ehtiyotkorlik bilan tanlangan eng mashhur o'simlik qo'shimchalarini kashf eting.",
+    "view_all_product": "Barcha Mahsulotlarni ko'rish",
+    "categories_title": "Sog‘liq bo‘yicha toifalar",
+    "categories_description": "Muayyan sog‘liq maqsadlari bo‘yicha tartiblangan o‘simlik mahsulotlari to‘plamimizni ko‘zdan kechiring.",
+    "natural_title": "100% Tabiiy",
+    "natural_description": "Barcha mahsulotlarimiz ishonchli yetkazib beruvchilardan olingan sof, organik ingredientlardan tayyorlangan.",
+
+    "shipping_title": "Bepul Yetkazib Berish",
+    "shipping_description": "$50 dan ortiq barcha buyurtmalarda bepul, tez va xavfsiz yetkazib berish xizmati.",
+
+    "support_title": "Mutaxassis Yordam",
+    "support_description": "Sog‘lig‘ingiz uchun to‘g‘ri mahsulotlarni tanlashda sizga yordam berishga tayyor wellness mutaxassislarimiz bor.",
+    "newsletter_title": "Sog‘liq yangiliklaridan xabardor bo‘ling",
+    "newsletter_description": "So‘nggi sog‘liq bo‘yicha maslahatlar, mahsulot yangiliklari va maxsus takliflarni emailingizga oling.",
+
+
+    "brand_tagline": "Ishonchli hamkoringiz — yuqori sifatli o‘simlik mahsulotlari va tabiiy sog‘lomlik yechimlari uchun.",
+    "footer_sections": {
+        "quick_links_title": "Tezkor havolalar",
+        "quick_links": [
+        "Barcha mahsulotlar",
+        "Toifalar",
+        "Maxsus chegirmalar",
+        "Sog‘liq blogi"
+        ],
+        
+        "customer_care_title": "Mijozlarga xizmat",
+        "customer_care_links": [
+        "Yordam markazi",
+        "Yetkazib berish haqida",
+        "Qaytarishlar",
+        "Biz bilan bog‘laning"
+        ]
+    },
+    "newsletter": {
+        "newsletter_title": "Yangiliklarga obuna bo‘ling",
+        "newsletter_description": "Sog‘liq bo‘yicha maslahatlar va maxsus takliflarni olish uchun obuna bo‘ling",
+        "email_placeholder": "Email manzilingiz"
+    },
+    "copyright": "© 2024 HerbaStore. Barcha huquqlar himoyalangan.",
+    "privacy_policy": "Maxfiylik siyosati",
+    "terms_of_service": "Xizmat ko‘rsatish shartlari",
+
+    "all_products": "Barcha mahsulotlar",
+    "categories": "Toifalar",
+    "price_range": "Narx oralig‘i",
+    "price_from": "dan",
+    "price_to": "gacha",
+    "clear_all_filters": "Barcha filtrlarni tozalash",
+
+    "why_choose_us_title": "Nega bizni tanlaysiz?",
+    "why_choose_us_description": "Har bir toifa ehtiyotkorlik bilan tanlangan, yuqori sifatli mahsulotlardan iborat.",
+    "quality_tested_title": "Sifat nazorati",
+    "quality_tested_description": "Uchinchi tomonlar tomonidan tozaligi va ta’siri bo‘yicha sinovdan o‘tkazilgan.",
+    "natural_sourcing_title": "Tabiiy manbalar",
+    "natural_sourcing_description": "Barqaror va etik fermalardan olingan ingredientlar.",
+    "expert_curated_title": "Mutaxassislar tanlovi",
+    "expert_curated_description": "Professional o‘simlikshunoslar tomonidan tanlab olingan mahsulotlar.",
+    
+    "contact_title": "Bog‘laning",
+    
+    "form": {
+        "full_name_label": "To‘liq ism *",
+        "full_name_placeholder": "To‘liq ismingiz",
+        
+        "phone_number_label": "Telefon raqami *",
+        "phone_number_placeholder": "998940014741",
+        "phone_number_note": "Faqat raqam kiriting. Kamida 8 ta raqam bo‘lishi kerak.",
+        
+        "message_label": "Xabar *",
+        "message_placeholder": "Qanday yordam bera olishimizni yozing...",
+        "message_char_count": "0/500 ta belgi",
+
+        "submit_button": "Xabarni yuborish"
+    },
+
+    "contact_info_title": "Aloqa ma’lumotlari",
+
+    "phone": {
+        "label": "Telefon",
+        "value": "+998 91-723-34-84",
+        "note": "Istalgan vaqtda qo‘ng‘iroq qiling"
+    },
+
+    "telegram": {
+        "label": "Telegram",
+        "value": "@Husanboy_Azamov",
+        "note": "Telegram’da yozing"
+    },
+
+    "address": {
+        "label": "Manzil",
+        "value": "HerbaStore Flagship, 123 Wellness Way, Natural City, NC 12345",
+        "note": "Ofisimizga tashrif buyuring"
+    },
+
+
+    "cart_title": "Savatcha",
+    "cart_description": "Mahsulotlaringizni ko‘rib chiqing va to‘lovga o‘ting",
+
+    "cart_empty_message": "Savatchangiz bo‘sh",
+    "cart_empty_subtext": "Boshlash uchun bir nechta mahsulot qo‘shing",
+
+    "continue_shopping_button": "Xaridni davom ettirish",
+
+    "product_added_success": "✅ Mahsulot savatchaga qo‘shildi",
+
+    "cart_items_title": "Savatchadagi mahsulotlar",
+    "continue_shopping": "Xaridni davom ettirish",
+    "subtotal": "Jami oraliq narx",
+    "total": "Jami",
+
+    "proceed_to_checkout": "To‘lovga o‘tish",
+
+    "checkout_title": "To‘lov",
+    "steps": {
+        "step_1": "1 Yetkazib berish",
+        "step_2": "2 To‘lov",
+        "step_3": "3 Ko‘rib chiqish"
+    },
+
+    "shipping_info_title": "Yetkazib berish ma’lumotlari",
+    "first_name_label": "Ism",
+    "first_name_placeholder": "Ismingiz",
+    "phone_number_label": "Telefon raqami",
+    "address_placeholder": "Manzil qidiring (masalan, Urganch)",
+    "search_button": "Qidirish",
+    "selected_address": "Tanlangan manzil: Toshkent, Uzbekistan",
+
+    "continue_to_payment": "To‘lovga o‘tish",
+
+    "order_summary_title": "Buyurtma tafsilotlari",
+    "product_name": "Organik zerdechal kapsulalari",
+    "quantity_label": "Soni: 1",
+    "subtotal_label": "Jami",
+    "total_label": "Umumiy",
+    "payment_method": "To‘lov usuli",
+
+    "order_review_title": "Buyurtmani ko‘rib chiqish",
+  
+    "recipient_label": "Oluvchi",
+    
+    "payment_method_label": "To‘lov usuli",
+
+    "back_button": "Orqaga",
+    "place_order_button": "Buyurtma berish",
+
+    "order_success_title": "Buyurtma muvaffaqiyatli qabul qilindi!",
+    "order_success_message": "Xaridingiz uchun tashakkur. Buyurtmangiz qabul qilindi va tez orada ko‘rib chiqiladi.",
+
+    "order_number_label": "Buyurtma raqami",
+    "order_number_value": "50",
+
+    "created_date_label": "Yaratilgan sana",
+    "created_date_value": "2025 M07 23",
+
+    "delivery_date_label": "Yetkazib berish sanasi",
+    "delivery_date_value": "2025 M07 28, Dushanba",
+
+    "payment_status_label": "To‘lov holati",
+    "payment_status_value": "To‘lanmagan",
+
+    "order_status_label": "Buyurtma holati",
+    "order_status_value": "Kutilmoqda",
+
+    "my_orders_button": "Buyurtmalarim",
+    "my_orders_title": "Buyurtmalarim",
+    "my_orders_subtitle": "HerbaStore'dagi buyurtmalaringizni kuzatib boring va boshqaring",
+
+    "filter_all": "Barcha buyurtmalar",
+    "filter_pending": "Kutilmoqda",
+    "filter_accepted": "Qabul qilinganlar",
+    "filter_rejected": "Rad etilganlar",
+
+    "order_card": {
+        "order_number_label": "Buyurtma",
+        "order_date_label": "Berilgan sana:",
+        "order_status_pending": "Kutilmoqda"
+    }
+
+}

@@ -1,0 +1,178 @@
+{
+  "product_search": "Поиск товаров...",
+  "home": "Главная",
+  "product": "Товары",
+  "category": "Категории",
+  "contact": "Контакты",
+  "lang": "Язык",
+  "my_orders": "Мои заказы",
+
+  "shop_show": "Просмотреть товары",
+  "featured_product": "Популярные товары",
+  "featured_products_description": "Откройте для себя самые популярные растительные добавки, тщательно отобранные за качество и эффективность.",
+  "view_all_product": "Смотреть все товары",
+  "categories_title": "Категории по здоровью",
+  "categories_description": "Изучите нашу коллекцию растительных продуктов, организованных по целям в области здоровья.",
+  "natural_title": "100% Натуральные",
+  "natural_description": "Все наши продукты изготовлены из чистых, органических ингредиентов от проверенных поставщиков.",
+
+  "shipping_title": "Бесплатная доставка",
+  "shipping_description": "Бесплатная и быстрая доставка для заказов свыше $50.",
+
+  "support_title": "Помощь экспертов",
+  "support_description": "Наши специалисты по здоровью помогут вам выбрать подходящие продукты под ваши нужды.",
+  "newsletter_title": "Будьте в курсе здоровья",
+  "newsletter_description": "Получайте советы по здоровью, новости о продуктах и эксклюзивные предложения на ваш email.",
+
+  "brand_tagline": "Ваш надежный партнер для качественных травяных продуктов и решений для естественного оздоровления.",
+  "footer_sections": {
+    "quick_links_title": "Быстрые ссылки",
+    "quick_links": [
+      "Все товары",
+      "Категории",
+      "Специальные предложения",
+      "Блог о здоровье"
+    ],
+    "customer_care_title": "Поддержка клиентов",
+    "customer_care_links": [
+      "Центр помощи",
+      "Информация о доставке",
+      "Возвраты",
+      "Связаться с нами"
+    ]
+  },
+  "newsletter": {
+    "newsletter_title": "Подпишитесь на рассылку",
+    "newsletter_description": "Подпишитесь, чтобы получать советы по здоровью и эксклюзивные предложения",
+    "email_placeholder": "Ваш email"
+  },
+  "copyright": "© 2024 HerbaStore. Все права защищены.",
+  "privacy_policy": "Политика конфиденциальности",
+  "terms_of_service": "Условия обслуживания",
+
+  "all_products": "Все товары",
+  "categories": "Категории",
+  "price_range": "Ценовой диапазон",
+  "price_from": "от",
+  "price_to": "до",
+  "clear_all_filters": "Очистить все фильтры",
+
+  "why_choose_us_title": "Почему выбирают нас",
+  "why_choose_us_description": "Каждая категория тщательно подобрана из высококачественных продуктов.",
+  "quality_tested_title": "Проверенное качество",
+  "quality_tested_description": "Протестировано независимыми лабораториями на чистоту и эффективность.",
+  "natural_sourcing_title": "Натуральные источники",
+  "natural_sourcing_description": "Ингредиенты получены с устойчивых и этичных ферм.",
+  "expert_curated_title": "Выбор экспертов",
+  "expert_curated_description": "Подобрано профессиональными травниками.",
+
+  "contact_title": "Связаться с нами",
+
+  "form": {
+    "full_name_label": "Полное имя *",
+    "full_name_placeholder": "Ваше полное имя",
+    "phone_number_label": "Номер телефона *",
+    "phone_number_placeholder": "998940014741",
+    "phone_number_note": "Введите только цифры. Минимум 8 символов.",
+    "message_label": "Сообщение *",
+    "message_placeholder": "Расскажите, как мы можем вам помочь...",
+    "message_char_count": "0/500 символов",
+    "submit_button": "Отправить сообщение"
+  },
+
+  "contact_info_title": "Контактная информация",
+
+  "phone": {
+    "label": "Телефон",
+    "value": "+998 91-723-34-84",
+    "note": "Звоните в любое время"
+  },
+
+  "telegram": {
+    "label": "Телеграм",
+    "value": "@Husanboy_Azamov",
+    "note": "Напишите в Телеграм"
+  },
+
+  "address": {
+    "label": "Адрес",
+    "value": "HerbaStore Flagship, 123 Wellness Way, Natural City, NC 12345",
+    "note": "Посетите наш офис"
+  },
+
+  "cart_title": "Корзина",
+  "cart_description": "Проверьте ваши товары и перейдите к оплате",
+
+  "cart_empty_message": "Ваша корзина пуста",
+  "cart_empty_subtext": "Добавьте товары, чтобы начать покупки",
+
+  "continue_shopping_button": "Продолжить покупки",
+
+  "product_added_success": "✅ Товар добавлен в корзину",
+
+  "cart_items_title": "Товары в корзине",
+  "continue_shopping": "Продолжить покупки",
+  "subtotal": "Промежуточный итог",
+  "total": "Итого",
+
+  "proceed_to_checkout": "Перейти к оплате",
+
+  "checkout_title": "Оформление заказа",
+  "steps": {
+    "step_1": "1 Доставка",
+    "step_2": "2 Оплата",
+    "step_3": "3 Подтверждение"
+  },
+
+  "shipping_info_title": "Информация о доставке",
+  "first_name_label": "Имя",
+  "first_name_placeholder": "Ваше имя",
+  "phone_number_label": "Телефон",
+  "address_placeholder": "Введите адрес (например, Ургенч)",
+  "search_button": "Поиск",
+  "selected_address": "Выбранный адрес: Ташкент, Узбекистан",
+
+  "continue_to_payment": "Перейти к оплате",
+
+  "order_summary_title": "Сводка заказа",
+  "product_name": "Капсулы с куркумой",
+  "quantity_label": "Количество: 1",
+  "subtotal_label": "Итого",
+  "total_label": "Общая сумма",
+  "payment_method": "Способ оплаты",
+
+  "order_review_title": "Подтверждение заказа",
+  "recipient_label": "Получатель",
+  "payment_method_label": "Способ оплаты",
+  "back_button": "Назад",
+  "place_order_button": "Оформить заказ",
+
+  "order_success_title": "Заказ успешно оформлен!",
+  "order_success_message": "Спасибо за покупку! Ваш заказ принят и скоро будет обработан.",
+
+  "order_number_label": "Номер заказа",
+  "order_number_value": "50",
+  "created_date_label": "Дата оформления",
+  "created_date_value": "23.07.2025",
+  "delivery_date_label": "Дата доставки",
+  "delivery_date_value": "28.07.2025, Понедельник",
+  "payment_status_label": "Статус оплаты",
+  "payment_status_value": "Не оплачено",
+  "order_status_label": "Статус заказа",
+  "order_status_value": "Ожидает обработки",
+
+  "my_orders_button": "Мои заказы",
+  "my_orders_title": "Мои заказы",
+  "my_orders_subtitle": "Отслеживайте и управляйте вашими заказами в HerbaStore",
+
+  "filter_all": "Все заказы",
+  "filter_pending": "Ожидаются",
+  "filter_accepted": "Приняты",
+  "filter_rejected": "Отклонены",
+
+  "order_card": {
+    "order_number_label": "Заказ",
+    "order_date_label": "Дата заказа:",
+    "order_status_pending": "Ожидается"
+  }
+}
