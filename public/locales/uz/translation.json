@@ -117,9 +117,13 @@
     "subtotal": "Jami oraliq narx",
     "total": "Jami",
 
+    "shipping": "Yetkazib berish",
+    "payment": "To‘lov",
+    "review": "Sharh",
+
     "proceed_to_checkout": "To‘lovga o‘tish",
 
-    "checkout_title": "To‘lov",
+    "checkout_title": "Buyurtma",
     "steps": {
         "step_1": "1 Yetkazib berish",
         "step_2": "2 To‘lov",
@@ -132,7 +136,11 @@
     "phone_number_label": "Telefon raqami",
     "address_placeholder": "Manzil qidiring (masalan, Urganch)",
     "search_button": "Qidirish",
-    "selected_address": "Tanlangan manzil: Toshkent, Uzbekistan",
+    "selected_address": "Tanlangan manzil:",
+
+
+    "quantity": "Miqdor",
+
 
     "continue_to_payment": "To‘lovga o‘tish",
 
@@ -172,17 +180,18 @@
 
     "my_orders_button": "Buyurtmalarim",
     "my_orders_title": "Buyurtmalarim",
-    "my_orders_subtitle": "HerbaStore'dagi buyurtmalaringizni kuzatib boring va boshqaring",
+    "my_orders_subtitle": "Sinolife'dagi buyurtmalaringizni kuzatib boring va boshqaring",
 
     "filter_all": "Barcha buyurtmalar",
     "filter_pending": "Kutilmoqda",
     "filter_accepted": "Qabul qilinganlar",
     "filter_rejected": "Rad etilganlar",
 
-    "order_card": {
-        "order_number_label": "Buyurtma",
-        "order_date_label": "Berilgan sana:",
-        "order_status_pending": "Kutilmoqda"
-    }
+    "order_date_label": "Berilgan sana:",
+    "order_status_pending": "Kutilmoqda",
+    "no_orders": "Buyurtma topilmadi",
+    "start_shopping": "Xarid qilishni boshlang va buyurtmalaringizni bu yerda ko‘ring"
+
+
 
 }

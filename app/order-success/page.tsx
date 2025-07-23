@@ -6,6 +6,8 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
+import { useLanguage } from '@/lib/LanguageContext';
+
 export default function OrderSuccessPage() {
   const searchParams = useSearchParams();
 
@@ -17,6 +19,7 @@ export default function OrderSuccessPage() {
   } | null>(null);
 
   const [estimatedDelivery, setEstimatedDelivery] = useState('');
+  const { t } = useLanguage();
 
   useEffect(() => {
     const id = searchParams.get('id');
@@ -75,31 +78,31 @@ export default function OrderSuccessPage() {
               <i className="ri-check-double-line text-green-600 text-4xl"></i>
             </div>
 
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Buyurtma muvaffaqiyatli qabul qilindi!</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">{t("order_success_title")}</h1>
             <p className="text-xl text-gray-600 mb-6">
-              Xaridingiz uchun tashakkur. Buyurtmangiz qabul qilindi va tez orada ko‘rib chiqiladi.
+              {t("order_success_message")}
             </p>
           </div>
 
           <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Buyurtma raqami</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">{t("order_number_label")}</h3>
                 <p className="text-green-600 font-bold text-xl">{orderData.id}</p>
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Yaratilgan sana</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">{t("created_date_label")}</h3>
                 <p className="text-gray-700">{formattedCreatedAt}</p>
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Yetkazib berish sanasi</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">{t("delivery_date_label")}</h3>
                 <p className="text-gray-700">{estimatedDelivery}</p>
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">To‘lov holati</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">{t("payment_status_label")}</h3>
                 <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${paymentStatusColor}`}>
                   <i className="ri-check-line mr-1"></i>
                   {paymentStatusText}
@@ -107,7 +110,7 @@ export default function OrderSuccessPage() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Buyurtma holati</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">{t("order_status_label")}</h3>
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
                   <i className="ri-settings-3-line mr-1"></i>
                   {orderStatusText}
@@ -122,7 +125,7 @@ export default function OrderSuccessPage() {
               className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors cursor-pointer whitespace-nowrap"
             >
               <i className="ri-file-list-3-line mr-2"></i>
-              Buyurtmalarim
+              {t("my_orders_button")}
             </Link>
 
             <Link 
@@ -130,7 +133,7 @@ export default function OrderSuccessPage() {
               className="inline-flex items-center px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer whitespace-nowrap"
             >
               <i className="ri-shopping-bag-line mr-2"></i>
-              Xaridni davom ettirish
+              {t("continue_shopping_button")}
             </Link>
           </div>
         </div>

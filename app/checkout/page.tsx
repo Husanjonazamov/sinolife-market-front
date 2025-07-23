@@ -9,9 +9,11 @@ import axios from 'axios';
 import BASE_URL from '@/app/config';
 import { refreshToken } from '../register/refresh';
 import { IMaskInput } from 'react-imask';
+import { useLanguage } from '@/lib/LanguageContext';
 
 
 import dynamic from 'next/dynamic';
+import { userInfo } from 'node:os';
 
 const CustomSearchMap = dynamic(() => import('./location'), {
   ssr: false,
@@ -32,6 +34,7 @@ interface CartItem {
 }
 
 export default function CheckoutPage() {
+  const { language, setLanguage, t } = useLanguage();
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState('payme');
@@ -174,7 +177,7 @@ export default function CheckoutPage() {
       <Header />
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Checkout</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("checkout_title")}</h1>
           <div className="flex items-center space-x-4">
             <StepIndicator step={currentStep} />
           </div>
@@ -223,26 +226,36 @@ export default function CheckoutPage() {
 
 // --- Components ---
 
-const StepIndicator = ({ step }: { step: number }) => (
-  <>
-    {['Shipping', 'Payment', 'Review'].map((label, index) => (
-      <div key={label} className={`flex items-center ${step >= index + 1 ? 'text-green-600' : 'text-gray-400'}`}>
+const StepIndicator = ({ step }: { step: number }) => {
+  const { t } = useLanguage();
+
+  return (
+    <>
+      {[t("shipping"), t("payment"), t("review")].map((label, index) => (
         <div
-          className={`w-8 h-8 rounded-full flex items-center justify-center ${
-            step >= index + 1 ? 'bg-green-600 text-white' : 'bg-gray-200'
-          }`}
+          key={label}
+          className={`flex items-center ${step >= index + 1 ? 'text-green-600' : 'text-gray-400'}`}
         >
-          {index + 1}
+          <div
+            className={`w-8 h-8 rounded-full flex items-center justify-center ${
+              step >= index + 1 ? 'bg-green-600 text-white' : 'bg-gray-200'
+            }`}
+          >
+            {index + 1}
+          </div>
+          <span className="ml-2">{label}</span>
+          {index < 2 && <div className="w-8 h-px bg-gray-300 mx-2"></div>}
         </div>
-        <span className="ml-2">{label}</span>
-        {index < 2 && <div className="w-8 h-px bg-gray-300 mx-2"></div>}
-      </div>
-    ))}
-  </>
-);
+      ))}
+    </>
+  );
+};
+
 
 const ShippingForm = ({ shippingInfo, setShippingInfo, onNext }: any) => {
   const [phoneError, setPhoneError] = useState<string | null>(null);
+  const { t } = useLanguage();
+
 
   const handlePhoneChange = (value: string) => {
     setShippingInfo({ ...shippingInfo, phone: value });
@@ -258,23 +271,23 @@ const ShippingForm = ({ shippingInfo, setShippingInfo, onNext }: any) => {
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">Shipping Information</h2>
+      <h2 className="text-xl font-semibold text-gray-900 mb-6">{t("shipping_info_title")}</h2>
       <form className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm text-gray-800 font-medium mb-2">First Name</label>
+            <label className="block text-sm text-gray-800 font-medium mb-2">{t("first_name_label")}</label>
             <input
               type="text"
               value={shippingInfo.firstName}
               onChange={(e) => setShippingInfo({ ...shippingInfo, firstName: e.target.value })}
               className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="Your first name"
+              placeholder={t("first_name_placeholder")}
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm text-gray-800 font-medium mb-2">Phone Number</label>
+            <label className="block text-sm text-gray-800 font-medium mb-2">{t("phone_number_label")}</label>
 
             < IMaskInput
               mask="+998-00-000-00-00"
@@ -311,7 +324,7 @@ const ShippingForm = ({ shippingInfo, setShippingInfo, onNext }: any) => {
             phoneError !== null
           }
         >
-          Continue to Payment
+          {t("continue_to_payment")}
         </button>
       </form>
     </div>
@@ -320,154 +333,179 @@ const ShippingForm = ({ shippingInfo, setShippingInfo, onNext }: any) => {
 
 
 
-const PaymentForm = ({ paymentMethod, setPaymentMethod, onNext, onBack }: any) => (
-  <div className="bg-white rounded-l g shadow-sm p-6">
-    <h2 className="text-xl font-semibold text-gray-900 mb-6">Payment Method</h2>
-    <div className="space-y-4">
-      {['payme', 'click'].map((method) => (
-        <div key={method} className="border border-gray-200 rounded-lg p-4">
-          <label className="flex items-center cursor-pointer">
-            <input
-              type="radio"
-              name="payment"
-              value={method}
-              checked={paymentMethod === method}
-              onChange={(e) => setPaymentMethod(e.target.value)}
-              className="w-4 h-4 text-green-600"
-            />
-            <div className="ml-3 flex items-center">
-              <Image src={`/images/${method}.png`} alt={method} width={48} height={32} className="object-contain" />
-              <span className="ml-3 font-medium text-teal-700 capitalize">{method}</span>
-            </div>
-          </label>
+const PaymentForm = ({ paymentMethod, setPaymentMethod, onNext, onBack }: any) => {
+  const { t } = useLanguage();
+
+  return (
+    <div className="bg-white rounded-lg shadow-sm p-6">
+      <h2 className="text-xl font-semibold text-gray-900 mb-6">{t("payment_method")}</h2>
+      
+      <div className="space-y-4">
+        {["payme", "click"].map((method) => (
+          <div key={method} className="border border-gray-200 rounded-lg p-4">
+            <label className="flex items-center cursor-pointer">
+              <input
+                type="radio"
+                name="payment"
+                value={method}
+                checked={paymentMethod === method}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+                className="w-4 h-4 text-green-600"
+              />
+              <div className="ml-3 flex items-center">
+                <Image
+                  src={`/images/${method}.png`}
+                  alt={method}
+                  width={48}
+                  height={32}
+                  className="object-contain"
+                />
+                <span className="ml-3 font-medium text-teal-700 capitalize">
+                  {method}
+                </span>
+              </div>
+            </label>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex space-x-4 mt-6">
+        <button
+          onClick={onBack}
+          className="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 font-medium"
+        >
+          {t("back_button")}
+        </button>
+        <button
+          onClick={onNext}
+          className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 font-medium"
+        >
+          {t("place_order_button")}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+
+
+const ReviewOrder = ({ shippingInfo, cartItems, paymentMethod, onBack, onPlaceOrder, isProcessing }: any) => {
+  const { t } = useLanguage();
+
+  return (
+    <div className="bg-white rounded-lg shadow-sm p-6">
+      <h2 className="text-xl font-semibold text-gray-900 mb-6">{t("order_review_title")}</h2>
+
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-lg font-semibold text-zinc-500 mb-2 flex items-center gap-2">{t("recipient_label")}</h3>
+          <div className="bg-gray-50 p-4 rounded-xl shadow-sm space-y-2 border border-gray-200">
+            <p className="text-lg font-semibold text-zinc-900 flex items-center gap-2">
+              <i className="ri-user-line text-teal-600"></i> {shippingInfo.firstName}
+            </p>
+            <p className="text-gray-700 flex items-center gap-2">
+              <i className="ri-phone-line text-green-500"></i> {shippingInfo.phone}
+            </p>
+            <p className="text-gray-700 flex items-start gap-2">
+              <i className="ri-map-pin-line text-red-500 mt-0.5"></i> {shippingInfo.address}
+            </p>
+          </div>
         </div>
-      ))}
-    </div>
 
-    <div className="flex space-x-4 mt-6">
-      <button
-        onClick={onBack}
-        className="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 font-medium"
-      >
-        Back
-      </button>
-      <button
-        onClick={onNext}
-        className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 font-medium"
-      >
-        Review Order
-      </button>
-    </div>
-  </div>
-);
+        <div>
+          <h3 className="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
+            <i className="ri-wallet-3-line text-blue-500"></i> {t("payment_method")}
+          </h3>
+          <p className="text-gray-600 pl-6 capitalize">{paymentMethod}</p>
+        </div>
 
-const ReviewOrder = ({ shippingInfo, cartItems, paymentMethod, onBack, onPlaceOrder, isProcessing }: any) => (
-  <div className="bg-white rounded-lg shadow-sm p-6">
-    <h2 className="text-xl font-semibold text-gray-900 mb-6">Order Review</h2>
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-semibold text-zinc-500 mb-2 flex items-center gap-2">Oluvchi</h3>
-        <div className="bg-grya-50 p-4 rounded-xl shadow-sm space-y-2 border border-gray-200">
-          <p className="text-lg font-semibold text-zinc-900 flex items-center gap-2">
-            <i className="ri-user-line text-teal-600"></i> {shippingInfo.firstName}
-          </p>
-          <p className="text-gray-700 flex items-center gap-2">
-            <i className="ri-phone-line text-green-500"></i> {shippingInfo.phone}
-          </p>
-          <p className="text-gray-700 flex items-start gap-2">
-            <i className="ri-map-pin-line text-red-500 mt-0.5"></i> {shippingInfo.address}
-          </p>
+        <div>
+          <h3 className="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
+            <i className="ri-shopping-cart-2-line text-purple-500"></i> {t("order_items")}
+          </h3>
+
+          <div className="divide-y divide-gray-200 rounded-lg border border-gray-100 overflow-hidden">
+            {cartItems.map((item: CartItem) => (
+              <div key={item.id} className="flex items-center gap-4 p-4">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-14 h-14 object-cover rounded-lg border"
+                />
+                <div className="flex-1">
+                  <h4 className="font-medium text-gray-800">{item.name}</h4>
+                  <p className="text-sm text-gray-500">{t("quantity")}: {item.quantity}</p>
+                </div>
+                <span className="font-semibold text-gray-700">
+                  {(item.price * item.quantity).toLocaleString('uz-UZ')} so'm
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div>
-        <h3 className="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
-          <i className="ri-wallet-3-line text-blue-500"></i> Payment Method
-        </h3>
-        <p className="text-gray-600 pl-6 capitalize">{paymentMethod}</p>
+      <div className="flex space-x-4 mt-6">
+        <button
+          onClick={onBack}
+          className="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 font-medium"
+        >
+          {t("back_button")}
+        </button>
+        <button
+          onClick={onPlaceOrder}
+          disabled={isProcessing}
+          className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 font-medium disabled:opacity-50"
+        >
+          {isProcessing ? t("processing") : t("place_order_button")}
+        </button>
       </div>
+    </div>
+  );
+};
 
-      <div>
-        <h3 className="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
-          <i className="ri-shopping-cart-2-line text-purple-500"></i> Order Items
-        </h3>
-       <div className="divide-y divide-gray-200 rounded-lg border border-gray-100 overflow-hidden">
+
+
+const OrderSummary = ({ cartItems, total }: any) => {
+  const { language, setLanguage, t } = useLanguage();
+
+  return (
+    <div className="bg-white rounded-lg shadow-sm p-6 sticky top-8">
+      <h2 className="text-xl font-semibold text-gray-900 mb-6">{t("order_summary_title")}</h2>
+      <div className="space-y-3 mb-6">
         {cartItems.map((item: CartItem) => (
-          <div key={item.id} className="flex items-center gap-4 p-4">
-            <img
-              src={item.image}
-              alt={item.name}
-              className="w-14 h-14 object-cover rounded-lg border"
-            />
-            <div className="flex-1">
-              <h4 className="font-medium text-gray-800">{item.name}</h4>
-              <p className="text-sm text-gray-500">Soni: {item.quantity}</p>
+          <div key={item.id} className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <img src={item.image} alt={item.name} className="w-12 h-12 object-cover rounded" />
+              <div>
+                <p className="font-medium text-sm">{item.name}</p>
+                <p className="text-gray-500 text-sm">{t("quantity")}: {item.quantity}</p>
+              </div>
             </div>
-            <span className="font-semibold text-gray-700">
+            <span className="font-medium">
               {(item.price * item.quantity).toLocaleString('uz-UZ')} so'm
             </span>
           </div>
         ))}
       </div>
 
-      </div>
-    </div>
-
-    <div className="flex space-x-4 mt-6">
-      <button
-        onClick={onBack}
-        className="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 font-medium"
-      >
-        Back
-      </button>
-      <button
-        onClick={onPlaceOrder}
-        disabled={isProcessing}
-        className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 font-medium disabled:opacity-50"
-      >
-        {isProcessing ? 'Processing...' : 'Place Order'}
-      </button>
-    </div>
-  </div>
-);
-
-
-const OrderSummary = ({ cartItems, total }: any) => (
-  <div className="bg-white rounded-lg shadow-sm p-6 sticky top-8">
-    <h2 className="text-xl font-semibold text-gray-900 mb-6">Order Summary</h2>
-    <div className="space-y-3 mb-6">
-      {cartItems.map((item: CartItem) => (
-        <div key={item.id} className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <img src={item.image} alt={item.name} className="w-12 h-12 object-cover rounded" />
-            <div>
-              <p className="font-medium text-sm">{item.name}</p>
-              <p className="text-gray-500 text-sm">Qty: {item.quantity}</p>
-            </div>
-          </div>
+      <div className="space-y-3 border-t border-gray-200 pt-4">
+        <div className="flex justify-between">
+          <span className="text-gray-600">{t("total")}</span>
           <span className="font-medium">
-            {(item.price * item.quantity).toLocaleString('uz-UZ')} so'm
-          </span>
-        </div>
-      ))}
-    </div>
-
-    <div className="space-y-3 border-t border-gray-200 pt-4">
-      <div className="flex justify-between">
-        <span className="text-gray-600">Jami</span>
-        <span className="font-medium">
-          {Number(total).toLocaleString('uz-UZ')} so'm
-        </span>
-      </div>
-    
-      <div className="border-t border-gray-200 pt-3">
-        <div className="flex justify-between text-lg font-semibold">
-          <span>Umumiy</span>
-          <span>
             {Number(total).toLocaleString('uz-UZ')} so'm
           </span>
         </div>
+
+        <div className="border-t border-gray-200 pt-3">
+          <div className="flex justify-between text-lg font-semibold">
+            <span>{t("total_label")}</span>
+            <span>
+              {Number(total).toLocaleString('uz-UZ')} so'm
+            </span>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};

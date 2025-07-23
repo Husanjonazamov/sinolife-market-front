@@ -8,6 +8,8 @@ import BASE_URL from '../config';
 import axios from 'axios';
 import { refreshToken } from '../register/refresh';
 
+import { useLanguage } from '@/lib/LanguageContext';
+
 interface OrderItem {
   id: number;
   product: {
@@ -29,6 +31,7 @@ interface Order {
 }
 
 export default function OrdersPage() {
+  const { t } = useLanguage();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'accepted' | 'rejected' | 'completed'>('all');
@@ -119,17 +122,17 @@ export default function OrdersPage() {
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">My Orders</h1>
-          <p className="text-gray-600">Track and manage your HerbaStore orders</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("my_orders_title")}</h1>
+          <p className="text-gray-600">{t("my_orders_subtitle")}</p>
         </div>
 
         <div className="mb-6">
           <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-fit">
             {[
-              { key: 'all', label: 'Barcha buyurtmalar' },
-              { key: 'pending', label: 'Kutilmoqda' },
-              { key: 'accepted', label: 'Qabul qilinganlar' },
-              { key: 'rejected', label: 'Rad etilganlar' },
+              { key: 'all', label: t("filter_all") },
+              { key: 'pending', label: t("filter_pending") },
+              { key: 'accepted', label: t("filter_accepted") },
+              { key: 'rejected', label: t("filter_rejected") },
               // { key: 'completed', label: 'Tugatildi' },
             ].map((tab) => (
               <button
@@ -152,14 +155,14 @@ export default function OrdersPage() {
         ) : filteredOrders.length === 0 ? (
           <div className="text-center py-16">
             <i className="ri-shopping-bag-line text-6xl text-gray-300 mb-4"></i>
-            <h2 className="text-2xl font-semibold text-gray-700 mb-2">Buyurtma topilmadi</h2>
-            <p className="text-gray-500 mb-8">Xarid qilishni boshlang va buyurtmalaringizni bu yerda ko‘ring</p>
+            <h2 className="text-2xl font-semibold text-gray-700 mb-2">{t("no_orders")}</h2>
+            <p className="text-gray-500 mb-8">{t("start_shopping")}</p>
             <Link
               href="/products"
               className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors cursor-pointer whitespace-nowrap"
             >
               <i className="ri-shopping-bag-line mr-2"></i>
-              Shop Now
+              {t("shop_now")}
             </Link>
           </div>
         ) : (
@@ -169,9 +172,9 @@ export default function OrdersPage() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900">Buyurtma #{order.id}</h3>
+                      <h3 className="text-lg font-semibold text-gray-900">{t("checkout_title")} #{order.id}</h3>
                       <p className="text-sm text-gray-500">
-                        Berilgan sana: {new Date(order.created_at).toLocaleDateString()}
+                        {t("order_date_label")}: {new Date(order.created_at).toLocaleDateString()}
                       </p>
                     </div>
                   </div>

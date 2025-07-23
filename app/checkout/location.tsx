@@ -2,6 +2,8 @@
 
 import { YMaps, Map, Placemark, GeolocationControl } from '@pbe/react-yandex-maps';
 import { useState } from 'react';
+import { useLanguage } from '@/lib/LanguageContext';
+
 
 interface CustomSearchMapProps {
   onSelect: (address: string, lat: number, long: number) => void;
@@ -56,19 +58,19 @@ export default function CustomSearchMap({ onSelect }: CustomSearchMapProps) {
       setAddress('Xatolik yuz berdi');
     }
   };
-
+  const { t } = useLanguage();
   return (
     <div className="space-y-4">
       <div className="flex space-x-2">
         <input
           type="text"
-          placeholder="Manzil qidiring (masalan, Urganch)"
+          placeholder={t("address_placeholder")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="border p-2 w-full rounded"
         />
         <button onClick={handleSearch} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-          Qidirish
+          {t("search_button")}
         </button>
       </div>
 
@@ -85,7 +87,7 @@ export default function CustomSearchMap({ onSelect }: CustomSearchMapProps) {
       </YMaps>
 
       <div className="p-2 bg-gray-100 rounded">
-        <b>Tanlangan manzil:</b> {address}
+        <b>{t("selected_address")}</b> {address}
       </div>
     </div>
   );

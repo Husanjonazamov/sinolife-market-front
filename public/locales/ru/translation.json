@@ -109,6 +109,13 @@
   "subtotal": "Промежуточный итог",
   "total": "Итого",
 
+  "quantity": "Количество",
+
+
+  "shipping": "Доставка",
+  "payment": "Оплата",
+  "review": "Обзор",
+
   "proceed_to_checkout": "Перейти к оплате",
 
   "checkout_title": "Оформление заказа",
@@ -124,7 +131,7 @@
   "phone_number_label": "Телефон",
   "address_placeholder": "Введите адрес (например, Ургенч)",
   "search_button": "Поиск",
-  "selected_address": "Выбранный адрес: Ташкент, Узбекистан",
+  "selected_address": "Выбранный адрес: ",
 
   "continue_to_payment": "Перейти к оплате",
 
@@ -157,16 +164,15 @@
 
   "my_orders_button": "Мои заказы",
   "my_orders_title": "Мои заказы",
-  "my_orders_subtitle": "Отслеживайте и управляйте вашими заказами в HerbaStore",
+  "my_orders_subtitle": "Отслеживайте и управляйте вашими заказами в Sinolife",
 
   "filter_all": "Все заказы",
   "filter_pending": "Ожидаются",
   "filter_accepted": "Приняты",
   "filter_rejected": "Отклонены",
 
-  "order_card": {
-    "order_number_label": "Заказ",
-    "order_date_label": "Дата заказа:",
-    "order_status_pending": "Ожидается"
-  }
+  "order_date_label": "Дата заказа:",
+  "no_orders": "Заказ не найден",
+  "start_shopping": "Начните покупки, и ваши заказы будут отображаться здесь"
+
 }
