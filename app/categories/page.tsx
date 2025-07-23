@@ -6,6 +6,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CategoryGrid from './CategoryGrid';
 import BASE_URL from '@/app/config';
+import { useLanguage } from '@/lib/LanguageContext';
+
 
 type BannerType = {
   title: string;
@@ -24,6 +26,7 @@ const DEFAULT_BANNER: BannerType = {
 
 export default function CategoriesPage() {
   const [banner, setBanner] = useState<BannerType>(DEFAULT_BANNER);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const cachedBanner = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -95,9 +98,9 @@ export default function CategoriesPage() {
         <section className="py-16 bg-green-50">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-800 mb-4">Why Choose Us</h2>
+              <h2 className="text-3xl font-bold text-gray-800 mb-4">{t("why_choose_us_title")}</h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Each category is carefully curated with premium quality products.
+                {t("why_choose_us_description")}
               </p>
             </div>
             
@@ -106,22 +109,22 @@ export default function CategoriesPage() {
                 <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <i className="ri-verified-badge-line text-white text-2xl"></i>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Quality Tested</h3>
-                <p className="text-gray-600">Third-party tested for purity and potency.</p>
+                <h3 className="text-xl font-semibold mb-2">{t("quality_tested_title")}</h3>
+                <p className="text-gray-600">{t("quality_tested_description")}</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <i className="ri-plant-line text-white text-2xl"></i>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Natural Sourcing</h3>
-                <p className="text-gray-600">Sourced from sustainable and ethical farms.</p>
+                <h3 className="text-xl font-semibold mb-2">{t("natural_sourcing_title")}</h3>
+                <p className="text-gray-600">{t("natural_sourcing_description")}</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <i className="ri-user-heart-line text-white text-2xl"></i>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Expert Curated</h3>
-                <p className="text-gray-600">Selected by professional herbalists.</p>
+                <h3 className="text-xl font-semibold mb-2">{t("expert_curated_title")}</h3>
+                <p className="text-gray-600">{t("expert_curated_description")}</p>
               </div>
             </div>
           </div>
