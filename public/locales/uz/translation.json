@@ -8,10 +8,15 @@
     "my_orders": "Buyurtmalarim",
 
     "logout": "Tizimdan chiqish",
+    "explore_products_in_this_category": "Ushbu toifadagi mahsulotlarni ko‘rib chiqing",
+
 
     "best_seller": "Eng ko‘p sotilgan",
     "new": "Yangi",
     "sale": "Chegirma",
+
+    "shop_now": "Hozir xarid qiling",
+    "products": "Mahsulotlar",
 
     "shop_show": "Mahsulotlarni ko'rish",
     "featured_product": "Mashhur mahsulotlar",
@@ -32,28 +37,23 @@
 
 
     "brand_tagline": "Ishonchli hamkoringiz — yuqori sifatli o‘simlik mahsulotlari va tabiiy sog‘lomlik yechimlari uchun.",
-    "footer_sections": {
-        "quick_links_title": "Tezkor havolalar",
-        "quick_links": [
-        "Barcha mahsulotlar",
-        "Toifalar",
-        "Maxsus chegirmalar",
-        "Sog‘liq blogi"
-        ],
-        
-        "customer_care_title": "Mijozlarga xizmat",
-        "customer_care_links": [
-        "Yordam markazi",
-        "Yetkazib berish haqida",
-        "Qaytarishlar",
-        "Biz bilan bog‘laning"
-        ]
-    },
-    "newsletter": {
-        "newsletter_title": "Yangiliklarga obuna bo‘ling",
-        "newsletter_description": "Sog‘liq bo‘yicha maslahatlar va maxsus takliflarni olish uchun obuna bo‘ling",
-        "email_placeholder": "Email manzilingiz"
-    },
+    "quick_links_title": "Tezkor havolalar",
+    "quick_links_0": "Barcha mahsulotlar",
+    "quick_links_1": "Toifalar",
+    "quick_links_2": "Maxsus chegirmalar",
+    "quick_links_3": "Sog‘liq blogi",
+
+    "customer_care_title": "Mijozlarga xizmat",
+    "customer_care_links_0": "Yordam markazi",
+    "customer_care_links_1": "Yetkazib berish haqida",
+    "customer_care_links_2": "Qaytarishlar",
+    "customer_care_links_3": "Biz bilan bog‘laning",
+
+    "newssletter_title": "Yangiliklarga obuna bo‘ling",
+    "newssletter_description": "Sog‘liq bo‘yicha maslahatlar va maxsus takliflarni olish uchun obuna bo‘ling",
+    "email_placeholder": "Email manzilingiz",
+
+    
     "copyright": "© 2024 HerbaStore. Barcha huquqlar himoyalangan.",
     "privacy_policy": "Maxfiylik siyosati",
     "terms_of_service": "Xizmat ko‘rsatish shartlari",

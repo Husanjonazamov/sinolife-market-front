@@ -12,7 +12,10 @@
   "new": "Новинка",
   "sale": "Скидка",
   "add_to_cart": "Добавить в корзину",
+  "explore_products_in_this_category": "Изучите продукты в этой категории",
 
+  "shop_now": "Купить сейчас",
+  "products": "Продукты",
 
   "shop_show": "Просмотреть товары",
   "featured_product": "Популярные товары",
@@ -32,27 +35,22 @@
   "newsletter_description": "Получайте советы по здоровью, новости о продуктах и эксклюзивные предложения на ваш email.",
 
   "brand_tagline": "Ваш надежный партнер для качественных травяных продуктов и решений для естественного оздоровления.",
-  "footer_sections": {
-    "quick_links_title": "Быстрые ссылки",
-    "quick_links": [
-      "Все товары",
-      "Категории",
-      "Специальные предложения",
-      "Блог о здоровье"
-    ],
-    "customer_care_title": "Поддержка клиентов",
-    "customer_care_links": [
-      "Центр помощи",
-      "Информация о доставке",
-      "Возвраты",
-      "Связаться с нами"
-    ]
-  },
-  "newsletter": {
-    "newsletter_title": "Подпишитесь на рассылку",
-    "newsletter_description": "Подпишитесь, чтобы получать советы по здоровью и эксклюзивные предложения",
-    "email_placeholder": "Ваш email"
-  },
+  "quick_links_title": "Быстрые ссылки",
+  "quick_links_0": "Все товары",
+  "quick_links_1": "Категории",
+  "quick_links_2": "Специальные предложения",
+  "quick_links_3": "Блог о здоровье",
+
+  "customer_care_title": "Поддержка клиентов",
+  "customer_care_links_0": "Центр помощи",
+  "customer_care_links_1": "Информация о доставке",
+  "customer_care_links_2": "Возвраты",
+  "customer_care_links_3": "Связаться с нами",
+
+  "newssletter_title": "Подпишитесь на рассылку",
+  "newssletter_description": "Подпишитесь, чтобы получать советы по здоровью и эксклюзивные предложения",
+  "email_placeholder": "Ваш email",
+
   "copyright": "© 2024 HerbaStore. Все права защищены.",
   "privacy_policy": "Политика конфиденциальности",
   "terms_of_service": "Условия обслуживания",

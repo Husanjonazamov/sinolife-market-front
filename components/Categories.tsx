@@ -4,6 +4,9 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import BASE_URL from '@/app/config';
 
+
+import { useLanguage } from '@/lib/LanguageContext';
+
 type Category = {
   id: number;
   title: string;
@@ -35,6 +38,8 @@ function getRandomItems<T>(arr: T[], n: number): T[] {
 export default function CategoryGrid() {
   const [categories, setCategories] = useState<(Category & { color: string })[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
     async function fetchCategories() {
@@ -80,9 +85,9 @@ export default function CategoryGrid() {
     <section className="py-16">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">Health Categories</h2>
+          <h2 className="text-4xl font-bold text-gray-800 mb-4">{t("categories_title")}</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Browse our collection of herbal products organized by specific health goals.
+            {t("categories_description")}
           </p>
         </div>
 
@@ -103,7 +108,7 @@ export default function CategoryGrid() {
                   <div className="absolute bottom-4 left-4 right-4">
                     <div className="flex items-center justify-between text-white">
                       <span className="text-sm font-medium bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
-                        {category.product_count} Products
+                        {category.product_count} {t("products")}
                       </span>
                     </div>
                   </div>
@@ -114,10 +119,10 @@ export default function CategoryGrid() {
                     {category.title}
                   </h3>
                   <p className="text-gray-600 mb-4 leading-relaxed">
-                    Explore products in this category.
+                    {t("explore_products_in_this_category")}
                   </p>
                   <div className="flex items-center text-green-600 group-hover:text-green-700 transition-colors">
-                    <span className="font-medium">Shop Now</span>
+                    <span className="font-medium">{t("shop_now")}</span>
                     <i className="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform"></i>
                   </div>
                 </div>

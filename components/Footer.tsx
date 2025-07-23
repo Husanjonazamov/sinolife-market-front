@@ -1,7 +1,11 @@
 
 import Link from 'next/link';
+import { useLanguage } from '@/lib/LanguageContext';
 
 export default function Footer() {
+  const { language, setLanguage, t } = useLanguage();
+  
+
   return (
     <footer className="bg-green-900 text-white">
       <div className="container mx-auto px-4 py-12">
@@ -11,10 +15,10 @@ export default function Footer() {
               <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
                 <i className="ri-leaf-line text-green-600 text-lg"></i>
               </div>
-              <span className="text-xl font-pacifico">HerbaStore</span>
+              <span className="text-xl font-pacifico">Sinolife</span>
             </div>
             <p className="text-green-100 mb-4">
-              Your trusted partner for premium herbal products and natural wellness solutions.
+              {t("brand_tagline")}
             </p>
             <div className="flex space-x-4">
               <button className="w-8 h-8 bg-green-700 rounded-full flex items-center justify-center hover:bg-green-600 transition-colors cursor-pointer">
@@ -30,46 +34,68 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4">{t("quick_links_title")}</h3>
             <ul className="space-y-2">
-              <li><Link href="/products" className="text-green-100 hover:text-white transition-colors cursor-pointer">All Products</Link></li>
-              <li><Link href="/categories" className="text-green-100 hover:text-white transition-colors cursor-pointer">Categories</Link></li>
-              <li><Link href="/deals" className="text-green-100 hover:text-white transition-colors cursor-pointer">Special Deals</Link></li>
-              <li><Link href="/blog" className="text-green-100 hover:text-white transition-colors cursor-pointer">Health Blog</Link></li>
+              <li>
+                <Link href="/products" className="text-green-100 hover:text-white transition-colors cursor-pointer">
+                  {t("quick_links_0")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/categories" className="text-green-100 hover:text-white transition-colors cursor-pointer">
+                  {t("quick_links_1")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/deals" className="text-green-100 hover:text-white transition-colors cursor-pointer">
+                  {t("quick_links_2")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog" className="text-green-100 hover:text-white transition-colors cursor-pointer">
+                  {t("quick_links_3")}
+                </Link>
+              </li>
+          </ul>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4">{t("customer_care_title")}</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/help" className="text-green-100 hover:text-white transition-colors cursor-pointer">
+                  {t("customer_care_links_0")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/shipping" className="text-green-100 hover:text-white transition-colors cursor-pointer">
+                  {t("customer_care_links_1")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/returns" className="text-green-100 hover:text-white transition-colors cursor-pointer">
+                  {t("customer_care_links_2")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-green-100 hover:text-white transition-colors cursor-pointer">
+                  {t("customer_care_links_3")}
+                </Link>
+              </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-4">Customer Care</h3>
-            <ul className="space-y-2">
-              <li><Link href="/help" className="text-green-100 hover:text-white transition-colors cursor-pointer">Help Center</Link></li>
-              <li><Link href="/shipping" className="text-green-100 hover:text-white transition-colors cursor-pointer">Shipping Info</Link></li>
-              <li><Link href="/returns" className="text-green-100 hover:text-white transition-colors cursor-pointer">Returns</Link></li>
-              <li><Link href="/contact" className="text-green-100 hover:text-white transition-colors cursor-pointer">Contact Us</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Newsletter</h3>
-            <p className="text-green-100 mb-4">Subscribe for health tips and exclusive offers</p>
-            <div className="flex">
-              <input
-                type="email"
-                placeholder="Your email"
-                className="flex-1 px-3 py-2 bg-green-800 border border-green-700 rounded-l-md text-white placeholder-green-300 focus:outline-none focus:border-green-500"
-              />
-              <button className="px-4 py-2 bg-green-600 hover:bg-green-500 rounded-r-md transition-colors whitespace-nowrap cursor-pointer">
-                <i className="ri-send-plane-line"></i>
-              </button>
-            </div>
+            <h3 className="text-lg font-semibold mb-4">{t("newssletter_title")}</h3>
+            <p className="text-green-100 mb-4">{t("newssletter_description")}</p>
+          
           </div>
         </div>
-
         <div className="border-t border-green-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-green-100">&copy; 2024 HerbaStore. All rights reserved.</p>
+          <p className="text-green-100">&copy; {t("copyright")}</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <Link href="/privacy" className="text-green-100 hover:text-white transition-colors cursor-pointer">Privacy Policy</Link>
-            <Link href="/terms" className="text-green-100 hover:text-white transition-colors cursor-pointer">Terms of Service</Link>
+            <Link href="/privacy" className="text-green-100 hover:text-white transition-colors cursor-pointer">{t("privacy_policy")}</Link>
+            <Link href="/terms" className="text-green-100 hover:text-white transition-colors cursor-pointer">{t("terms_of_service")}</Link>
           </div>
         </div>
       </div>
