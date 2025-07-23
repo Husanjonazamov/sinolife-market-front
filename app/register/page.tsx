@@ -9,6 +9,8 @@ import axios from 'axios';
 import BASE_URL from '@/app/config';
 import { useRouter } from 'next/navigation';
 
+
+
 export default function RegisterPage() {
   const router = useRouter();
 
@@ -23,10 +25,7 @@ export default function RegisterPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -46,11 +45,9 @@ export default function RegisterPage() {
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
-
     if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
 
     const cleanedPhone = formData.phone.replace(/[^0-9]/g, '');
-
     if (!cleanedPhone.startsWith('998')) {
       newErrors.phone = 'Phone number must start with +998';
     } else if (cleanedPhone.length !== 12) {
@@ -72,42 +69,38 @@ export default function RegisterPage() {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
-
-    const cleanedPhone = formData.phone.replace(/[^0-9]/g, ''); // 998781233322 ko‘rinishida
+    const cleanedPhone = formData.phone.replace(/[^0-9]/g, '');
 
     try {
-      // 1️⃣ Register qilish
       await axios.post(`${BASE_URL}/auth/register/`, {
         first_name: formData.firstName,
         phone: Number(cleanedPhone),
-        password: formData.password
+        password: formData.password,
       });
 
-      // 2️⃣ Login qilish va token olish
-      const loginResponse = await axios.post(`${BASE_URL}/auth/token/`, {
+      const loginRes = await axios.post(`${BASE_URL}/auth/token/`, {
         phone: Number(cleanedPhone),
-        password: formData.password
+        password: formData.password,
       });
 
-      const { access, refresh, first_name } = loginResponse.data;
+      const { access, refresh, first_name } = loginRes.data;
 
       localStorage.setItem('access', access);
       localStorage.setItem('refresh', refresh);
-      localStorage.setItem('first_name', first_name || formData.firstName); // fallback qo'yildi
+      localStorage.setItem('first_name', first_name || formData.firstName);
 
       router.push('/');
-
     } catch (error: any) {
       if (error.response && error.response.data) {
         const backendErrors = error.response.data;
         setErrors(prev => ({
           ...prev,
-          server: backendErrors.detail || backendErrors.message || 'Registration or login failed'
+          server: backendErrors.detail || backendErrors.message || 'Registration or login failed',
         }));
       } else {
         setErrors(prev => ({
           ...prev,
-          server: 'Network error'
+          server: 'Network error',
         }));
       }
     } finally {
@@ -154,9 +147,7 @@ export default function RegisterPage() {
               </label>
               <IMaskInput
                 mask="+998 00 000 00 00"
-                definitions={{
-                  "0": /[0-9]/,
-                }}
+                definitions={{ "0": /[0-9]/ }}
                 lazy={false}
                 overwrite
                 id="phone"

@@ -148,8 +148,10 @@ export default function CheckoutPage() {
         },
       });
 
-      console.log('Order Response:', response.data);
-      router.push('/order-success');
+      const { id, created_at, status, payment_status } = response.data.data;
+      router.push(
+        `/order-success?id=${id}&created_at=${encodeURIComponent(created_at)}&status=${status}&payment_status=${payment_status}`
+      );
     } catch (error: any) {
       console.error('Order Error:', error);
       // Extract server error message if available
