@@ -7,6 +7,9 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { refreshToken } from '../register/refresh';
 import BASE_URL from '@/app/config';
+import { useLanguage } from '@/lib/LanguageContext';
+
+
 
 type ProductType = {
   id: number;
@@ -36,6 +39,8 @@ export default function ProductGrid({ filters }: ProductGridProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const productsPerPage = 10;
+  const { t } = useLanguage();
+
 
   useEffect(() => {
     async function fetchProducts() {
@@ -160,7 +165,7 @@ export default function ProductGrid({ filters }: ProductGridProps) {
       <ToastContainer position="top-right" autoClose={2000} />
 
       <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl font-bold text-gray-800">All Products ({products.length})</h2>
+        <h2 className="text-2xl font-bold text-gray-800">{t("all_products")} ({products.length})</h2>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
