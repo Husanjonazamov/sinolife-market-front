@@ -162,16 +162,22 @@ export default function CartPage() {
                           alt={item.name}
                           className="w-20 h-20 object-cover rounded-lg"
                         />
-                        <div className="flex items-center mt-2">
-                          <span className="text-lg font-semibold text-green-600">
-                            {item.price.toLocaleString('uz-UZ')} so'm
-                          </span>
-                          {item.originalPrice && (
-                            <span className="ml-2 text-sm text-gray-400 line-through">
-                              {item.originalPrice.toLocaleString('uz-UZ')} so'm
+                        <div className="mt-2">
+                          <div className="text-base font-bold text-teal-700">
+                            {item.name}
+                          </div>
+                          <div className="flex items-center">
+                            <span className="text-lg font-semibold text-green-600">
+                              {item.price.toLocaleString('uz-UZ')} so'm
                             </span>
-                          )}
+                            {item.originalPrice && (
+                              <span className="ml-2 text-sm text-gray-400 line-through">
+                                {item.originalPrice.toLocaleString('uz-UZ')} so'm
+                              </span>
+                            )}
+                          </div>
                         </div>
+
                       </div>
 
                       <div className="flex items-center justify-between mt-4 md:mt-0 md:justify-end w-full md:w-auto space-x-4">
