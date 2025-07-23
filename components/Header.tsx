@@ -103,7 +103,7 @@ export default function Header() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={t('search')}
+              placeholder={t('product_search')}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
             />
             <i className="ri-search-line absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
@@ -113,7 +113,7 @@ export default function Header() {
         {/* Nav */}
         <nav className="hidden md:flex items-center space-x-8">
           <Link href="/" className="text-gray-700 hover:text-green-600">{t('home')}</Link>
-          <Link href="/products" className="text-gray-700 hover:text-green-600">{t('products')}</Link>
+          <Link href="/products" className="text-gray-700 hover:text-green-600">{t('product')}</Link>
           <Link href="/categories" className="text-gray-700 hover:text-green-600">{t('categories')}</Link>
           <Link href="/contact" className="text-gray-700 hover:text-green-600">{t('contact')}</Link>
         </nav>
@@ -131,7 +131,7 @@ export default function Header() {
             {isLanguageOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                 <div className="p-2">
-                  <div className="text-xs font-semibold text-gray-500 uppercase px-2 py-1">Language</div>
+                  <div className="text-xs font-semibold text-gray-500 uppercase px-2 py-1">{t("lang")}</div>
                   {languages.map((lang) => (
                     <button key={lang.code} onClick={() => { setLanguage(lang.code as any); setIsLanguageOpen(false); }}
                       className={`w-full flex items-center px-2 py-2 text-sm rounded ${language === lang.code ? 'bg-green-50 text-green-700' : 'text-gray-700'} hover:bg-gray-100`}>
@@ -163,7 +163,7 @@ export default function Header() {
 
               {isUserMenuOpen && (
                 <div className="absolute right-0 mt-2 w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
-                  
+      
                   <button
                     onClick={() => {
                       setIsUserMenuOpen(false);
@@ -171,7 +171,7 @@ export default function Header() {
                     }}
                     className="flex items-center justify-between w-full px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors focus:outline-none focus:bg-green-100 focus:text-green-800 border-t border-gray-200"
                   >
-                    <span>Buyurtmalarim</span>
+                    <span>{t("my_orders")}</span>
                     <i className="ri-shopping-bag-line text-lg"></i>
                   </button>
                   <button
@@ -181,7 +181,7 @@ export default function Header() {
                     }}
                     className="flex items-center justify-between w-full px-5 py-3 text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors focus:outline-none focus:bg-red-100 focus:text-red-800"
                   >
-                    <span>Chiqish</span>
+                    <span>{t("logout")}</span>
                     <i className="ri-logout-box-r-line text-lg"></i>
                   </button>
                 </div>
@@ -218,7 +218,7 @@ export default function Header() {
           </form>
 
           <div className="mb-4 space-y-2">
-            <div className="text-xs text-gray-500 uppercase">Language</div>
+            <div className="text-xs text-gray-500 uppercase">{t("lang")}</div>
             {languages.map((lang) => (
               <button key={lang.code} onClick={() => setLanguage(lang.code as any)}
                 className={`w-full flex items-center px-2 py-2 text-sm rounded ${language === lang.code ? 'bg-green-50 text-green-700' : 'text-gray-700'} hover:bg-gray-100`}>
