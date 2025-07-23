@@ -144,11 +144,14 @@ export default function Header() {
           </div>
 
           {/* User */}
-         <div className="relative">
+        <div className="relative">
               {isLoggedIn && userName ? (
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-semibold select-none user-menu-toggle"
+                  className="w-9 h-9 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-semibold select-none user-menu-toggle shadow-md hover:brightness-110 transition"
+                  aria-haspopup="true"
+                  aria-expanded={isUserMenuOpen}
+                  aria-label="User menu"
                 >
                   {getInitials(userName)}
                 </button>
@@ -159,17 +162,31 @@ export default function Header() {
               )}
 
               {isUserMenuOpen && (
-                <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                <div className="absolute right-0 mt-2 w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
+                  
                   <button
-                    onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100"
+                    onClick={() => {
+                      setIsUserMenuOpen(false);
+                      router.push('/orders');
+                    }}
+                    className="flex items-center justify-between w-full px-5 py-3 text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors focus:outline-none focus:bg-green-100 focus:text-green-800 border-t border-gray-200"
                   >
-                    Logout
+                    <span>Buyurtmalarim</span>
+                    <i className="ri-shopping-bag-line text-lg"></i>
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsUserMenuOpen(false);
+                    }}
+                    className="flex items-center justify-between w-full px-5 py-3 text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors focus:outline-none focus:bg-red-100 focus:text-red-800"
+                  >
+                    <span>Chiqish</span>
+                    <i className="ri-logout-box-r-line text-lg"></i>
                   </button>
                 </div>
               )}
             </div>
-
 
           {/* Cart */}
           <Link href="/cart" className="p-2 text-gray-700 hover:text-green-600 relative">
