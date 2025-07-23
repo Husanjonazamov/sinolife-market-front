@@ -5,6 +5,8 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import BASE_URL from '../config';
+import { useLanguage } from '@/lib/LanguageContext';
+
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -12,6 +14,7 @@ export default function ContactForm() {
     phone: '',
     message: ''
   });
+  const { language, setLanguage, t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -62,13 +65,13 @@ export default function ContactForm() {
     <div>
       <ToastContainer position="top-center" />
 
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">Get In Touch</h2>
+      <h2 className="text-3xl font-bold text-gray-800 mb-6">{t("contact")}</h2>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label htmlFor="first_name" className="block text-sm font-medium text-gray-700 mb-2">
-              Full Name *
+              {t("full_name_label")}
             </label>
             <input
               type="text"
@@ -78,13 +81,13 @@ export default function ContactForm() {
               value={formData.first_name}
               onChange={handleChange}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              placeholder="Your full name"
+              placeholder={t("full_name_placeholder")}
             />
           </div>
 
           <div>
             <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-              Phone Number *
+              {t("phone_number_label")}
             </label>
             <input
               type="text"
@@ -95,17 +98,17 @@ export default function ContactForm() {
               onInput={handlePhoneInput} // faqat raqam uchun
               maxLength={20}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              placeholder="998940014741"
+              placeholder={t("phone_number_label")}
             />
             <p className="text-xs text-gray-500 mt-1">
-              Faqat raqam kiriting. Kamida 8 ta raqam bo‘lishi kerak.
+              {t("phone_number_note")}
             </p>
           </div>
         </div>
 
         <div>
           <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-            Message *
+            {t("message_label")}
           </label>
           <textarea
             id="message"
@@ -116,10 +119,10 @@ export default function ContactForm() {
             value={formData.message}
             onChange={handleChange}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
-            placeholder="Tell us how we can help you..."
+            placeholder={t("message_placeholder")}
           ></textarea>
           <div className="text-right text-sm text-gray-500 mt-1">
-            {formData.message.length}/500 characters
+            {formData.message.length}{t("message_char_count")}
           </div>
         </div>
 
@@ -131,10 +134,10 @@ export default function ContactForm() {
           {isSubmitting ? (
             <span className="flex items-center justify-center">
               <i className="ri-loader-4-line animate-spin mr-2"></i>
-              Yuborilmoqda...
+              {t("submitting")} {/* yoki "Yuborilmoqda..." */}
             </span>
           ) : (
-            'Xabarni Yuborish'
+            <span>{t("submit_button")}</span>
           )}
         </button>
       </form>

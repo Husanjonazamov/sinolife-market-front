@@ -200,7 +200,7 @@ export default function ProductGrid({ filters }: ProductGridProps) {
                 onClick={() => handleAddToCart(product.id)}
                 className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer"
               >
-                Add to Cart
+                {t("add_to_cart")}
               </button>
             </div>
           </div>

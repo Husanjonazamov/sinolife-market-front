@@ -5,6 +5,8 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { useLanguage } from '@/lib/LanguageContext';
+
 
 function SearchContent() {
   const searchParams = useSearchParams();
@@ -13,6 +15,8 @@ function SearchContent() {
   const [sortBy, setSortBy] = useState('relevance');
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
+  const { t } = useLanguage();
+
 
   const allProducts = [
     {
@@ -204,7 +208,7 @@ function SearchContent() {
                     </div>
 
                     <button className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer">
-                      Add to Cart
+                      {t("add_to_cart")}
                     </button>
                   </div>
                 </div>

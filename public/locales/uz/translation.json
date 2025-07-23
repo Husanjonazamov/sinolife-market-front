@@ -76,40 +76,29 @@
     
     "contact_title": "Bog‘laning",
     
-    "form": {
-        "full_name_label": "To‘liq ism *",
-        "full_name_placeholder": "To‘liq ismingiz",
-        
-        "phone_number_label": "Telefon raqami *",
-        "phone_number_placeholder": "998940014741",
-        "phone_number_note": "Faqat raqam kiriting. Kamida 8 ta raqam bo‘lishi kerak.",
-        
-        "message_label": "Xabar *",
-        "message_placeholder": "Qanday yordam bera olishimizni yozing...",
-        "message_char_count": "0/500 ta belgi",
+    "                                                                                                                                                                       ": "To‘liq ism *",
+    "full_name_placeholder": "To‘liq ismingiz",
+    
+    "phone_number_placeholder": "998940014741",
+    "phone_number_note": "Faqat raqam kiriting. Kamida 8 ta raqam bo‘lishi kerak.",
+    
+    "message_label": "Xabar *",
+    "message_placeholder": "Qanday yordam bera olishimizni yozing...",
+    "message_char_count": "500 ta belgi",
 
-        "submit_button": "Xabarni yuborish"
-    },
+    "submit_button": "Xabarni yuborish",
 
     "contact_info_title": "Aloqa ma’lumotlari",
 
-    "phone": {
-        "label": "Telefon",
-        "value": "+998 91-723-34-84",
-        "note": "Istalgan vaqtda qo‘ng‘iroq qiling"
-    },
+    "label": "Telefon",
+    "note": "Istalgan vaqtda qo‘ng‘iroq qiling",
 
-    "telegram": {
-        "label": "Telegram",
-        "value": "@Husanboy_Azamov",
-        "note": "Telegram’da yozing"
-    },
+    "telegram_label": "Telegram",
+    "telegram_note": "Telegram’da yozing",
 
-    "address": {
-        "label": "Manzil",
-        "value": "HerbaStore Flagship, 123 Wellness Way, Natural City, NC 12345",
-        "note": "Ofisimizga tashrif buyuring"
-    },
+    "address_label": "Manzil",
+    "address_note": "Ofisimizga tashrif buyuring",
+
     "add_to_cart": "Savatchaga qo‘shish",
 
 

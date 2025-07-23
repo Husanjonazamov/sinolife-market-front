@@ -73,37 +73,26 @@
 
   "contact_title": "Связаться с нами",
 
-  "form": {
-    "full_name_label": "Полное имя *",
-    "full_name_placeholder": "Ваше полное имя",
-    "phone_number_label": "Номер телефона *",
-    "phone_number_placeholder": "998940014741",
-    "phone_number_note": "Введите только цифры. Минимум 8 символов.",
-    "message_label": "Сообщение *",
-    "message_placeholder": "Расскажите, как мы можем вам помочь...",
-    "message_char_count": "0/500 символов",
-    "submit_button": "Отправить сообщение"
-  },
+  "full_name_label": "Полное имя *",
+  "full_name_placeholder": "Ваше полное имя",
+  "phone_number_placeholder": "998940014741",
+  "phone_number_note": "Введите только цифры. Минимум 8 символов.",
+  "message_label": "Сообщение *",
+  "message_placeholder": "Расскажите, как мы можем вам помочь...",
+  "message_char_count": "0/500 символов",
+  "submit_button": "Отправить сообщение",
 
   "contact_info_title": "Контактная информация",
 
-  "phone": {
-    "label": "Телефон",
-    "value": "+998 91-723-34-84",
-    "note": "Звоните в любое время"
-  },
+  "label": "Телефон",
+  "value": "+998 91-723-34-84",
+  "note": "Звоните в любое время",
 
-  "telegram": {
-    "label": "Телеграм",
-    "value": "@Husanboy_Azamov",
-    "note": "Напишите в Телеграм"
-  },
+  "telegram_label": "Телеграм",
+  "telegram_note": "Напишите в Телеграм",
 
-  "address": {
-    "label": "Адрес",
-    "value": "HerbaStore Flagship, 123 Wellness Way, Natural City, NC 12345",
-    "note": "Посетите наш офис"
-  },
+  "address_label": "Адрес",
+  "address_note": "Посетите наш офис",
 
   "cart_title": "Корзина",
   "cart_description": "Проверьте ваши товары и перейдите к оплате",
