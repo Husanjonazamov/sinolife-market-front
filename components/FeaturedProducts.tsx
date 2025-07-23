@@ -6,6 +6,8 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { refreshToken } from '@/app/register/refresh';
+import { useLanguage } from '@/lib/LanguageContext';
+
 
 import BASE_URL from '@/app/config';
 
@@ -39,6 +41,8 @@ function getRandomItems<T>(arr: T[], n: number): T[] {
 export default function FeaturedProducts() {
   const [products, setProducts] = useState<ProductType[]>([]);
   const [loading, setLoading] = useState(true);
+  const { language, setLanguage, t } = useLanguage();
+
 
   useEffect(() => {
     async function fetchProducts() {
@@ -140,9 +144,9 @@ export default function FeaturedProducts() {
       <ToastContainer position="top-right" autoClose={2000} />
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">Featured Products</h2>
+          <h2 className="text-4xl font-bold text-gray-800 mb-4">{t("featured_product")}</h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Discover our most popular herbal supplements, carefully selected for their quality and effectiveness.
+            {t("featured_products_description")}
           </p>
         </div>
 
@@ -159,17 +163,17 @@ export default function FeaturedProducts() {
                   {product.is_populer && (
                     <span className="px-3 py-1 text-xs font-semibold rounded-full text-white"
                       style={{ backgroundColor: '#0ef' }}>
-                      Best Seller
+                      {t("best_seller")}
                     </span>
                   )}
                   {product.is_new && (
                     <span className="px-3 py-1 text-xs font-semibold rounded-full bg-green-600 text-white">
-                      New
+                      {t("new")}
                     </span>
                   )}
                   {product.is_discounted && (
                     <span className="px-3 py-1 text-xs font-semibold rounded-full bg-red-600 text-white">
-                      Sale
+                      {t("sale")}
                     </span>
                   )}
                 </div>
@@ -198,7 +202,7 @@ export default function FeaturedProducts() {
                   onClick={() => handleAddToCart(product.id)}
                   className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer"
                 >
-                  Add to Cart
+                {t("add_to_cart")}
                 </button>
               </div>
             </div>
@@ -208,7 +212,7 @@ export default function FeaturedProducts() {
         <div className="text-center mt-12">
           <Link href="/products">
             <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-colors whitespace-nowrap cursor-pointer">
-              View All Products
+              {t("view_all_product")}
             </button>
           </Link>
         </div>

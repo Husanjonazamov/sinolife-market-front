@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useLanguage } from '@/lib/LanguageContext';
 import BASE_URL from '@/app/config';
+
 
 type BannerType = {
   title: string;
@@ -25,6 +27,8 @@ const DEFAULT_BANNER: BannerType = {
 
 export default function HeroSection() {
   const [banner, setBanner] = useState<BannerType | null>(null);
+  const { language, setLanguage, t } = useLanguage();
+
 
   useEffect(() => {
     const cachedBanner = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -94,12 +98,12 @@ export default function HeroSection() {
           <div className="flex flex-col sm:flex-row gap-4">
             <a href="/products">
               <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105">
-                Shop Now
+                {t("shop_show")}
               </button>
             </a>
             <a href="/contact">
               <button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-green-600 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300">
-                Learn More
+                {t("contact")}
               </button>
             </a>
           </div>

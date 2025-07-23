@@ -9,6 +9,10 @@
 
     "logout": "Tizimdan chiqish",
 
+    "best_seller": "Eng ko‘p sotilgan",
+    "new": "Yangi",
+    "sale": "Chegirma",
+
     "shop_show": "Mahsulotlarni ko'rish",
     "featured_product": "Mashhur mahsulotlar",
     "featured_products_description": "Sifati va samaradorligi uchun ehtiyotkorlik bilan tanlangan eng mashhur o'simlik qo'shimchalarini kashf eting.",
@@ -106,6 +110,7 @@
         "value": "HerbaStore Flagship, 123 Wellness Way, Natural City, NC 12345",
         "note": "Ofisimizga tashrif buyuring"
     },
+    "add_to_cart": "Savatchaga qo‘shish",
 
 
     "cart_title": "Savatcha",
