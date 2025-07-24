@@ -22,7 +22,7 @@ const currencyMap: { [key in Language]: Currency } = {
 };
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useState<Language>('uz');
   const [currency, setCurrency] = useState<Currency>('USD');
   const [translations, setTranslations] = useState<{ [key: string]: string }>({});
 
@@ -30,7 +30,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const savedLang = localStorage.getItem('language') as Language;
     const savedCurrency = localStorage.getItem('currency') as Currency;
 
-    const lang = savedLang && ['en', 'uz', 'ru'].includes(savedLang) ? savedLang : 'en';
+    const lang = savedLang && ['en', 'uz', 'ru'].includes(savedLang) ? savedLang : 'uz';
     const curr = savedCurrency && ['USD', 'UZS', 'RUB'].includes(savedCurrency)
       ? savedCurrency
       : currencyMap[lang];

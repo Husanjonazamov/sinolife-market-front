@@ -190,7 +190,15 @@
     "order_date_label": "Berilgan sana:",
     "order_status_pending": "Kutilmoqda",
     "no_orders": "Buyurtma topilmadi",
-    "start_shopping": "Xarid qilishni boshlang va buyurtmalaringizni bu yerda ko‘ring"
+    "start_shopping": "Xarid qilishni boshlang va buyurtmalaringizni bu yerda ko‘ring",
+
+    "pending": "Kutilmoqda",
+    "processing": "Jarayonda",
+    "shipped": "Yuborilgan",
+    "delivered": "Yetkazilgan",
+    "cancelled": "Bekor qilingan",
+    "paid": "To‘langan"
+
 
 
 

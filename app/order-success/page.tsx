@@ -51,18 +51,18 @@ export default function OrderSuccessPage() {
     year: 'numeric',
   });
 
-  const paymentStatusText = orderData.payment_status === 'paid' ? 'To‘langan' : 'To‘lanmagan';
+  const paymentStatusText = orderData.payment_status === 'paid' ? t("paid") : t("payment_status_value");
   const paymentStatusColor =
     orderData.payment_status === 'paid'
       ? 'bg-green-100 text-green-800'
       : 'bg-red-100 text-red-800';
 
   const statusMap: { [key: string]: string } = {
-    pending: 'Kutilmoqda',
-    processing: 'Jarayonda',
-    shipped: 'Yuborilgan',
-    delivered: 'Yetkazilgan',
-    cancelled: 'Bekor qilingan',
+    pending: t("pending"),
+    processing: t("processing"),
+    shipped: t("shipped"),
+    delivered: t("delivered"),
+    cancelled: t("cancelled"),
   };
 
   const orderStatusText = statusMap[orderData.status] || orderData.status;
