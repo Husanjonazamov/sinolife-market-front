@@ -1,4 +1,22 @@
 {
+
+    "welcome_back": "Xush kelibsiz",
+    "sign_in_to_account": "Sinolife hisobingizga kiring",
+    "phone_number": "Telefon raqam",
+    "password": "Parolni kiriting",
+    "sign_in": "Kirish",
+    "no_account": "Hisobingiz yo‘qmi?",
+    "sign_up_here": "Bu yerda ro‘yxatdan o‘ting",
+
+
+    "create_account": "Hisob yaratish",
+    "join_herbastore": "Sinolife qo‘shiling va tabiiy sog‘lomlik sayohatingizni boshlang",
+    "first_name": "Ismingiz",
+    "enter_first_name": "Ismingizni kiriting",
+    "create_account_button": "Hisob yaratish",
+    "already_have_account": "Hisobingiz bormi?",
+    "sign_in_here": "Bu yerda kiring",
+
     "product_search": "Mahsulotlarni qidiring...",
     "home": "Bosh sahifa",
     "product": "Mahsulotlar",

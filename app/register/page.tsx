@@ -8,11 +8,12 @@ import { IMaskInput } from 'react-imask';
 import axios from 'axios';
 import BASE_URL from '@/app/config';
 import { useRouter } from 'next/navigation';
-
+import { useLanguage } from '@/lib/LanguageContext';
 
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { t } = useLanguage();
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -114,8 +115,8 @@ export default function RegisterPage() {
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
-            <p className="text-gray-600">Join HerbaStore and start your natural wellness journey</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("create_account")}</h1>
+            <p className="text-gray-600">{t("join_herbastore")}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -125,7 +126,7 @@ export default function RegisterPage() {
 
             <div>
               <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-                First Name
+                {t("first_name")}
               </label>
               <input
                 type="text"
@@ -136,14 +137,14 @@ export default function RegisterPage() {
                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm ${
                   errors.firstName ? 'border-red-500' : 'border-gray-300'
                 }`}
-                placeholder="Enter first name"
+                placeholder={t("enter_first_name")}
               />
               {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
             </div>
 
             <div>
               <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                Phone Number
+                {t("phone_number")}
               </label>
               <IMaskInput
                 mask="+998 00 000 00 00"
@@ -164,7 +165,7 @@ export default function RegisterPage() {
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Password
+                {t("password")}
               </label>
               <input
                 type="password"
@@ -175,7 +176,7 @@ export default function RegisterPage() {
                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm ${
                   errors.password ? 'border-red-500' : 'border-gray-300'
                 }`}
-                placeholder="Create a password"
+                placeholder={t("password")}
               />
               {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
             </div>
@@ -185,15 +186,15 @@ export default function RegisterPage() {
               disabled={isSubmitting}
               className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? 'Creating Account...' : 'Create Account'}
+              {isSubmitting ? 'Creating Account...' : t("create_account_button")}
             </button>
           </form>
 
           <div className="mt-8 text-center">
             <p className="text-sm text-gray-600">
-              Already have an account?{' '}
+              {t("already_have_account")}{' '}
               <Link href="/login" className="text-green-600 hover:text-green-700 font-medium">
-                Sign in here
+                {t("sign_in_here")}
               </Link>
             </p>
           </div>

@@ -1,4 +1,21 @@
 {
+
+  "welcome_back": "С возвращением",
+  "sign_in_to_account": "Войдите в свой аккаунт Sinolife",
+  "phone_number": "Номер телефона",
+  "password": "Введите пароль",
+  "sign_in": "Войти",
+  "no_account": "Нет аккаунта?",
+  "sign_up_here": "Зарегистрируйтесь здесь",
+
+  "create_account": "Создать аккаунт",
+  "join_herbastore": "Присоединяйтесь к Sinolife и начните свой путь к естественному оздоровлению",
+  "first_name": "Имя",
+  "enter_first_name": "Введите имя",
+  "create_account_button": "Создать аккаунт",
+  "already_have_account": "Уже есть аккаунт?",
+  "sign_in_here": "Войдите здесь",
+
   "product_search": "Поиск товаров...",
   "home": "Главная",
   "product": "Товары",
