@@ -15,6 +15,13 @@ type BannerType = {
   image: string;
 };
 
+type FilterType = {
+  category_ids: number[];
+  min_price: number;
+  max_price: number;
+  q: string;
+};
+
 const LOCAL_STORAGE_KEY = 'bannerDataProducts';
 const CACHE_EXPIRY_MS = 1000 * 60 * 60; // 1 soat
 
@@ -26,7 +33,7 @@ const DEFAULT_BANNER: BannerType = {
 };
 
 export default function ProductsPage() {
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<FilterType>({
     category_ids: [],
     min_price: 0,
     max_price: 0,
