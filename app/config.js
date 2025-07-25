@@ -1,3 +1,3 @@
-const BASE_URL = "http://127.0.0.1:8088";
+const BASE_URL = "https://admin.sinolife.uz";
 
 export default BASE_URL;

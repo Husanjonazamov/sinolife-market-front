@@ -45,7 +45,7 @@ export default function HeroSection() {
 
     async function fetchBanner() {
       try {
-        const response = await axios.get(`https://admin.sinolife.uz/api/banner/?lang=${language}`);
+        const response = await axios.get(`${BASE_URL}/api/banner/?lang=${language}`);
         if (response.data.status && response.data.data.results.length > 0) {
           const banners = response.data.data.results;
           const homeBanner = banners.find((b: any) => b.type === 'home');
