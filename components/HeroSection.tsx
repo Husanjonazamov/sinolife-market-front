@@ -5,7 +5,6 @@ import axios from 'axios';
 import { useLanguage } from '@/lib/LanguageContext';
 import BASE_URL from '@/app/config';
 
-
 type BannerType = {
   title: string;
   subtitle: string;
@@ -13,9 +12,7 @@ type BannerType = {
   image: string;
 };
 
-const LOCAL_STORAGE_KEY = 'bannerDataHome';
 const CACHE_EXPIRY_MS = 1000 * 60 * 60; // 1 soat
-
 const DEFAULT_IMAGE = "https://readdy.ai/api/search-image?query=Natural%20herbal%20garden%20with%20green%20herbs%20and%20plants%20growing%20in%20sunlight&width=1920&height=1080";
 
 const DEFAULT_BANNER: BannerType = {
@@ -27,11 +24,13 @@ const DEFAULT_BANNER: BannerType = {
 
 export default function HeroSection() {
   const [banner, setBanner] = useState<BannerType | null>(null);
-  const { language, setLanguage, t } = useLanguage();
+  const { language, t } = useLanguage();
 
+  const LOCAL_STORAGE_KEY = `bannerDataHome_${language}`;
 
   useEffect(() => {
     const cachedBanner = localStorage.getItem(LOCAL_STORAGE_KEY);
+
     if (cachedBanner) {
       try {
         const { data, timestamp } = JSON.parse(cachedBanner);
@@ -40,17 +39,15 @@ export default function HeroSection() {
           return;
         }
       } catch {
-        // Kesh noto‘g‘ri bo‘lsa, API chaqiramiz
+        // noto‘g‘ri format bo‘lsa, e’tiborsiz
       }
     }
 
     async function fetchBanner() {
       try {
-        const response = await axios.get(`${BASE_URL}/api/banner/`);
+        const response = await axios.get(`https://admin.sinolife.uz/api/banner/?lang=${language}`);
         if (response.data.status && response.data.data.results.length > 0) {
           const banners = response.data.data.results;
-
-          // Faqat type === 'home' bo'lganini olish
           const homeBanner = banners.find((b: any) => b.type === 'home');
 
           if (homeBanner) {
@@ -66,7 +63,6 @@ export default function HeroSection() {
           }
         }
 
-        // Agar home type topilmasa
         setBanner(DEFAULT_BANNER);
       } catch (error) {
         console.error('Banner olishda xatolik:', error);
@@ -75,7 +71,7 @@ export default function HeroSection() {
     }
 
     fetchBanner();
-  }, []);
+  }, [language]);
 
   const displayBanner = banner || DEFAULT_BANNER;
 
