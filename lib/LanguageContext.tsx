@@ -11,6 +11,7 @@ interface LanguageContextType {
   setLanguage: (lang: Language) => void;
   setCurrency: (curr: Currency) => void;
   t: (key: string) => string;
+  isReady: boolean; // ✅ qo‘shildi
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -25,6 +26,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>('uz');
   const [currency, setCurrency] = useState<Currency>('USD');
   const [translations, setTranslations] = useState<{ [key: string]: string }>({});
+  const [isReady, setIsReady] = useState(false); // ✅
 
   useEffect(() => {
     const savedLang = localStorage.getItem('language') as Language;
@@ -42,11 +44,15 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const loadTranslations = async (lang: Language) => {
     try {
+      setIsReady(false); // ✅ yangi til yuklanayotganda loading holatiga o‘tamiz
       const res = await fetch(`/locales/${lang}/translation.json`);
       const data = await res.json();
       setTranslations(data);
+      setIsReady(true); // ✅ yuklandi
     } catch (error) {
       console.error('Tarjimalarni yuklashda xatolik:', error);
+      setTranslations({});
+      setIsReady(true); // ❗ hatolik bo‘lsa ham tayyor deb qaytamiz
     }
   };
 
@@ -75,6 +81,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         setLanguage: handleSetLanguage,
         setCurrency: handleSetCurrency,
         t,
+        isReady, // ✅ qo‘shildi
       }}
     >
       {children}
