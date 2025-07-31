@@ -7,8 +7,9 @@ import BASE_URL from '../config';
 
 const SMSCodeInput = ({ phone }: { phone: number }) => {
   const [code, setCode] = useState(['', '', '', '']);
-  const inputs = useRef<HTMLInputElement[]>([]);
   const [loading, setLoading] = useState(false);
+  const inputs = useRef<Array<HTMLInputElement | null>>([]);
+
 
   const handleChange = (index: number, value: string) => {
     if (!/^\d?$/.test(value)) return;
@@ -68,7 +69,10 @@ const SMSCodeInput = ({ phone }: { phone: number }) => {
         {[0, 1, 2, 3].map((i) => (
           <input
             key={i}
-            ref={(el) => (inputs.current[i] = el!)}
+            ref={(el) => {
+              inputs.current[i] = el;
+            }}
+
             type="text"
             maxLength={1}
             value={code[i]}
