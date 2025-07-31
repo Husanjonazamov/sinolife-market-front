@@ -4,96 +4,86 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import axios from 'axios';
-import BASE_URL from '@/app/config';
 import { useRouter } from 'next/navigation';
 import { IMaskInput } from 'react-imask';
 import { useLanguage } from '@/lib/LanguageContext';
+import BASE_URL from '../config';
 
 export default function LoginPage() {
   const router = useRouter();
   const { t } = useLanguage();
 
-  const [formData, setFormData] = useState({
-    phone: '',
-    password: ''
-  });
-
+  const [formData, setFormData] = useState({ phone: '', password: '' });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [serverError, setServerError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handlePhoneChange = (value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      phone: value
-    }));
-
-    if (errors.phone) {
-      setErrors(prev => ({ ...prev, phone: '' }));
-    }
+    setFormData(prev => ({ ...prev, phone: value }));
+    if (errors.phone) setErrors(prev => ({ ...prev, phone: '' }));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
+
+
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
     const onlyNumbers = formData.phone.replace(/[^0-9]/g, '');
 
-    if (onlyNumbers.length !== 12) {
+    if (onlyNumbers.length !== 12)
       newErrors.phone = 'Telefon raqam to‘liq bo‘lishi kerak: +998 XX XXX XX XX';
-    }
 
     if (!formData.password) {
       newErrors.password = 'Parol kiritish shart';
-    } else if (formData.password.length < 8) {
-      newErrors.password = 'Parol kamida 8 ta belgidan iborat bo‘lishi kerak';
+    } else if (formData.password.length < 4) {
+      newErrors.password = 'Parol kamida 4 ta belgidan iborat bo‘lishi kerak';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setServerError(null);
     if (!validateForm()) return;
 
+    const onlyNumbers = formData.phone.replace(/[^0-9]/g, '');
     setIsSubmitting(true);
+    const cleanedPhone = formData.phone.replace(/\D/g, '');
+
 
     try {
-      const onlyNumbers = formData.phone.replace(/[^0-9]/g, ''); 
-
-      const response = await axios.post(`${BASE_URL}/auth/token/`, {
-        phone: Number(onlyNumbers),
-        password: formData.password
+      const res = await fetch(`${BASE_URL}/auth/token/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phone: String(cleanedPhone),        // 👉 string ko‘rinishda
+          password: String(formData.password), // 👉 string ko‘rinishda
+        }),
       });
 
-      const { access, refresh, first_name } = response.data;
+      const data = await res.json();
+      console.log('TOKEN RESPONSE:', data);
 
-      localStorage.setItem('access', access);
-      localStorage.setItem('refresh', refresh);
-      if (first_name) {
-        localStorage.setItem('first_name', first_name);
+      if (res.ok) {
+        localStorage.setItem('phone', cleanedPhone);
+
+        router.push('/sms');
+      } else {                                  
+        setServerError(data.detail || 'Telefon raqam yoki parol noto‘g‘ri');
       }
-
-      router.push('/');
-
-    } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        setServerError('Telefon raqami yoki parol noto‘g‘ri');
-      } else {
-        setServerError('Kirishda xatolik. Qaytadan urinib ko‘ring.');
-      }
+    } catch (err) {
+      setServerError('Serverga ulanib bo‘lmadi');
     } finally {
       setIsSubmitting(false);
     }
@@ -102,7 +92,6 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
           <div className="text-center mb-8">
@@ -123,9 +112,7 @@ export default function LoginPage() {
               </label>
               <IMaskInput
                 mask="+998 00 000 00 00"
-                definitions={{
-                  "0": /[0-9]/,
-                }}
+                definitions={{ "0": /[0-9]/ }}
                 lazy={false}
                 overwrite
                 id="phone"
@@ -161,24 +148,22 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 font-medium"
             >
-              {isSubmitting ? 'Signing In...' : t("sign_in")}
+              {isSubmitting ? t("loading") : t("sign_in")}
             </button>
           </form>
 
           <div className="mt-8 text-center">
             <p className="text-sm text-gray-600">
               {t("no_account")}{' '}
-              <Link href="/register" className="text-green-600 hover:text-green-700 font-medium cursor-pointer">
+              <Link href="/register" className="text-green-600 hover:text-green-700 font-medium">
                 {t("sign_up_here")}
               </Link>
             </p>
           </div>
-
         </div>
       </div>
-
       <Footer />
     </div>
   );

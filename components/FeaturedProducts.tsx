@@ -159,7 +159,7 @@ export default function FeaturedProducts() {
                   alt={product.title}
                   className="w-full h-64 object-cover object-top"
                 />
-                <div className="absolute top-4 left-4 flex flex-col gap-1">
+                <div className="absolute top-4 left-4 flex flex-col items-start gap-1">
                   {product.is_populer && (
                     <span className="px-3 py-1 text-xs font-semibold rounded-full text-white"
                       style={{ backgroundColor: '#0ef' }}>

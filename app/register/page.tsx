@@ -79,18 +79,9 @@ export default function RegisterPage() {
         password: formData.password,
       });
 
-      const loginRes = await axios.post(`${BASE_URL}/auth/token/`, {
-        phone: Number(cleanedPhone),
-        password: formData.password,
-      });
 
-      const { access, refresh, first_name } = loginRes.data;
-
-      localStorage.setItem('access', access);
-      localStorage.setItem('refresh', refresh);
-      localStorage.setItem('first_name', first_name || formData.firstName);
-
-      router.push('/');
+      localStorage.setItem("phone", cleanedPhone)
+      router.push('/sms');
     } catch (error: any) {
       if (error.response && error.response.data) {
         const backendErrors = error.response.data;

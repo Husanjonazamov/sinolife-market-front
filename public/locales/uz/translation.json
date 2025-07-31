@@ -8,6 +8,15 @@
     "no_account": "Hisobingiz yo‘qmi?",
     "sign_up_here": "Bu yerda ro‘yxatdan o‘ting",
 
+    "sms_verify": "SMS tasdiqlash",
+    "enter_code": "Telefon raqamingizga yuborilgan 4 xonali kodni kiriting",
+    "submit": "Tasdiqlash",
+    "resend_code": "Yangi kod olish",
+    "code_expired": "Kod eskirgan",
+    "code_expires_in": "Kod eskirguncha: ",
+    "oclock": "soniya",
+
+
 
     "create_account": "Hisob yaratish",
     "join_herbastore": "Sinolife qo‘shiling va tabiiy sog‘lomlik sayohatingizni boshlang",
