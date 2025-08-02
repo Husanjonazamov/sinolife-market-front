@@ -184,13 +184,13 @@ export default function ProductGrid({ filters }: ProductGridProps) {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-2">
                   <span className="text-2xl font-bold text-green-600">
-                    {product.discounted_price
-                      ? `${product.discounted_price.toLocaleString('uz-UZ')} so'm`
+                    {product.price
+                      ? `${product.price.toLocaleString('uz-UZ')} so'm`
                       : `${product.price.toLocaleString('uz-UZ')} so'm`}
                   </span>
                   {product.discounted_price && product.price !== product.discounted_price && (
                     <span className="text-sm text-gray-500 line-through">
-                      {product.price.toLocaleString('uz-UZ')} so'm
+                      {product.discounted_price.toLocaleString('uz-UZ')} so'm
                     </span>
                   )}
                 </div>

@@ -12,13 +12,12 @@ type BannerType = {
   image: string;
 };
 
-const CACHE_EXPIRY_MS = 1000 * 60 * 60; // 1 soat
 const DEFAULT_IMAGE = "https://readdy.ai/api/search-image?query=Natural%20herbal%20garden%20with%20green%20herbs%20and%20plants%20growing%20in%20sunlight&width=1920&height=1080";
 
 const DEFAULT_BANNER: BannerType = {
-  title: 'Welcome to Sinolife',
-  subtitle: 'Natural Wellness',
-  desc: 'Discover premium herbal products for your health and lifestyle.',
+  title: 'Sinolife – sog‘lol xayot tarzini yetkazamiz',
+  subtitle: '',
+  desc: 'Sinolife bu – Har bir oilaga tabiiy yechimlar orqali sog‘lik va yaxshi xayot tarzini yetkazamiz.',
   image: DEFAULT_IMAGE,
 };
 
@@ -26,23 +25,7 @@ export default function HeroSection() {
   const [banner, setBanner] = useState<BannerType | null>(null);
   const { language, t } = useLanguage();
 
-  const LOCAL_STORAGE_KEY = `bannerDataHome_${language}`;
-
   useEffect(() => {
-    const cachedBanner = localStorage.getItem(LOCAL_STORAGE_KEY);
-
-    if (cachedBanner) {
-      try {
-        const { data, timestamp } = JSON.parse(cachedBanner);
-        if (Date.now() - timestamp < CACHE_EXPIRY_MS) {
-          setBanner(data);
-          return;
-        }
-      } catch {
-        // noto‘g‘ri format bo‘lsa, e’tiborsiz
-      }
-    }
-
     async function fetchBanner() {
       try {
         const response = await axios.get(`${BASE_URL}/api/banner/?lang=${language}`);
@@ -58,7 +41,6 @@ export default function HeroSection() {
               image: homeBanner.image,
             };
             setBanner(bannerObj);
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ data: bannerObj, timestamp: Date.now() }));
             return;
           }
         }
@@ -80,11 +62,11 @@ export default function HeroSection() {
       className="relative min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${displayBanner.image})` }}
     >
-      <div className="absolute inset-0 bg-black/40"></div>
+      <div className="absolute inset-0 bg-black/60"></div>
 
       <div className="relative z-10 w-full container mx-auto px-4">
         <div className="max-w-2xl text-white">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+          <h1 className="text-4xl md:text-6xl text-zinc-300 font-bold mb-6 leading-tight">
             {displayBanner.title}
             <span className="block text-green-400">{displayBanner.subtitle}</span>
           </h1>

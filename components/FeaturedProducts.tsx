@@ -50,7 +50,7 @@ export default function FeaturedProducts() {
         const response = await axios.get(`${BASE_URL}/api/product/`);
         if (response.data.status) {
           const allProducts = response.data.data.results as ProductType[];
-          const randomProducts = getRandomItems(allProducts, 4);
+          const randomProducts = getRandomItems(allProducts, 10);
           setProducts(randomProducts);
         }
       } catch (error) {
@@ -185,13 +185,13 @@ export default function FeaturedProducts() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
                     <span className="text-2xl font-bold text-green-600">
-                      {product.discounted_price
-                        ? `${product.discounted_price.toLocaleString('uz-UZ')} so'm`
+                      {product.price
+                        ? `${product.price.toLocaleString('uz-UZ')} so'm`
                         : `${product.price.toLocaleString('uz-UZ')} so'm`}
                     </span>
-                    {product.discounted_price && product.price !== product.discounted_price && (
+                    {product.discounted_price && product.discounted_price !== product.price && (
                       <span className="text-sm text-gray-500 line-through">
-                        {product.price.toLocaleString('uz-UZ')} so'm
+                        {product.discounted_price.toLocaleString('uz-UZ')} so'm
                       </span>
                     )}
                   </div>
