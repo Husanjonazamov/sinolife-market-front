@@ -158,7 +158,8 @@
 
 
     "quantity": "Miqdor",
-
+    "order_items": "Buyurtmadagi mahsulotlar",
+    "continue_to_review": "Buyurtmani Ko'rish",
 
     "continue_to_payment": "To‘lovga o‘tish",
 

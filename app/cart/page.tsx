@@ -122,7 +122,10 @@ export default function CartPage() {
     }
   };
 
-  const subtotal = cartItems.reduce((total, item) => total + (item.originalPrice * item.quantity), 0);
+  const subtotal = cartItems.reduce((total, item) => {
+  const price = item.originalPrice ?? item.price; // agar originalPrice bo'lmasa, price ni oling
+  return total + price * item.quantity;
+}, 0);
   const discountAmount = subtotal * discount;
   const shipping = subtotal > 50 ? 0 : 9.99;
   const tax = (subtotal - discountAmount) * 0.08;
@@ -170,10 +173,12 @@ export default function CartPage() {
                             {item.name}
                           </div>
                           <div className="flex items-center">
-                            <span className="text-lg font-semibold text-green-600">
-                              {item.originalPrice.toLocaleString('uz-UZ')} so'm
-                            </span>
-                            {item.originalPrice && (
+                           {item.originalPrice && (
+                              <span className="text-lg font-semibold text-green-600">
+                                {item.originalPrice.toLocaleString('uz-UZ')} so'm
+                              </span>
+                            )}
+                            {item.price && (
                               <span className="ml-2 text-sm text-gray-400 line-through">
                                 {item.price.toLocaleString('uz-UZ')} so'm
                               </span>
