@@ -10,19 +10,15 @@ import BASE_URL from '@/app/config';
 import { refreshToken } from '../register/refresh';
 import { IMaskInput } from 'react-imask';
 import { useLanguage } from '@/lib/LanguageContext';
-
-
 import dynamic from 'next/dynamic';
-import { userInfo } from 'node:os';
 
 const CustomSearchMap = dynamic(() => import('./location'), {
   ssr: false,
 });
 
-
 interface Cart {
   id: string;
-  total_price: string
+  total_price: string;
 }
 
 interface CartItem {
@@ -40,15 +36,14 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState('payme');
   const [isProcessing, setIsProcessing] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [cart, setCart] = useState<Cart | null>(null); // Bitta Cart bo'ladi, massiv emas
+  const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const [shippingInfo, setShippingInfo] = useState({
     firstName: '',
     phone: '',
     lat: '',
-    long: '', 
+    long: '',
     address: '',
   });
 
@@ -61,7 +56,6 @@ export default function CheckoutPage() {
       });
 
       const result = response.data.data.results[0];
-
       const cartData: Cart = {
         id: result.id,
         total_price: result.total_price,
@@ -69,10 +63,10 @@ export default function CheckoutPage() {
 
       setCart(cartData);
 
-      const items: CartItem[] = response.data.data.results[0].cart_items.map((item: any) => ({
-        id: item.product.id.toString(), 
+      const items: CartItem[] = result.cart_items.map((item: any) => ({
+        id: item.product.id.toString(),
         name: item.product.title,
-        price: item.product.price, 
+        price: item.product.price,
         quantity: item.quantity,
         image: item.product.image,
       }));
@@ -112,12 +106,6 @@ export default function CheckoutPage() {
     }
   }, [router]);
 
-  // Calculate totals
-  const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-  const shipping = 9.99;
-  const tax = subtotal * 0.08;
-  const total = subtotal + shipping + tax;
-
   const handlePlaceOrder = async () => {
     setIsProcessing(true);
 
@@ -127,22 +115,19 @@ export default function CheckoutPage() {
         throw new Error('Authentication failed');
       }
 
-      // Construct order data
       const orderData = {
         first_name: shippingInfo.firstName,
         phone: shippingInfo.phone,
         payment_type: paymentMethod,
-        lat: parseFloat(shippingInfo.lat) || 0, // Fallback to 0 if invalid
-        lon: parseFloat(shippingInfo.long) || 0, // Use 'lon' to match provided structure
+        lat: parseFloat(shippingInfo.lat) || 0,
+        lon: parseFloat(shippingInfo.long) || 0,
         order_item: cartItems.map((item) => ({
-          product: parseInt(item.id), // Use product ID
+          product: parseInt(item.id),
           quantity: item.quantity,
         })),
-        // Include address if required by the API
         address: shippingInfo.address,
       };
 
-      // Log the payload for debugging
       console.log('Order Payload:', JSON.stringify(orderData, null, 2));
 
       const response = await axios.post(`${BASE_URL}/api/order/`, orderData, {
@@ -157,7 +142,6 @@ export default function CheckoutPage() {
       );
     } catch (error: any) {
       console.error('Order Error:', error);
-      // Extract server error message if available
       const errorMessage =
         error.response?.data?.detail ||
         error.response?.data?.message ||
@@ -197,8 +181,10 @@ export default function CheckoutPage() {
               <PaymentForm
                 paymentMethod={paymentMethod}
                 setPaymentMethod={setPaymentMethod}
-                onNext={() => setCurrentStep(3)}
+                shippingInfo={shippingInfo}
+                cartItems={cartItems}
                 onBack={() => setCurrentStep(1)}
+                onNext={() => setCurrentStep(3)} // Kept for compatibility, but overridden in PaymentForm
               />
             )}
 
@@ -215,7 +201,7 @@ export default function CheckoutPage() {
           </div>
 
           <div className="lg:col-span-1">
-              <OrderSummary cartItems={cartItems} total={cart?.total_price || "0.00"} />
+            <OrderSummary cartItems={cartItems} total={cart?.total_price || "0.00"} />
           </div>
         </div>
       </div>
@@ -230,7 +216,7 @@ const StepIndicator = ({ step }: { step: number }) => {
   const { t } = useLanguage();
 
   return (
-    <>
+    <div className="flex items-center">
       {[t("shipping"), t("payment"), t("review")].map((label, index) => (
         <div
           key={label}
@@ -247,20 +233,16 @@ const StepIndicator = ({ step }: { step: number }) => {
           {index < 2 && <div className="w-8 h-px bg-gray-300 mx-2"></div>}
         </div>
       ))}
-    </>
+    </div>
   );
 };
-
 
 const ShippingForm = ({ shippingInfo, setShippingInfo, onNext }: any) => {
   const [phoneError, setPhoneError] = useState<string | null>(null);
   const { t } = useLanguage();
 
-
   const handlePhoneChange = (value: string) => {
     setShippingInfo({ ...shippingInfo, phone: value });
-
-    // Tekshiruv: faqat to'liq kiritilganda o'tkazish
     const isComplete = /^\+998-\d{2}-\d{3}-\d{2}-\d{2}$/.test(value);
     if (!isComplete) {
       setPhoneError("To'liq raqam kiriting: +998-XX-XXX-XX-XX");
@@ -288,8 +270,7 @@ const ShippingForm = ({ shippingInfo, setShippingInfo, onNext }: any) => {
 
           <div>
             <label className="block text-sm text-gray-800 font-medium mb-2">{t("phone_number_label")}</label>
-
-            < IMaskInput
+            <IMaskInput
               mask="+998-00-000-00-00"
               definitions={{
                 "0": /[0-9]/,
@@ -297,22 +278,18 @@ const ShippingForm = ({ shippingInfo, setShippingInfo, onNext }: any) => {
               lazy={false}
               overwrite
               value={shippingInfo.phone}
-              onAccept={(value: string) => {
-                setShippingInfo({ ...shippingInfo, phone: value });
-              }}
+              onAccept={(value: string) => handlePhoneChange(value)}
               placeholder="+998-__-___-__-__"
               className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
             />
-
             {phoneError && <p className="text-red-500 text-sm mt-1">{phoneError}</p>}
           </div>
         </div>
-          <CustomSearchMap
-            onSelect={(address, lat, long) =>
-              setShippingInfo({ ...shippingInfo, address, lat, long })
-            }
-          />
-
+        <CustomSearchMap
+          onSelect={(address, lat, long) =>
+            setShippingInfo({ ...shippingInfo, address, lat, long })
+          }
+        />
         <button
           type="button"
           onClick={onNext}
@@ -331,10 +308,62 @@ const ShippingForm = ({ shippingInfo, setShippingInfo, onNext }: any) => {
   );
 };
 
-
-
-const PaymentForm = ({ paymentMethod, setPaymentMethod, onNext, onBack }: any) => {
+const PaymentForm = ({ paymentMethod, setPaymentMethod, shippingInfo, cartItems, onNext, onBack }: any) => {
   const { t } = useLanguage();
+  const router = useRouter();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleGetPayLink = async () => {
+    setIsProcessing(true);
+    setError(null);
+
+    try {
+      const access = await refreshToken();
+      if (!access) {
+        throw new Error('Authentication failed');
+      }
+
+      const orderData = {
+        first_name: shippingInfo.firstName,
+        phone: shippingInfo.phone,
+        payment_type: paymentMethod,
+        lat: parseFloat(shippingInfo.lat) || 0,
+        lon: parseFloat(shippingInfo.long) || 0,
+        order_item: cartItems.map((item: CartItem) => ({
+          product: parseInt(item.id),
+          quantity: item.quantity,
+        })),
+        address: shippingInfo.address,
+      };
+
+      console.log('Order Payload for Pay Link:', JSON.stringify(orderData, null, 2));
+
+      const response = await axios.post(`${BASE_URL}/api/order/`, orderData, {
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
+
+      const { pay_link } = response.data.data;
+
+      if (pay_link) {
+        window.location.href = pay_link; // Redirect to payment provider
+      } else {
+        throw new Error('Payment link not provided in response');
+      }
+    } catch (error: any) {
+      console.error('Payment Link Error:', error);
+      const errorMessage =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        Object.values(error.response?.data || {}).join(', ') ||
+        'Toʻlov havolasini olishda xatolik yuz berdi.';
+      setError(errorMessage);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">
@@ -369,25 +398,27 @@ const PaymentForm = ({ paymentMethod, setPaymentMethod, onNext, onBack }: any) =
         ))}
       </div>
 
+      {error && <p className="text-red-500 text-sm mt-4">{error}</p>}
+
       <div className="flex space-x-4 mt-6">
         <button
           onClick={onBack}
           className="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 font-medium"
+          disabled={isProcessing}
         >
           {t("back_button")}
         </button>
         <button
-          onClick={onNext}
-          className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 font-medium"
+          onClick={handleGetPayLink}
+          className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 font-medium disabled:opacity-50"
+          disabled={isProcessing}
         >
-          {t("place_order_button")}
+          {isProcessing ? t("processing") : t("continue_to_payment")}
         </button>
       </div>
     </div>
   );
 };
-
-
 
 const ReviewOrder = ({ shippingInfo, cartItems, paymentMethod, onBack, onPlaceOrder, isProcessing }: any) => {
   const { t } = useLanguage();
@@ -464,10 +495,8 @@ const ReviewOrder = ({ shippingInfo, cartItems, paymentMethod, onBack, onPlaceOr
   );
 };
 
-
-
 const OrderSummary = ({ cartItems, total }: any) => {
-  const { language, setLanguage, t } = useLanguage();
+  const { t } = useLanguage();
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 sticky top-8">
