@@ -7,7 +7,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { refreshToken } from '@/app/register/refresh';
 import { useLanguage } from '@/lib/LanguageContext';
-import { useRouter } from 'next/navigation'; // app router
+import { useRouter } from 'next/navigation';
 import BASE_URL from '@/app/config';
 
 type ProductType = {
@@ -151,21 +151,24 @@ export default function FeaturedProducts() {
 
       {/* Modal */}
       {selectedProduct && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-4xl relative shadow-2xl flex flex-col md:flex-row gap-6">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4 py-6 overflow-auto">
+          <div className="bg-white rounded-2xl w-full max-w-4xl shadow-2xl relative flex flex-col md:flex-row max-h-[90vh]">
+            {/* Close */}
             <button onClick={handleCloseModal} className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
-            {/* Chapda rasm */}
-            <div className="md:w-1/2 flex justify-center items-center">
+
+            {/* Chap: rasm */}
+            <div className="md:w-1/2 flex justify-center items-center p-4">
               <img src={selectedProduct.image} alt={selectedProduct.title} className="w-full h-64 object-contain" />
             </div>
-            {/* O'ngda title, desc, tugmalar */}
-            <div className="md:w-1/2 flex flex-col justify-between">
-              <div>
+
+            {/* O'ng: title + desc + buttons */}
+            <div className="md:w-1/2 flex flex-col p-4 justify-between overflow-hidden">
+              <div className="overflow-y-auto max-h-[calc(90vh-120px)] pr-2">
                 <h3 className="text-2xl font-bold mb-2">{selectedProduct.title}</h3>
-                <p className="text-gray-600 mb-4">{selectedProduct.description}</p>
-                <p className="text-green-600 font-bold mb-4">{selectedProduct.price.toLocaleString('uz-UZ')} UZS</p>
+                <p className="text-gray-600 whitespace-pre-wrap">{selectedProduct.description}</p>
+                <p className="text-green-600 font-bold mt-4">{selectedProduct.price.toLocaleString('uz-UZ')} UZS</p>
               </div>
-              <div className="flex flex-col sm:flex-row gap-2 mt-4">
+              <div className="flex flex-col sm:flex-row gap-2 mt-4 sticky bottom-0 bg-white pt-4">
                 <button onClick={() => handleAddToCart(selectedProduct.id)} className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-semibold">{t("add_to_cart")}</button>
                 <button onClick={() => handleOrderNow(selectedProduct)} className="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-lg font-semibold">{t("order_now")}</button>
               </div>
