@@ -74,7 +74,8 @@ export default function CartPage() {
             : undefined,
         image: item.product.image,
         quantity: item.quantity,
-        category: item.product.category.title
+        category: item.product.category?.title || "Noma'lum", // null-safe
+
       }));
 
       setCartItems(formattedItems);

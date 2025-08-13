@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { refreshToken } from '../register/refresh';
 import BASE_URL from '@/app/config';
 import { useLanguage } from '@/lib/LanguageContext';
+import { useRouter } from 'next/navigation';
 
 
 
@@ -40,6 +41,16 @@ export default function ProductGrid({ filters }: ProductGridProps) {
   const [loading, setLoading] = useState(true);
   const productsPerPage = 10;
   const { t } = useLanguage();
+  const router = useRouter();
+  
+
+  const handleOrderNow = (product: ProductType) => {
+    const params = new URLSearchParams({
+      product_id: product.id.toString(),
+      quantity: '1',
+    });
+    router.push(`/checkout?${params.toString()}`);
+  };
 
 
   useEffect(() => {
@@ -204,12 +215,22 @@ export default function ProductGrid({ filters }: ProductGridProps) {
                 </div>
               </div>
 
-              <button
-                onClick={() => handleAddToCart(product.id)}
-                className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer"
-              >
-                {t("add_to_cart")}
-              </button>
+               <div className="flex flex-col sm:flex-row gap-2 mt-auto">
+                  <button
+                    onClick={() => handleAddToCart(product.id)}
+                    className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors"
+                  >
+                    {t("add_to_cart")}
+                  </button>
+                  <button
+                    onClick={() => handleOrderNow(product)}
+                  
+                    className="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors"
+                  >
+                    {t("order_now")}
+                  </button>
+                </div>
+
             </div>
           </div>
         ))}

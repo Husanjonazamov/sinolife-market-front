@@ -7,6 +7,8 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { refreshToken } from '@/app/register/refresh';
 import { useLanguage } from '@/lib/LanguageContext';
+import { useRouter } from 'next/navigation'; // app router
+
 
 
 import BASE_URL from '@/app/config';
@@ -42,6 +44,27 @@ export default function FeaturedProducts() {
   const [products, setProducts] = useState<ProductType[]>([]);
   const [loading, setLoading] = useState(true);
   const { language, setLanguage, t } = useLanguage();
+  const router = useRouter();
+
+
+  const handleOrderNow = (product: ProductType) => {
+    // Mahsulotni localStorage ga saqlash
+    localStorage.setItem('checkoutProduct', JSON.stringify({
+      id: product.id,
+      name: product.title,
+      price: product.price,
+      quantity: 1,
+      image: product.image,
+    }));
+
+    // URL orqali checkout sahifasiga yo'naltirish
+    const params = new URLSearchParams({
+      product_id: product.id.toString(),
+    });
+    router.push(`/order_now?${params.toString()}`);
+  };
+
+
 
 
   useEffect(() => {
@@ -209,6 +232,7 @@ export default function FeaturedProducts() {
                     {t("add_to_cart")}
                   </button>
                   <button
+                    onClick={() => handleOrderNow(product)}
                     className="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors"
                   >
                     {t("order_now")}
