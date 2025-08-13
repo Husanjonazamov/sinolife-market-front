@@ -7,6 +7,7 @@ import axios from 'axios';
 import BASE_URL from '@/app/config';
 import { useRouter } from 'next/navigation';
 import SearchDropdown from './searchDropDown';
+import Image from 'next/image';
 
 export default function Header() {  
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,6 +18,7 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
   const [cartCount, setCartCount] = useState(0);
+
 
   const router = useRouter();
 
@@ -90,12 +92,19 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center space-x-2">
-          <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center">
-            <i className="ri-leaf-line text-white text-xl"></i>
-          </div>
-          <span className="text-2xl font-pacifico text-green-700">SinoLife</span>
-        </Link>
+       <Link href="/" className="flex items-center space-x-2">
+        <div className="w-10 h-10 flex items-center justify-center">
+          <Image
+            src="/images/logo.png"
+            alt="SinoLife Logo"
+            width={40}
+            height={40}
+            className="rounded-full object-cover"
+          />
+        </div>
+        <span className="text-2xl font-pacifico text-green-700">SinoLife</span>
+      </Link>
+
 
         {/* Search */}
         <div className="hidden md:flex flex-1 max-w-md mx-8">
