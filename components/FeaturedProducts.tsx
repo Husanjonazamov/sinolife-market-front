@@ -8,11 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { refreshToken } from '@/app/register/refresh';
 import { useLanguage } from '@/lib/LanguageContext';
 import { useRouter } from 'next/navigation'; // app router
-
-
-
 import BASE_URL from '@/app/config';
-
 
 type ProductType = {
   id: number;
@@ -43,12 +39,11 @@ function getRandomItems<T>(arr: T[], n: number): T[] {
 export default function FeaturedProducts() {
   const [products, setProducts] = useState<ProductType[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(null);
   const { language, setLanguage, t } = useLanguage();
   const router = useRouter();
 
-
   const handleOrderNow = (product: ProductType) => {
-    // Mahsulotni localStorage ga saqlash
     localStorage.setItem('checkoutProduct', JSON.stringify({
       id: product.id,
       name: product.title,
@@ -56,16 +51,29 @@ export default function FeaturedProducts() {
       quantity: 1,
       image: product.image,
     }));
-
-    // URL orqali checkout sahifasiga yo'naltirish
-    const params = new URLSearchParams({
-      product_id: product.id.toString(),
-    });
+    const params = new URLSearchParams({ product_id: product.id.toString() });
     router.push(`/order_now?${params.toString()}`);
   };
 
-
-
+  const handleAddToCart = async (productId: number) => {
+    try {
+      const url = `${BASE_URL}/api/cart/`;
+      let access = localStorage.getItem('access');
+      const payload = { cart_items: [{ product: productId, quantity: 1 }] };
+      let response;
+      try {
+        response = await axios.post(url, payload, { headers: { Authorization: `Bearer ${access}`, 'Content-Type': 'application/json' } });
+      } catch (err: any) {
+        if (err.response && err.response.status === 401) {
+          const newAccess = await refreshToken();
+          if (!newAccess) { toast.error("Sessiya tugadi. Iltimos, qaytadan tizimga kiring."); return; }
+          response = await axios.post(url, payload, { headers: { Authorization: `Bearer ${newAccess}`, 'Content-Type': 'application/json' } });
+        } else { toast.error(err.response?.data?.detail || 'Serverda xatolik'); return; }
+      }
+      if (response.data.status) { toast.success('✅ Mahsulot savatchaga qo‘shildi'); }
+      else { toast.error('❌ Mahsulot qo‘shishda xatolik'); }
+    } catch (error) { toast.error('Serverda xatolik'); console.error(error); }
+  };
 
   useEffect(() => {
     async function fetchProducts() {
@@ -86,159 +94,49 @@ export default function FeaturedProducts() {
     fetchProducts();
   }, []);
 
-  const handleAddToCart = async (productId: number) => {
-    try {
-      const url = `${BASE_URL}/api/cart/`;
-      let access = localStorage.getItem('access');
+  const handleOpenModal = (product: ProductType) => setSelectedProduct(product);
+  const handleCloseModal = () => setSelectedProduct(null);
 
-      const payload = {
-        cart_items: [
-          {
-            product: productId,
-            quantity: 1
-          }
-        ]
-      };
-
-      let response;
-      try {
-        response = await axios.post(url, payload, {
-          headers: {
-            Authorization: `Bearer ${access}`,
-            'Content-Type': 'application/json'
-          }
-        });
-      } catch (err: any) {
-        if (err.response && err.response.status === 401) {
-          // Token yangilash
-          const newAccess = await refreshToken();
-          if (!newAccess) {
-            toast.error("Sessiya tugadi. Iltimos, qaytadan tizimga kiring.");
-            return;
-          }
-
-          response = await axios.post(url, payload, {
-            headers: {
-              Authorization: `Bearer ${newAccess}`,
-              'Content-Type': 'application/json'
-            }
-          });
-        } else {
-          console.error('Savatchaga qo‘shishda xatolik:', err);
-          toast.error(err.response?.data?.detail || 'Serverda xatolik');
-          return;
-        }
-      }
-
-      if (response.data.status) {
-        toast.success('✅ Mahsulot savatchaga qo‘shildi');
-      } else {
-        toast.error('❌ Mahsulot qo‘shishda xatolik');
-      }
-
-    } catch (error) {
-      console.error('Savatchaga qo‘shishda xatolik:', error);
-      toast.error('Serverda xatolik');
-    }
-  };
-
-  if (loading) {
-    return (
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4 text-center text-gray-600">
-          Yuklanmoqda...
-        </div>
-      </section>
-    );
-  }
-
-  if (products.length === 0) {
-    return (
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4 text-center text-gray-600">
-          Mahsulotlar topilmadi.
-        </div>
-      </section>
-    );
-  }
+  if (loading) return <section className="py-16 bg-gray-50"><div className="container mx-auto px-4 text-center text-gray-600">Yuklanmoqda...</div></section>;
+  if (products.length === 0) return <section className="py-16 bg-gray-50"><div className="container mx-auto px-4 text-center text-gray-600">Mahsulotlar topilmadi.</div></section>;
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-gray-50 relative">
       <ToastContainer position="top-right" autoClose={2000} />
+
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-800 mb-4">{t("featured_product")}</h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            {t("featured_products_description")}
-          </p>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">{t("featured_products_description")}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.map((product) => (
-            <div key={product.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden">
+            <div key={product.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden cursor-pointer" onClick={() => handleOpenModal(product)}>
               <div className="relative">
                 <div className="w-full aspect-[4/3] bg-white">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="w-full h-full object-contain object-center"
-                  />
+                  <img src={product.image} alt={product.title} className="w-full h-full object-contain object-center" />
                 </div>
-
                 <div className="absolute top-4 left-4 flex flex-col items-start gap-1">
-                  {product.is_populer && (
-                    <span className="px-3 py-1 text-xs font-semibold rounded-full text-white"
-                      style={{ backgroundColor: '#0ef' }}>
-                      {t("best_seller")}
-                    </span>
-                  )}
-                  {product.is_new && (
-                    <span className="px-3 py-1 text-xs font-semibold rounded-full bg-green-600 text-white">
-                      {t("new")}
-                    </span>
-                  )}
-                  {product.is_discounted && (
-                    <span className="px-3 py-1 text-xs font-semibold rounded-full bg-red-600 text-white">
-                      {t("sale")}
-                    </span>
-                  )}
+                  {product.is_populer && <span className="px-3 py-1 text-xs font-semibold rounded-full text-white" style={{ backgroundColor: '#0ef' }}>{t("best_seller")}</span>}
+                  {product.is_new && <span className="px-3 py-1 text-xs font-semibold rounded-full bg-green-600 text-white">{t("new")}</span>}
+                  {product.is_discounted && <span className="px-3 py-1 text-xs font-semibold rounded-full bg-red-600 text-white">{t("sale")}</span>}
                 </div>
               </div>
 
               <div className="p-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">{product.title}</h3>
-
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
-                    <span className="text-2xl font-bold text-green-600">
-                      {product.price
-                        ? `${product.price.toLocaleString('uz-UZ')} UZS`
-                        : `${product.price.toLocaleString('uz-UZ')} UZS`}
-                    </span>
-                    {product.discounted_price && product.discounted_price !== product.price && (
-                      <span className="text-sm text-gray-500 line-through">
-                        {product.discounted_price.toLocaleString('uz-UZ')} UZS
-                      </span>
-                    )}
+                    <span className="text-2xl font-bold text-green-600">{product.price.toLocaleString('uz-UZ')} UZS</span>
+                    {product.discounted_price && product.discounted_price !== product.price && <span className="text-sm text-gray-500 line-through">{product.discounted_price.toLocaleString('uz-UZ')} UZS</span>}
                   </div>
                 </div>
 
-
                 <div className="flex flex-col sm:flex-row gap-2 mt-auto">
-                  <button
-                    onClick={() => handleAddToCart(product.id)}
-                    className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors"
-                  >
-                    {t("add_to_cart")}
-                  </button>
-                  <button
-                    onClick={() => handleOrderNow(product)}
-                    className="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors"
-                  >
-                    {t("order_now")}
-                  </button>
+                  <button onClick={() => handleAddToCart(product.id)} className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors">{t("add_to_cart")}</button>
+                  <button onClick={() => handleOrderNow(product)} className="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors">{t("order_now")}</button>
                 </div>
-
               </div>
             </div>
           ))}
@@ -246,12 +144,35 @@ export default function FeaturedProducts() {
 
         <div className="text-center mt-12">
           <Link href="/products">
-            <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-colors whitespace-nowrap cursor-pointer">
-              {t("view_all_product")}
-            </button>
+            <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-colors whitespace-nowrap cursor-pointer">{t("view_all_product")}</button>
           </Link>
         </div>
       </div>
+
+      {/* Modal */}
+      {selectedProduct && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-4xl relative shadow-2xl flex flex-col md:flex-row gap-6">
+            <button onClick={handleCloseModal} className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
+            {/* Chapda rasm */}
+            <div className="md:w-1/2 flex justify-center items-center">
+              <img src={selectedProduct.image} alt={selectedProduct.title} className="w-full h-64 object-contain" />
+            </div>
+            {/* O'ngda title, desc, tugmalar */}
+            <div className="md:w-1/2 flex flex-col justify-between">
+              <div>
+                <h3 className="text-2xl font-bold mb-2">{selectedProduct.title}</h3>
+                <p className="text-gray-600 mb-4">{selectedProduct.description}</p>
+                <p className="text-green-600 font-bold mb-4">{selectedProduct.price.toLocaleString('uz-UZ')} UZS</p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2 mt-4">
+                <button onClick={() => handleAddToCart(selectedProduct.id)} className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-semibold">{t("add_to_cart")}</button>
+                <button onClick={() => handleOrderNow(selectedProduct)} className="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-lg font-semibold">{t("order_now")}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
