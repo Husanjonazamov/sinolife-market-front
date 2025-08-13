@@ -95,7 +95,7 @@ export default function ProductFilters({ onFilterChange }: ProductFiltersProps) 
         <h3 className="text-lg font-semibold mb-4">{t("category")}</h3>
         <div className="space-y-3 max-h-64 overflow-y-auto">
           {categories.length === 0 && (
-            <div className="text-sm text-gray-500">Kategoriyalar yuklanmoqda...</div>
+            <div className="text-sm text-gray-500">Brend yuklanmoqda...</div>
           )}
           {categories.map((category) => (
             <div key={category.id} className="flex items-center">

@@ -6,6 +6,7 @@ import { useLanguage } from '@/lib/LanguageContext';
 import axios from 'axios';
 import BASE_URL from '@/app/config';
 import { useRouter } from 'next/navigation';
+import SearchDropdown from './searchDropDown';
 
 export default function Header() {  
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -98,16 +99,7 @@ export default function Header() {
 
         {/* Search */}
         <div className="hidden md:flex flex-1 max-w-md mx-8">
-          <form onSubmit={handleSearch} className="w-full relative">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={t('product_search')}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
-            />
-            <i className="ri-search-line absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-          </form>
+          <SearchDropdown />
         </div>
 
         {/* Nav */}
@@ -204,19 +196,9 @@ export default function Header() {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden px-4 pt-4 pb-6 border-t border-gray-100 bg-white">
-          <form onSubmit={handleSearch} className="mb-4">
-            <div className="relative">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={t('search')}
-                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
-              />
-              <i className="ri-search-line absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-            </div>
-          </form>
-
+         <div className='mb-6'>
+         <SearchDropdown/>
+         </div>
           <div className="mb-4 space-y-2">
             <div className="text-xs text-gray-500 uppercase">{t("lang")}</div>
             {languages.map((lang) => (

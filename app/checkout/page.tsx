@@ -505,7 +505,7 @@ const ReviewOrder = ({ shippingInfo, cartItems, paymentMethod, onBack, isProcess
                   <p className="text-sm text-gray-500">{t("quantity")}: {item.quantity}</p>
                 </div>
                 <span className="font-semibold text-gray-700">
-                  {(item.price * item.quantity).toLocaleString('uz-UZ')} so'm
+                  {(item.price * item.quantity).toLocaleString('uz-UZ')} UZS
                 </span>
               </div>
             ))}
@@ -552,7 +552,7 @@ const OrderSummary = ({ cartItems }: any) => {
               </div>
             </div>
             <span className="font-medium">
-              {(item.price * item.quantity).toLocaleString('uz-UZ')} so'm
+              {(item.price * item.quantity).toLocaleString('uz-UZ')} UZS
             </span>
           </div>
         ))}
@@ -562,7 +562,7 @@ const OrderSummary = ({ cartItems }: any) => {
         <div className="flex justify-between">
           <span className="text-gray-600">{t("total")}</span>
           <span className="font-medium">
-            {total.toLocaleString('uz-UZ')} so'm
+            {total.toLocaleString('uz-UZ')} UZS
           </span>
         </div>
 
@@ -570,7 +570,7 @@ const OrderSummary = ({ cartItems }: any) => {
           <div className="flex justify-between text-lg font-semibold">
             <span>{t("total_label")}</span>
             <span>
-              {total.toLocaleString('uz-UZ')} so'm
+              {total.toLocaleString('uz-UZ')} UZS
             </span>
           </div>
         </div>

@@ -29,17 +29,23 @@
   "product_search": "Поиск товаров...",
   "home": "Главная",
   "product": "Товары",
-  "category": "Категории",
+  "category": "Бренд",
   "contact": "Контакты",
   "lang": "Язык",
   "my_orders": "Мои заказы",
   "logout": "Выход из системы",
+   "empty_cart_title": "Ваша корзина пуста",
+    "empty_cart_subtitle": "Добавьте товары, чтобы начать",
 
   "best_seller": "Хит продаж",
   "new": "Новинка",
+      "no_products_found": "Продукты не найдены",
+          "order_now": "Заказать сейчас",
+
+
   "sale": "Скидка",
   "add_to_cart": "Добавить в корзину",
-  "explore_products_in_this_category": "Изучите продукты в этой категории",
+  "explore_products_in_this_category": "Изучите продукты в этой Бренд",
 
   "shop_now": "Купить сейчас",
   "products": "Продукты",
@@ -48,7 +54,7 @@
   "featured_product": "Популярные товары",
   "featured_products_description": "Откройте для себя самые популярные растительные добавки, тщательно отобранные за качество и эффективность.",
   "view_all_product": "Смотреть все товары",
-  "categories_title": "Категории по здоровью",
+  "categories_title": "Бренд по здоровью",
   "categories_description": "Изучите нашу коллекцию растительных продуктов, организованных по целям в области здоровья.",
   "natural_title": "100% Натуральные",
   "natural_description": "Все наши продукты изготовлены из чистых, органических ингредиентов от проверенных поставщиков.",
@@ -83,7 +89,7 @@
   "terms_of_service": "Условия обслуживания",
 
   "all_products": "Все товары",
-  "categories": "Категории",
+  "categories": "Бренд",
   "price_range": "Ценовой диапазон",
   "price_from": "от",
   "price_to": "до",

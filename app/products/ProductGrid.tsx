@@ -171,7 +171,15 @@ export default function ProductGrid({ filters }: ProductGridProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {currentProducts.map((product) => (
           <div key={product.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden">
-            <img src={product.image} alt={product.title} className="w-full h-64 object-cover object-top" />
+            <div className="w-full h-64 bg-white flex items-center justify-center overflow-hidden">
+              <img
+                src={product.image}
+                alt={product.title}
+                className="max-w-full max-h-full object-contain object-center"
+              />
+            </div>
+
+
             <div className="p-6">
               {product.category && (
                 <div className="text-sm text-green-600 mb-2">{product.category.title}</div>
@@ -185,12 +193,12 @@ export default function ProductGrid({ filters }: ProductGridProps) {
                 <div className="flex items-center space-x-2">
                   <span className="text-2xl font-bold text-green-600">
                     {product.price
-                      ? `${product.price.toLocaleString('uz-UZ')} so'm`
-                      : `${product.price.toLocaleString('uz-UZ')} so'm`}
+                      ? `${product.price.toLocaleString('uz-UZ')} UZS`
+                      : `${product.price.toLocaleString('uz-UZ')} UZS`}
                   </span>
                   {product.discounted_price && product.price !== product.discounted_price && (
                     <span className="text-sm text-gray-500 line-through">
-                      {product.discounted_price.toLocaleString('uz-UZ')} so'm
+                      {product.discounted_price.toLocaleString('uz-UZ')} UZS
                     </span>
                   )}
                 </div>

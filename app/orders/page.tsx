@@ -38,7 +38,7 @@ export default function OrdersPage() {
 
   // Narxni so'm formatida, minglik ajratgich bilan chiqaruvchi funksiya
   const formatPrice = (price: number) => {
-    return price.toLocaleString('ru-RU') + " so'm";
+    return price.toLocaleString('ru-RU') + " UZS";
   };
 
   const fetchOrders = async () => {

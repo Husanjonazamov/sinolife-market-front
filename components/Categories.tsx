@@ -98,11 +98,11 @@ export default function CategoryGrid() {
               href={`/products?category_ids=${category.id}`}
             >
               <div className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden cursor-pointer">
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-48 overflow-hidden bg-white">
                   <img
                     src={category.image}
                     alt={category.title}
-                    className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-300"
+                    className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                   <div className="absolute bottom-4 left-4 right-4">
@@ -113,6 +113,7 @@ export default function CategoryGrid() {
                     </div>
                   </div>
                 </div>
+
 
                 <div className="p-6">
                   <h3 className="text-xl font-semibold text-gray-800 mb-3 group-hover:text-green-600 transition-colors">

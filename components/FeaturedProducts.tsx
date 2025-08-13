@@ -154,11 +154,14 @@ export default function FeaturedProducts() {
           {products.map((product) => (
             <div key={product.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden">
               <div className="relative">
-                <img
-                  src={product.image}
-                  alt={product.title}
-                  className="w-full h-64 object-cover object-top"
-                />
+                <div className="w-full aspect-[4/3] bg-white">
+                  <img
+                    src={product.image}
+                    alt={product.title}
+                    className="w-full h-full object-contain object-center"
+                  />
+                </div>
+
                 <div className="absolute top-4 left-4 flex flex-col items-start gap-1">
                   {product.is_populer && (
                     <span className="px-3 py-1 text-xs font-semibold rounded-full text-white"
@@ -186,24 +189,32 @@ export default function FeaturedProducts() {
                   <div className="flex items-center space-x-2">
                     <span className="text-2xl font-bold text-green-600">
                       {product.price
-                        ? `${product.price.toLocaleString('uz-UZ')} so'm`
-                        : `${product.price.toLocaleString('uz-UZ')} so'm`}
+                        ? `${product.price.toLocaleString('uz-UZ')} UZS`
+                        : `${product.price.toLocaleString('uz-UZ')} UZS`}
                     </span>
                     {product.discounted_price && product.discounted_price !== product.price && (
                       <span className="text-sm text-gray-500 line-through">
-                        {product.discounted_price.toLocaleString('uz-UZ')} so'm
+                        {product.discounted_price.toLocaleString('uz-UZ')} UZS
                       </span>
                     )}
                   </div>
                 </div>
 
 
-                <button
-                  onClick={() => handleAddToCart(product.id)}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer"
-                >
-                {t("add_to_cart")}
-                </button>
+                <div className="flex flex-col sm:flex-row gap-2 mt-auto">
+                  <button
+                    onClick={() => handleAddToCart(product.id)}
+                    className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors"
+                  >
+                    {t("add_to_cart")}
+                  </button>
+                  <button
+                    className="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors"
+                  >
+                    {t("order_now")}
+                  </button>
+                </div>
+
               </div>
             </div>
           ))}

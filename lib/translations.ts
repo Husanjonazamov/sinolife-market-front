@@ -84,7 +84,7 @@ export const translations = {
     country: "Mamlakat",
     
     // Currency
-    currency: "so'm",
+    currency: "UZS",
     currencyCode: "UZS"
   },
   ru: {

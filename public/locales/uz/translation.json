@@ -29,13 +29,15 @@
     "product_search": "Mahsulotlarni qidiring...",
     "home": "Bosh sahifa",
     "product": "Mahsulotlar",
-    "category": "Kategoriyalar",
+    "category": "Brend",
     "contact": "Aloqa",
     "lang": "Til",
     "my_orders": "Buyurtmalarim",
 
     "logout": "Tizimdan chiqish",
     "explore_products_in_this_category": "Ushbu toifadagi mahsulotlarni ko‘rib chiqing",
+    "no_products_found": "Mahsulot topilmadi",
+    "order_now": "buyurtma berish",
 
 
     "best_seller": "Eng ko‘p sotilgan",
@@ -44,6 +46,8 @@
 
     "shop_now": "Hozir xarid qiling",
     "products": "Mahsulotlar",
+    "empty_cart_title": "Savatingiz bo‘sh",
+    "empty_cart_subtitle": "Boshlash uchun mahsulotlar qo‘shing",
 
     "shop_show": "Mahsulotlarni ko'rish",
     "featured_product": "Mashhur mahsulotlar",
@@ -126,7 +130,7 @@
     "address_label": "Manzil",
     "address_note": "Ofisimizga tashrif buyuring",
 
-    "add_to_cart": "Savatchaga qo‘shish",
+    "add_to_cart": "Savatchaga",
 
 
     "cart_title": "Savatcha",
