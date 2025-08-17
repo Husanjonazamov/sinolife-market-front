@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FaSadTear } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { refreshToken } from '../register/refresh';
@@ -32,20 +31,8 @@ interface ProductGridProps {
 
 export default function ProductGrid({ filters }: ProductGridProps) {
   const [products, setProducts] = useState<ProductType[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [modalProduct, setModalProduct] = useState<ProductType | null>(null);
-  const productsPerPage = 10;
   const { t } = useLanguage();
   const router = useRouter();
-
-  const handleOrderNow = (product: ProductType) => {
-    const params = new URLSearchParams({
-      product_id: product.id.toString(),
-      quantity: '1',
-    });
-    router.push(`/checkout?${params.toString()}`);
-  };
 
   const handleAddToCart = async (productId: number) => {
     try {
@@ -83,7 +70,6 @@ export default function ProductGrid({ filters }: ProductGridProps) {
 
   useEffect(() => {
     async function fetchProducts() {
-      setLoading(true);
       try {
         const url = `${BASE_URL}/api/product/`;
         const params: any = {};
@@ -94,193 +80,77 @@ export default function ProductGrid({ filters }: ProductGridProps) {
 
         const response = await axios.get(url, { params });
         if (response.data.status) setProducts(response.data.data.results);
-      } catch (error) {
+      } catch {
         toast.error('Mahsulotlarni olishda xatolik');
-      } finally {
-        setLoading(false);
       }
     }
 
     fetchProducts();
   }, [filters]);
 
-  const totalPages = Math.ceil(products.length / productsPerPage);
-  const startIndex = (currentPage - 1) * productsPerPage;
-  const currentProducts = products.slice(startIndex, startIndex + productsPerPage);
-
-  if (loading)
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[300px] text-gray-500 px-4">
-        <h2 className="text-xl font-semibold mb-1">Yuklanmoqda...</h2>
-      </div>
-    );
-
-  if (products.length === 0)
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[300px] text-gray-500 px-4">
-        <FaSadTear className="text-7xl text-gray-400 mb-4 animate-bounce" />
-        <h2 className="text-xl font-semibold mb-1">Mahsulot topilmadi</h2>
-        <p className="text-center text-sm text-gray-400 max-w-md">
-          Qidiruv filterlarini tekshirib ko‘ring yoki boshqa kategoriya tanlang.
-        </p>
-      </div>
-    );
-
   return (
-    <div className="flex-1 px-4">
+    <div className="px-0 sm:px-4 max-w-full sm:max-w-7xl mx-auto">
       <ToastContainer position="top-right" autoClose={2000} />
 
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl font-bold text-gray-800">
-          {t('all_products')} ({products.length})
-        </h2>
-      </div>
-
-      {/* Product Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {currentProducts.map((product) => (
-          <div
-            key={product.id}
-            className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
-          >
-            {/* Product Image */}
+      {products.length === 0 ? (
+        <div className="relative h-[300px] flex justify-center items-center">
+          {/* Shaffof pulsatsiya animatsiyasi */}
+          <div className="absolute inset-0 bg-black/20 animate-pulse-slow rounded-xl"></div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+          {products.map((product) => (
             <div
-              className="w-full h-64 bg-white flex items-center justify-center overflow-hidden cursor-pointer"
-              onClick={() => setModalProduct(product)}
+              key={product.id}
+              className="bg-white rounded-lg shadow hover:shadow-lg transition p-2 flex flex-col cursor-pointer"
+              onClick={() => router.push(`/products/${product.id}`)}
             >
-              <img
-                src={product.image}
-                alt={product.title}
-                className="max-w-full max-h-full object-contain object-center"
-              />
-            </div>
-
-            {/* Product Info */}
-            <div className="p-6 flex flex-col h-full">
-              {product.category && (
-                <div className="text-sm text-green-600 mb-2">{product.category.title}</div>
-              )}
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">{product.title}</h3>
-              <div className="flex items-center mb-3">
-                <span className="text-sm text-gray-500 ml-2">Mahsulot soni: ({product.quantity})</span>
+              <div className="w-full aspect-square bg-gray-50 flex items-center justify-center overflow-hidden rounded-md">
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className="max-w-full max-h-full object-contain"
+                />
               </div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-2">
-                  <span className="text-2xl font-bold text-green-600">
-                    {product.price.toLocaleString('uz-UZ')} UZS
+
+              <h3 className="mt-2 text-sm font-medium line-clamp-2 min-h-[36px]">{product.title}</h3>
+
+              <div className="mt-1">
+                <span className="text-base font-bold text-green-600">
+                  {product.price.toLocaleString('uz-UZ')} UZS
+                </span>
+                {product.discounted_price && product.price !== product.discounted_price && (
+                  <span className="block text-xs text-gray-400 line-through">
+                    {product.discounted_price.toLocaleString('uz-UZ')} UZS
                   </span>
-                  {product.discounted_price && product.price !== product.discounted_price && (
-                    <span className="text-sm text-gray-500 line-through">
-                      {product.discounted_price.toLocaleString('uz-UZ')} UZS
-                    </span>
-                  )}
-                </div>
+                )}
               </div>
 
-              {/* Buttons ONLY for list */}
-              <div className="flex flex-col sm:flex-row gap-2 mt-4">
+              <div className="mt-auto flex gap-1">
                 <button
-                  onClick={() => handleAddToCart(product.id)}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddToCart(product.id);
+                  }}
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded text-xs"
                 >
                   {t('add_to_cart')}
                 </button>
-                <button
-                  onClick={() => handleOrderNow(product)}
-                  className="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors"
-                >
-                  {t('order_now')}
-                </button>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Pagination */}
-      <div className="flex justify-center items-center mt-12 space-x-2">
-        <button
-          onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-          disabled={currentPage === 1}
-          className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-        >
-          &larr;
-        </button>
-        {[...Array(totalPages)].map((_, i) => (
-          <button
-            key={i + 1}
-            onClick={() => setCurrentPage(i + 1)}
-            className={`px-4 py-2 rounded-lg cursor-pointer ${
-              currentPage === i + 1 ? 'bg-green-600 text-white' : 'border border-gray-300 hover:bg-gray-50'
-            }`}
-          >
-            {i + 1}
-          </button>
-        ))}
-        <button
-          onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-          disabled={currentPage === totalPages}
-          className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-        >
-          &rarr;
-        </button>
-      </div>
-
-      {/* Modal */}
-      {modalProduct && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-          onClick={() => setModalProduct(null)}
-        >
-          <div
-            className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 relative"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setModalProduct(null)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl font-bold"
-            >
-              ×
-            </button>
-            <div className="w-full h-64 flex items-center justify-center overflow-hidden mb-4">
-              <img
-                src={modalProduct.image}
-                alt={modalProduct.title}
-                className="max-w-full max-h-full object-contain"
-              />
-            </div>
-            <h3 className="text-xl font-bold mb-2">{modalProduct.title}</h3>
-            {modalProduct.category && (
-              <div className="text-sm text-green-600 mb-2">{modalProduct.category.title}</div>
-            )}
-            <p className="text-gray-700 mb-4 max-h-40 overflow-y-auto whitespace-pre-wrap">{modalProduct.description}</p>
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-2xl font-bold text-green-600">
-                {modalProduct.price.toLocaleString('uz-UZ')} UZS
-              </span>
-              {modalProduct.discounted_price && modalProduct.price !== modalProduct.discounted_price && (
-                <span className="text-sm text-gray-500 line-through">
-                  {modalProduct.discounted_price.toLocaleString('uz-UZ')} UZS
-                </span>
-              )}
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => handleAddToCart(modalProduct.id)}
-                className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-semibold"
-              >
-                {t('add_to_cart')}
-              </button>
-              <button
-                onClick={() => handleOrderNow(modalProduct)}
-                className="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-lg font-semibold"
-              >
-                {t('order_now')}
-              </button>
-            </div>
-          </div>
+          ))}
         </div>
       )}
+
+      <style jsx>{`
+        @keyframes pulseSlow {
+          0%, 100% { opacity: 0.4; }
+          50% { opacity: 0.6; }
+        }
+        .animate-pulse-slow {
+          animation: pulseSlow 3s infinite;
+        }
+      `}</style>
     </div>
   );
 }

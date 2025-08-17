@@ -53,7 +53,7 @@ export const updateCartItemQuantity = async (id: string, quantity: number) => {
 export const removeCartItem = async (id: string) => {
   const url = `${BASE_URL}/api/cart-item/${id}/remove/`;
 
-  let access = localStorage.getItem('access');
+  const access = localStorage.getItem('access');
 
   try {
     await axios.delete(url, {

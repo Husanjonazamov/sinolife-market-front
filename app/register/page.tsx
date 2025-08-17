@@ -102,96 +102,98 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
-      <div className="container mx-auto px-4 py-12">
-        <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("create_account")}</h1>
-            <p className="text-gray-600">{t("join_herbastore")}</p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {errors.server && (
-              <p className="text-red-500 text-center text-sm">{errors.server}</p>
-            )}
-
-            <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-                {t("first_name")}
-              </label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm ${
-                  errors.firstName ? 'border-red-500' : 'border-gray-300'
-                }`}
-                placeholder={t("enter_first_name")}
-              />
-              {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
+      <div className='px-0 sm:px-4 max-w-full sm:max-w-7xl mx-auto'>
+        <Header />
+        <div className="container mx-auto px-4 py-12">
+          <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("create_account")}</h1>
+              <p className="text-gray-600">{t("join_herbastore")}</p>
             </div>
 
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                {t("phone_number")}
-              </label>
-              <IMaskInput
-                mask="+998 00 000 00 00"
-                definitions={{ "0": /[0-9]/ }}
-                lazy={false}
-                overwrite
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onAccept={handlePhoneChange}
-                placeholder="+998 __ ___ __ __"
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm ${
-                  errors.phone ? 'border-red-500' : 'border-gray-300'
-                }`}
-              />
-              {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {errors.server && (
+                <p className="text-red-500 text-center text-sm">{errors.server}</p>
+              )}
+
+              <div>
+                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+                  {t("first_name")}
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm ${
+                    errors.firstName ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                  placeholder={t("enter_first_name")}
+                />
+                {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
+              </div>
+
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                  {t("phone_number")}
+                </label>
+                <IMaskInput
+                  mask="+998 00 000 00 00"
+                  definitions={{ "0": /[0-9]/ }}
+                  lazy={false}
+                  overwrite
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onAccept={handlePhoneChange}
+                  placeholder="+998 __ ___ __ __"
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm ${
+                    errors.phone ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                />
+                {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                  {t("password")}
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm ${
+                    errors.password ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                  placeholder={t("password")}
+                />
+                {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? 'Creating Account...' : t("create_account_button")}
+              </button>
+            </form>
+
+            <div className="mt-8 text-center">
+              <p className="text-sm text-gray-600">
+                {t("already_have_account")}{' '}
+                <Link href="/login" className="text-green-600 hover:text-green-700 font-medium">
+                  {t("sign_in_here")}
+                </Link>
+              </p>
             </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                {t("password")}
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm ${
-                  errors.password ? 'border-red-500' : 'border-gray-300'
-                }`}
-                placeholder={t("password")}
-              />
-              {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
-            </div>
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? 'Creating Account...' : t("create_account_button")}
-            </button>
-          </form>
-
-          <div className="mt-8 text-center">
-            <p className="text-sm text-gray-600">
-              {t("already_have_account")}{' '}
-              <Link href="/login" className="text-green-600 hover:text-green-700 font-medium">
-                {t("sign_in_here")}
-              </Link>
-            </p>
           </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
     </div>
   );
 }

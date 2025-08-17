@@ -6,8 +6,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ContactForm from './ContactForm';
 import ContactInfo from './ContactInfo';
-// import LocationMap from './LocationMap';
 import BASE_URL from '@/app/config';
+import MobileFooterNav from '@/components/FooterNav';
 
 type BannerType = {
   title: string;
@@ -26,6 +26,20 @@ const DEFAULT_BANNER: BannerType = {
 
 export default function ContactPage() {
   const [banner, setBanner] = useState<BannerType>(DEFAULT_BANNER);
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const access = localStorage.getItem('access');
+    if (access) {
+      axios
+        .get(`${BASE_URL}/api/cart/`, { headers: { Authorization: `Bearer ${access}` } })
+        .then((res) => {
+          const results = res.data.data.results;
+          if (results.length > 0) setCartCount(results[0].cart_items_count);
+        })
+        .catch((err) => console.error('Cart olishda xatolik:', err));
+    }
+  }, []);
 
   useEffect(() => {
     const cachedBanner = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -36,19 +50,14 @@ export default function ContactPage() {
           setBanner(data);
           return;
         }
-      } catch {
-        // Cache xato bo'lsa API dan olib kelamiz
-      }
+      } catch {}
     }
 
     async function fetchBanner() {
       try {
         const response = await axios.get(`${BASE_URL}/api/banner/`);
         if (response.data.status && response.data.data.results.length > 0) {
-          const banners = response.data.data.results;
-
-          const contactBanner = banners.find((b: any) => b.type === 'contact');
-
+          const contactBanner = response.data.data.results.find((b: any) => b.type === 'contact');
           if (contactBanner) {
             const bannerObj: BannerType = {
               title: contactBanner.title,
@@ -60,7 +69,6 @@ export default function ContactPage() {
             return;
           }
         }
-
         setBanner(DEFAULT_BANNER);
       } catch (error) {
         console.error('Contact Banner olishda xatolik:', error);
@@ -73,74 +81,34 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen">
-      <Header />
-      <main>
-        {/* Hero Section */}
-        <section 
-          className="relative py-24 bg-cover bg-center"
-          style={{
-            backgroundImage: `url(${banner.image})`,
-          }}
-        >
-          <div className="absolute inset-0 bg-black/50"></div>
-          <div className="relative z-10 container mx-auto px-4 text-center text-white">
-            <h1 className="text-5xl font-bold mb-4">{banner.title}</h1>
-            <p className="text-xl max-w-2xl mx-auto">
-              {banner.desc}
-            </p>
-          </div>
-        </section>
-
-        {/* Contact Content */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              <ContactForm />
-              <ContactInfo />
+      <div className="px-2 sm:px-4 max-w-full sm:max-w-7xl mx-auto">
+        <Header />
+        <main>
+          {/* Hero Section */}
+          <section className="relative h-[180px] sm:h-[300px] md:h-[350px] mt-8 rounded-xl overflow-hidden">
+            {banner.image && (
+              <img src={banner.image} alt={banner.title} className="w-full h-full object-cover" />
+            )}
+            <div className="absolute inset-0 bg-black/25"></div>
+            <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white px-4 z-10">
+              <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 leading-snug">{banner.title}</h1>
+              <p className="text-xs sm:text-sm md:text-base lg:text-lg max-w-xs sm:max-w-xl md:max-w-2xl">{banner.desc}</p>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Location & Map */}
-        {/* <LocationMap /> */}
-
-        {/* FAQ Section */}
-        {/* <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-800 mb-4">Frequently Asked Questions</h2>
-              <p className="text-lg text-gray-600">Quick answers to common questions</p>
+          {/* Contact Content */}
+          <section className="py-16">
+            <div className="container mx-auto px-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <ContactForm />
+                <ContactInfo />
+              </div>
             </div>
-            
-            <div className="max-w-3xl mx-auto space-y-6">
-              {[
-                {
-                  question: "What are your business hours?",
-                  answer: "Our customer service team is available Monday-Friday 9AM-6PM EST, and Saturday 10AM-4PM EST. Online orders can be placed 24/7."
-                },
-                {
-                  question: "Do you offer international shipping?",
-                  answer: "Yes, we ship to over 50 countries worldwide. Shipping costs and delivery times vary by location. Please check our shipping page for details."
-                },
-                {
-                  question: "Are your products third-party tested?",
-                  answer: "Absolutely! All our products undergo rigorous third-party testing for purity, potency, and safety. We provide certificates of analysis upon request."
-                },
-                {
-                  question: "Can I return products if I'm not satisfied?",
-                  answer: "Yes, we offer a 30-day satisfaction guarantee. If you're not completely satisfied, you can return unopened products for a full refund."
-                }
-              ].map((faq, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-md p-6">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-3">{faq.question}</h3>
-                  <p className="text-gray-600">{faq.answer}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section> */}
-      </main>
-      <Footer />
+          </section>
+        </main>
+        <Footer />
+        <MobileFooterNav cartCount={cartCount} />
+      </div>
     </div>
   );
 }

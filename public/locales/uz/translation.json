@@ -83,6 +83,12 @@
     "newssletter_title": "Yangiliklarga obuna bo‘ling",
     "newssletter_description": "Sog‘liq bo‘yicha maslahatlar va maxsus takliflarni olish uchun obuna bo‘ling",
     "email_placeholder": "Email manzilingiz",
+"cart": "Savat",
+  "order": "Buyurtma",
+    "region_label": "Viloyat",
+  "select_region": "Viloyatni tanlang",
+  "district_label": "Tuman",
+    "district_placeholder": "Tumanni tanlang",
 
     
     "copyright": "© 2024 HerbaStore. Barcha huquqlar himoyalangan.",
@@ -95,6 +101,14 @@
     "price_from": "dan",
     "price_to": "gacha",
     "clear_all_filters": "Barcha filtrlarni tozalash",
+
+    "not_found": "Mahsulot topilmadi.",
+    "available": "dona mavjud",
+    "about_product": "Mahsulot haqida",
+    "login_required": "Avval tizimga kiring!",
+    "session_expired": "Sessiya tugadi. Iltimos, qaytadan tizimga kiring.",
+    "added_to_cart": "✅ Mahsulot savatchaga qo‘shildi!",
+    "add_error": "❌ Mahsulot qo‘shishda xatolik",
 
     "why_choose_us_title": "Nega bizni tanlaysiz?",
     "why_choose_us_description": "Har bir toifa ehtiyotkorlik bilan tanlangan, yuqori sifatli mahsulotlardan iborat.",

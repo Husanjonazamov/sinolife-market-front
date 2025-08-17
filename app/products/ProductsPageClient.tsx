@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProductGrid from './ProductGrid';
-import ProductFilters from './ProductFilters';
 import axios from 'axios';
 import BASE_URL from '@/app/config';
 
@@ -22,15 +21,8 @@ type FilterType = {
   q: string;
 };
 
-const LOCAL_STORAGE_KEY = 'bannerDataProducts';
+const LOCAL_STORAGE_KEY = 'heroBanner';
 const CACHE_EXPIRY_MS = 1000 * 60 * 60;
-
-const DEFAULT_BANNER: BannerType = {
-  title: 'Our Products',
-  subtitle: 'Premium Herbal Supplements',
-  desc: 'Discover our complete collection of premium herbal supplements and natural wellness products',
-  image: 'https://readdy.ai/api/search-image?query=Premium%20herbal%20supplements&width=1920&height=600',
-};
 
 export default function ProductsPageClient() {
   const [filters, setFilters] = useState<FilterType>({
@@ -40,7 +32,7 @@ export default function ProductsPageClient() {
     q: '',
   });
 
-  const [banner, setBanner] = useState<BannerType>(DEFAULT_BANNER);
+  const [banner, setBanner] = useState<BannerType | null>(null);
 
   useEffect(() => {
     const cachedBanner = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -58,26 +50,23 @@ export default function ProductsPageClient() {
       try {
         const response = await axios.get(`${BASE_URL}/api/banner/`);
         if (response.data.status && response.data.data.results.length > 0) {
-          const banners = response.data.data.results;
-          const productBanner = banners.find((b: any) => b.type === 'products');
-
-          if (productBanner) {
+          const homeBanner = response.data.data.results.find((b: any) => b.type === 'home');
+          if (homeBanner) {
             const bannerObj: BannerType = {
-              title: productBanner.title,
-              subtitle: productBanner.subtitle,
-              desc: productBanner.description || '',
-              image: productBanner.image,
+              title: homeBanner.title,
+              subtitle: homeBanner.subtitle || '',
+              desc: homeBanner.description || '',
+              image: homeBanner.image,
             };
             setBanner(bannerObj);
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ data: bannerObj, timestamp: Date.now() }));
-            return;
+            localStorage.setItem(
+              LOCAL_STORAGE_KEY,
+              JSON.stringify({ data: bannerObj, timestamp: Date.now() })
+            );
           }
         }
-
-        setBanner(DEFAULT_BANNER);
       } catch (error) {
-        console.error('Banner fetch error:', error);
-        setBanner(DEFAULT_BANNER);
+        console.error('Hero banner fetch error:', error);
       }
     }
 
@@ -86,32 +75,53 @@ export default function ProductsPageClient() {
 
   return (
     <div className="min-h-screen">
-      <Header />
-      <main>
-        <section
-          className="relative py-24 bg-cover bg-center"
-          style={{
-            backgroundImage: `url(${banner.image})`,
-          }}
-        >
-          <div className="absolute inset-0 bg-black/50"></div>
-          <div className="relative z-10 container mx-auto px-4 text-center text-white">
-            <h1 className="text-5xl font-bold mb-4">{banner.title}</h1>
-            <h2 className="text-2xl text-green-400 mb-4">{banner.subtitle}</h2>
-            <p className="text-xl max-w-2xl mx-auto">{banner.desc}</p>
-          </div>
-        </section>
+      <div className="px-2 sm:px-4 max-w-full sm:max-w-7xl mx-auto">
+        <Header />
+        <main>
+          {/* Hero Banner */}
+          <section className="relative h-[180px] sm:h-[300px] mt-4 rounded-xl overflow-hidden">
+            {banner && (
+              <>
+                {/* Banner rasm */}
+                <div
+                  className="absolute inset-0 bg-cover bg-center filter brightness-90 transition-opacity duration-1000"
+                  style={{ backgroundImage: `url(${banner.image})` }}
+                ></div>
 
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col lg:flex-row gap-8">
-              <ProductFilters onFilterChange={setFilters} />
-              <ProductGrid filters={filters} />
+                {/* Shaffof overlay */}
+                <div className="absolute inset-0 bg-black/40"></div>
+
+                {/* Matn */}
+                <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white p-4 z-10">
+                  <h1 className="text-xl sm:text-3xl md:text-4xl font-bold mb-2 leading-snug">
+                    {banner.title}
+                  </h1>
+                  {banner.subtitle && (
+                    <h2 className="text-sm sm:text-xl md:text-2xl text-green-400 mb-2 leading-snug">
+                      {banner.subtitle}
+                    </h2>
+                  )}
+                  {banner.desc && (
+                    <p className="text-xs sm:text-sm md:text-base lg:text-lg max-w-xs sm:max-w-xl md:max-w-2xl">
+                      {banner.desc}
+                    </p>
+                  )}
+                </div>
+              </>
+            )}
+          </section>
+
+          {/* Products Grid */}
+          <section className="py-16">
+            <div className="container mx-auto px-2 sm:px-4">
+              <div className="flex flex-col lg:flex-row gap-8">
+                <ProductGrid filters={filters} />
+              </div>
             </div>
-          </div>
-        </section>
-      </main>
-      <Footer />
+          </section>
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }

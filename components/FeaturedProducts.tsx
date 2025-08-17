@@ -7,7 +7,6 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { refreshToken } from '@/app/register/refresh';
 import { useLanguage } from '@/lib/LanguageContext';
-import { useRouter } from 'next/navigation';
 import BASE_URL from '@/app/config';
 
 type ProductType = {
@@ -39,21 +38,7 @@ function getRandomItems<T>(arr: T[], n: number): T[] {
 export default function FeaturedProducts() {
   const [products, setProducts] = useState<ProductType[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(null);
-  const { language, setLanguage, t } = useLanguage();
-  const router = useRouter();
-
-  const handleOrderNow = (product: ProductType) => {
-    localStorage.setItem('checkoutProduct', JSON.stringify({
-      id: product.id,
-      name: product.title,
-      price: product.price,
-      quantity: 1,
-      image: product.image,
-    }));
-    const params = new URLSearchParams({ product_id: product.id.toString() });
-    router.push(`/order_now?${params.toString()}`);
-  };
+  const { t } = useLanguage();
 
   const handleAddToCart = async (productId: number) => {
     try {
@@ -64,7 +49,7 @@ export default function FeaturedProducts() {
       try {
         response = await axios.post(url, payload, { headers: { Authorization: `Bearer ${access}`, 'Content-Type': 'application/json' } });
       } catch (err: any) {
-        if (err.response && err.response.status === 401) {
+        if (err.response?.status === 401) {
           const newAccess = await refreshToken();
           if (!newAccess) { toast.error("Sessiya tugadi. Iltimos, qaytadan tizimga kiring."); return; }
           response = await axios.post(url, payload, { headers: { Authorization: `Bearer ${newAccess}`, 'Content-Type': 'application/json' } });
@@ -94,88 +79,76 @@ export default function FeaturedProducts() {
     fetchProducts();
   }, []);
 
-  const handleOpenModal = (product: ProductType) => setSelectedProduct(product);
-  const handleCloseModal = () => setSelectedProduct(null);
-
-  if (loading) return <section className="py-16 bg-gray-50"><div className="container mx-auto px-4 text-center text-gray-600">Yuklanmoqda...</div></section>;
-  if (products.length === 0) return <section className="py-16 bg-gray-50"><div className="container mx-auto px-4 text-center text-gray-600">Mahsulotlar topilmadi.</div></section>;
+  if (loading) return <section className="py-12 bg-gray-50"><div className="container mx-auto px-4 text-center text-gray-600">Yuklanmoqda...</div></section>;
+  if (products.length === 0) return <section className="py-12 bg-gray-50"><div className="container mx-auto px-4 text-center text-gray-600">Mahsulotlar topilmadi.</div></section>;
 
   return (
-    <section className="py-16 bg-gray-50 relative">
+    <section className="py-12 bg-gray-50 relative">
       <ToastContainer position="top-right" autoClose={2000} />
 
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">{t("featured_product")}</h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">{t("featured_products_description")}</p>
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">{t("featured_product")}</h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t("featured_products_description")}</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {products.map((product) => (
-            <div key={product.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden cursor-pointer" onClick={() => handleOpenModal(product)}>
-              <div className="relative">
-                <div className="w-full aspect-[4/3] bg-white">
-                  <img src={product.image} alt={product.title} className="w-full h-full object-contain object-center" />
-                </div>
-                <div className="absolute top-4 left-4 flex flex-col items-start gap-1">
-                  {product.is_populer && <span className="px-3 py-1 text-xs font-semibold rounded-full text-white" style={{ backgroundColor: '#0ef' }}>{t("best_seller")}</span>}
-                  {product.is_new && <span className="px-3 py-1 text-xs font-semibold rounded-full bg-green-600 text-white">{t("new")}</span>}
-                  {product.is_discounted && <span className="px-3 py-1 text-xs font-semibold rounded-full bg-red-600 text-white">{t("sale")}</span>}
-                </div>
-              </div>
+        {/* Kartalar */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+          {products.map((product) => {
+            const hasDiscount = product.discounted_price && product.discounted_price !== product.price;
 
-              <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">{product.title}</h3>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-2xl font-bold text-green-600">{product.price.toLocaleString('uz-UZ')} UZS</span>
-                    {product.discounted_price && product.discounted_price !== product.price && <span className="text-sm text-gray-500 line-through">{product.discounted_price.toLocaleString('uz-UZ')} UZS</span>}
+            // Description 10 ta so'z bilan kesiladi
+            const words = product.description.split(" ");
+            const shortDesc = words.slice(0, 10).join(" ") + (words.length > 10 ? "..." : "");
+
+            return (
+              <Link key={product.id} href={`/products/${product.id}`}>
+                <div className="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer flex flex-col h-full hover:shadow-lg transition">
+                  
+                  {/* Rasm container */}
+                  <div className="relative w-full h-40 sm:h-48 md:h-40 lg:h-48 overflow-hidden">
+                    <img src={product.image} alt={product.title} className="w-full h-full object-contain" />
+                  </div>
+
+                  {/* Card content */}
+                  <div className="p-3 flex flex-col flex-grow">
+                    <h3 className="text-sm sm:text-base font-semibold text-gray-800 mb-1 line-clamp-2">{product.title}</h3>
+
+                    {/* Narxlar */}
+                    <div className="mb-1 flex flex-col">
+                      <span className="text-sm font-bold text-green-600">{product.price.toLocaleString('uz-UZ')} UZS</span>
+                      {hasDiscount && (
+                        <span className="text-xs text-gray-500 line-through">{product.discounted_price.toLocaleString('uz-UZ')} UZS</span>
+                      )}
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-xs sm:text-sm mt-1 text-gray-500">{shortDesc}</p>
+
+                    {/* Tugma */}
+                    <div className="flex flex-col sm:flex-row gap-1 mt-auto">
+                      <button
+                        onClick={(e) => { e.preventDefault(); handleAddToCart(product.id); }}
+                        className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors"
+                      >
+                        {t("add_to_cart")}
+                      </button>
+                    </div>
                   </div>
                 </div>
-
-                <div className="flex flex-col sm:flex-row gap-2 mt-auto">
-                  <button onClick={() => handleAddToCart(product.id)} className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors">{t("add_to_cart")}</button>
-                  <button onClick={() => handleOrderNow(product)} className="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors">{t("order_now")}</button>
-                </div>
-              </div>
-            </div>
-          ))}
+              </Link>
+            );
+          })}
         </div>
 
-        <div className="text-center mt-12">
+        <div className="text-center mt-8">
           <Link href="/products">
-            <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-colors whitespace-nowrap cursor-pointer">{t("view_all_product")}</button>
+            <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer">
+              {t("view_all_product")}
+            </button>
           </Link>
         </div>
       </div>
-
-      {/* Modal */}
-      {selectedProduct && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4 py-6 overflow-auto">
-          <div className="bg-white rounded-2xl w-full max-w-4xl shadow-2xl relative flex flex-col md:flex-row max-h-[90vh]">
-            {/* Close */}
-            <button onClick={handleCloseModal} className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
-
-            {/* Chap: rasm */}
-            <div className="md:w-1/2 flex justify-center items-center p-4">
-              <img src={selectedProduct.image} alt={selectedProduct.title} className="w-full h-64 object-contain" />
-            </div>
-
-            {/* O'ng: title + desc + buttons */}
-            <div className="md:w-1/2 flex flex-col p-4 justify-between overflow-hidden">
-              <div className="overflow-y-auto max-h-[calc(90vh-120px)] pr-2">
-                <h3 className="text-2xl font-bold mb-2">{selectedProduct.title}</h3>
-                <p className="text-gray-600 whitespace-pre-wrap">{selectedProduct.description}</p>
-                <p className="text-green-600 font-bold mt-4">{selectedProduct.price.toLocaleString('uz-UZ')} UZS</p>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-2 mt-4 sticky bottom-0 bg-white pt-4">
-                <button onClick={() => handleAddToCart(selectedProduct.id)} className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-semibold">{t("add_to_cart")}</button>
-                <button onClick={() => handleOrderNow(selectedProduct)} className="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-lg font-semibold">{t("order_now")}</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }

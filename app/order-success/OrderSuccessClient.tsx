@@ -6,9 +6,33 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useLanguage } from '@/lib/LanguageContext';
+import axios from 'axios';
+import BASE_URL from '../config';
+import MobileFooterNav from '@/components/FooterNav';
+
 
 export default function OrderSuccessClient() {
   const searchParams = useSearchParams();
+  const [cartCount, setCartCount] = useState(0);
+
+
+  useEffect(() => {
+    const access = localStorage.getItem('access');
+    if (access) {
+      axios
+        .get(`${BASE_URL}/api/cart/`, {
+          headers: { Authorization: `Bearer ${access}` },
+        })
+        .then((res) => {
+          const results = res.data.data.results;
+          if (results.length > 0) {
+            const cart = results[0];
+            setCartCount(cart.cart_items_count);
+          }
+        })
+        .catch((err) => console.error('Cart olishda xatolik:', err));
+    }
+  }, []);
 
   const [orderData, setOrderData] = useState<{
     id: string;
@@ -137,6 +161,8 @@ export default function OrderSuccessClient() {
       </div>
 
       <Footer />
+                <MobileFooterNav cartCount={cartCount} />
+      
     </div>
   );
 }

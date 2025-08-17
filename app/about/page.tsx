@@ -6,8 +6,34 @@ import AboutHero from './AboutHero';
 import TeamSection from './TeamSection';
 import CompanyHistory from './CompanyHistory';
 import Values from './Values';
+import MobileFooterNav from '@/components/FooterNav';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import axios from 'axios';
+import BASE_URL from '../config';
 
 export default function AboutPage() {
+
+  const [cartCount, setCartCount] = useState(0);
+
+  // Cartni olish
+  useEffect(() => {
+    const access = localStorage.getItem('access');
+    if (access) {
+      axios
+        .get(`${BASE_URL}/api/cart/`, {
+          headers: { Authorization: `Bearer ${access}` },
+        })
+        .then((res) => {
+          const results = res.data.data.results;
+          if (results.length > 0) {
+            const cart = results[0];
+            setCartCount(cart.cart_items_count);
+          }
+        })
+        .catch((err) => console.error('Cart olishda xatolik:', err));
+    }
+  }, []);
   return (
     <div className="min-h-screen">
       <Header />
@@ -36,6 +62,8 @@ export default function AboutPage() {
         </section>
       </main>
       <Footer />
+      <MobileFooterNav cartCount={cartCount} />
+      
     </div>
   );
 }

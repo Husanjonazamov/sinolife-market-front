@@ -36,6 +36,15 @@
     "shop_now": "Hozir xarid qiling",
     "products": "Mahsulotlar",
 
+    "not_found": "Mahsulot topilmadi.",
+    "available": "dona mavjud",
+    "about_product": "Mahsulot haqida",
+    "order_now": "Hozirroq buyurtma",
+    "login_required": "Avval tizimga kiring!",
+    "session_expired": "Sessiya tugadi. Iltimos, qaytadan tizimga kiring.",
+    "added_to_cart": "✅ Mahsulot savatchaga qo‘shildi!",
+    "add_error": "❌ Mahsulot qo‘shishda xatolik",
+
     "shop_show": "Mahsulotlarni ko'rish",
     "featured_product": "Mashhur mahsulotlar",
     "featured_products_description": "Sifati va samaradorligi uchun ehtiyotkorlik bilan tanlangan eng mashhur o'simlik qo'shimchalarini kashf eting.",

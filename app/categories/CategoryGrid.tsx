@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import BASE_URL from '../config';
 import { useLanguage } from '@/lib/LanguageContext';
 
-
 type Category = {
   id: number;
   title: string;
@@ -14,15 +13,15 @@ type Category = {
 };
 
 const colorMap: Record<string, string> = {
-  green: 'bg-green-600 hover:bg-green-700',
-  orange: 'bg-orange-600 hover:bg-orange-700',
-  yellow: 'bg-yellow-600 hover:bg-yellow-700',
-  purple: 'bg-purple-600 hover:bg-purple-700',
-  blue: 'bg-blue-600 hover:bg-blue-700',
-  pink: 'bg-pink-600 hover:bg-pink-700',
-  indigo: 'bg-indigo-600 hover:bg-indigo-700',
-  red: 'bg-red-600 hover:bg-red-700',
-  rose: 'bg-rose-600 hover:bg-rose-700',
+  green: 'bg-green-600',
+  orange: 'bg-orange-600',
+  yellow: 'bg-yellow-600',
+  purple: 'bg-purple-600',
+  blue: 'bg-blue-600',
+  pink: 'bg-pink-600',
+  indigo: 'bg-indigo-600',
+  red: 'bg-red-600',
+  rose: 'bg-rose-600',
 };
 
 const icons = [
@@ -47,10 +46,9 @@ function getRandomItems<T>(arr: T[], n: number): T[] {
 }
 
 export default function CategoryGrid() {
-  const [categories, setCategories] = useState<(Category & { color: string, icon: string })[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<(Category & { color: string; icon: string })[]>([]);
   const { t } = useLanguage();
-
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchCategories() {
@@ -103,7 +101,7 @@ export default function CategoryGrid() {
 
   return (
     <section className="py-16">
-      <div className="container mx-auto px-4">
+      <div className="px-0 sm:px-4 max-w-full sm:max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-800 mb-4">{t("categories_title")}</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -113,18 +111,15 @@ export default function CategoryGrid() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.map((category) => (
-            <Link
-              key={category.id}
-              href={`/products?category_ids=${category.id}`}
-            >
-              <div className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden cursor-pointer">
-                <div className="relative h-48 overflow-hidden">
+            <Link key={category.id} href={`/products?category_ids=${category.id}`}>
+              <div className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer">
+                <div className="relative h-48 w-full overflow-hidden rounded-t-2xl">
                   <img
                     src={category.image}
                     alt={category.title}
-                    className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-300"
+                    className="w-full h-full object-cover object-center"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                   <div className={`absolute top-4 left-4 w-12 h-12 ${colorMap[category.color]} rounded-full flex items-center justify-center`}>
                     <i className={`${category.icon} text-white text-xl`}></i>
                   </div>
@@ -138,15 +133,15 @@ export default function CategoryGrid() {
                 </div>
 
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-3 group-hover:text-green-600 transition-colors">
+                  <h3 className="text-xl font-semibold text-gray-800 mb-3">
                     {category.title}
                   </h3>
                   <p className="text-gray-600 mb-4 leading-relaxed">
                     {t("explore_products_in_this_category")}
                   </p>
-                  <div className="flex items-center text-green-600 group-hover:text-green-700 transition-colors">
+                  <div className="flex items-center text-green-600">
                     <span className="font-medium">{t("shop_now")}</span>
-                    <i className="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    <i className="ri-arrow-right-line ml-2"></i>
                   </div>
                 </div>
               </div>

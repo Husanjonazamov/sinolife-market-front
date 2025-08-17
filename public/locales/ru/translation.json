@@ -41,7 +41,21 @@
   "new": "Новинка",
       "no_products_found": "Продукты не найдены",
           "order_now": "Заказать сейчас",
+          "cart": "Корзина",
+  "order": "Заказать",
+   "region_label": "Регион",
+  "select_region": "Выберите регион",
+  "district_label": "Район",
+    "district_placeholder": "Выберите район",
 
+
+  "not_found": "Товар не найден.",
+  "available": "шт. в наличии",
+  "about_product": "О товаре",
+  "login_required": "Сначала войдите в систему!",
+  "session_expired": "Сессия истекла. Пожалуйста, войдите снова.",
+  "added_to_cart": "✅ Товар добавлен в корзину!",
+  "add_error": "❌ Ошибка при добавлении товара",
 
   "sale": "Скидка",
   "add_to_cart": "Добавить в корзину",

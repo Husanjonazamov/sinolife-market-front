@@ -11,6 +11,7 @@ import { refreshToken } from '../register/refresh';
 import { IMaskInput } from 'react-imask';
 import { useLanguage } from '@/lib/LanguageContext';
 import dynamic from 'next/dynamic';
+import MobileFooterNav from '@/components/FooterNav';
 
 const CustomSearchMap = dynamic(() => import('./location'), {
   ssr: false,
@@ -46,6 +47,26 @@ export default function CheckoutPage() {
     long: '',
     address: '',
   });
+  const [cartCount, setCartCount] = useState(0);
+
+
+  useEffect(() => {
+    const access = localStorage.getItem('access');
+    if (access) {
+      axios
+        .get(`${BASE_URL}/api/cart/`, {
+          headers: { Authorization: `Bearer ${access}` },
+        })
+        .then((res) => {
+          const results = res.data.data.results;
+          if (results.length > 0) {
+            const cart = results[0];
+            setCartCount(cart.cart_items_count);
+          }
+        })
+        .catch((err) => console.error('Cart olishda xatolik:', err));
+    }
+  }, []);
 
   const fetchCartItems = async (token: string) => {
     try {
@@ -158,54 +179,58 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("checkout_title")}</h1>
-          <div className="flex items-center space-x-4">
-            <StepIndicator step={currentStep} />
+      <div className='px-0 sm:px-4 max-w-full sm:max-w-7xl mx-auto'>
+        <Header />
+        <div className="container mx-auto px-4 py-8">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("checkout_title")}</h1>
+            <div className="flex items-center space-x-4">
+              <StepIndicator step={currentStep} />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              {currentStep === 1 && (
+                <ShippingForm
+                  shippingInfo={shippingInfo}
+                  setShippingInfo={setShippingInfo}
+                  onNext={() => setCurrentStep(2)}
+                />
+              )}
+
+              {currentStep === 2 && (
+                <PaymentForm
+                  paymentMethod={paymentMethod}
+                  setPaymentMethod={setPaymentMethod}
+                  shippingInfo={shippingInfo}
+                  cartItems={cartItems}
+                  onBack={() => setCurrentStep(1)}
+                  onNext={() => setCurrentStep(3)} // Kept for compatibility, but overridden in PaymentForm
+                />
+              )}
+
+              {currentStep === 3 && (
+                <ReviewOrder
+                  shippingInfo={shippingInfo}
+                  cartItems={cartItems}
+                  paymentMethod={paymentMethod}
+                  onBack={() => setCurrentStep(2)}
+                  onPlaceOrder={handlePlaceOrder}
+                  isProcessing={isProcessing}
+                />
+              )}
+            </div>
+
+            <div className="lg:col-span-1">
+              <OrderSummary cartItems={cartItems} total={cart?.total_price || "0.00"} />
+            </div>
           </div>
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            {currentStep === 1 && (
-              <ShippingForm
-                shippingInfo={shippingInfo}
-                setShippingInfo={setShippingInfo}
-                onNext={() => setCurrentStep(2)}
-              />
-            )}
-
-            {currentStep === 2 && (
-              <PaymentForm
-                paymentMethod={paymentMethod}
-                setPaymentMethod={setPaymentMethod}
-                shippingInfo={shippingInfo}
-                cartItems={cartItems}
-                onBack={() => setCurrentStep(1)}
-                onNext={() => setCurrentStep(3)} // Kept for compatibility, but overridden in PaymentForm
-              />
-            )}
-
-            {currentStep === 3 && (
-              <ReviewOrder
-                shippingInfo={shippingInfo}
-                cartItems={cartItems}
-                paymentMethod={paymentMethod}
-                onBack={() => setCurrentStep(2)}
-                onPlaceOrder={handlePlaceOrder}
-                isProcessing={isProcessing}
-              />
-            )}
-          </div>
-
-          <div className="lg:col-span-1">
-            <OrderSummary cartItems={cartItems} total={cart?.total_price || "0.00"} />
-          </div>
+        <Footer />
+            <MobileFooterNav cartCount={cartCount} />
+        
         </div>
-      </div>
-      <Footer />
     </div>
   );
 }
@@ -254,56 +279,127 @@ const ShippingForm = ({ shippingInfo, setShippingInfo, onNext }: any) => {
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">
       <h2 className="text-xl font-semibold text-gray-900 mb-6">{t("shipping_info_title")}</h2>
-      <form className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm text-gray-800 font-medium mb-2">{t("first_name_label")}</label>
-            <input
-              type="text"
-              value={shippingInfo.firstName}
-              onChange={(e) => setShippingInfo({ ...shippingInfo, firstName: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder={t("first_name_placeholder")}
-              required
-            />
-          </div>
+    <form className="space-y-6">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+      <label className="block text-sm text-gray-800 font-medium mb-2">
+        {t("first_name_label")}
+      </label>
+      <input
+        type="text"
+        value={shippingInfo.firstName}
+        onChange={(e) =>
+          setShippingInfo({ ...shippingInfo, firstName: e.target.value })
+        }
+        className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+        placeholder={t("first_name_placeholder")}
+        required
+      />
+    </div>
 
-          <div>
-            <label className="block text-sm text-gray-800 font-medium mb-2">{t("phone_number_label")}</label>
-            <IMaskInput
-              mask="+998-00-000-00-00"
-              definitions={{
-                "0": /[0-9]/,
-              }}
-              lazy={false}
-              overwrite
-              value={shippingInfo.phone}
-              onAccept={(value: string) => handlePhoneChange(value)}
-              placeholder="+998-__-___-__-__"
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-            {phoneError && <p className="text-red-500 text-sm mt-1">{phoneError}</p>}
-          </div>
-        </div>
-        <CustomSearchMap
-          onSelect={(address, lat, long) =>
-            setShippingInfo({ ...shippingInfo, address, lat, long })
-          }
-        />
-        <button
-          type="button"
-          onClick={onNext}
-          className="w-full bg-green-600 text-white py-3 rounded-xl hover:bg-green-700 font-semibold shadow-md transition-all text-base"
-          disabled={
-            !shippingInfo.firstName ||
-            !shippingInfo.phone ||
-            !shippingInfo.address ||
-            phoneError !== null
-          }
-        >
-          {t("continue_to_payment")}
-        </button>
-      </form>
+    <div>
+      <label className="block text-sm text-gray-800 font-medium mb-2">
+        {t("phone_number_label")}
+      </label>
+      <IMaskInput
+        mask="+998-00-000-00-00"
+        definitions={{
+          "0": /[0-9]/,
+        }}
+        lazy={false}
+        overwrite
+        value={shippingInfo.phone}
+        onAccept={(value: string) => handlePhoneChange(value)}
+        placeholder="+998-__-___-__-__"
+        className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+      />
+      {phoneError && (
+        <p className="text-red-500 text-sm mt-1">{phoneError}</p>
+      )}
+    </div>
+  </div>
+
+  {/* Viloyat select */}
+  <div>
+    <label className="block text-sm text-gray-800 font-medium mb-2">
+      {t("region_label") || "Viloyat"}
+    </label>
+    <select
+      value={shippingInfo.region || ""}
+      onChange={(e) =>
+        setShippingInfo({ ...shippingInfo, region: e.target.value })
+      }
+      className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500"
+      required
+    >
+      <option value="">{t("select_region") || "Viloyatni tanlang"}</option>
+      <option value="Andijon">Andijon</option>
+      <option value="Buxoro">Buxoro</option>
+      <option value="Fargʻona">Fargʻona</option>
+      <option value="Jizzax">Jizzax</option>
+      <option value="Xorazm">Xorazm</option>
+      <option value="Namangan">Namangan</option>
+      <option value="Navoiy">Navoiy</option>
+      <option value="Qashqadaryo">Qashqadaryo</option>
+      <option value="Qoraqalpogʻiston">Qoraqalpogʻiston</option>
+      <option value="Samarqand">Samarqand</option>
+      <option value="Sirdaryo">Sirdaryo</option>
+      <option value="Surxondaryo">Surxondaryo</option>
+      <option value="Toshkent">Toshkent</option>
+    </select>
+  </div>
+
+  {/* Tuman */}
+  <div>
+    <label className="block text-sm text-gray-800 font-medium mb-2">
+      {t("district_label") || "Tuman"}
+    </label>
+    <input
+      type="text"
+      value={shippingInfo.district || ""}
+      onChange={(e) =>
+        setShippingInfo({ ...shippingInfo, district: e.target.value })
+      }
+      className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+      placeholder={t("district_placeholder") || "Tumanni kiriting"}
+      required
+    />
+  </div>
+
+  {/* Aniq manzil */}
+  <div>
+    <label className="block text-sm text-gray-800 font-medium mb-2">
+      {t("address_label") || "Manzil"}
+    </label>
+    <input
+      type="text"
+      value={shippingInfo.address}
+      onChange={(e) =>
+        setShippingInfo({ ...shippingInfo, address: e.target.value })
+      }
+      className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+      placeholder={t("address_placeholder") || "Ko‘cha, uy raqami va h.k."}
+      required
+    />
+  </div>
+
+  <button
+    type="button"
+    onClick={onNext}
+    className="w-full bg-green-600 text-white py-3 rounded-xl hover:bg-green-700 font-semibold shadow-md transition-all text-base"
+    disabled={
+      !shippingInfo.firstName ||
+      !shippingInfo.phone ||
+      !shippingInfo.region ||
+      !shippingInfo.district ||
+      !shippingInfo.address ||
+      phoneError !== null
+    }
+  >
+    {t("continue_to_payment")}
+  </button>
+    </form>
+
     </div>
   );
 };
