@@ -11,7 +11,7 @@ import { refreshToken } from '@/app/register/refresh';
 export const updateCartItemQuantity = async (id: string, quantity: number) => {
   const url = `${BASE_URL}/api/cart-item/${id}/`; 
 
-  let access = localStorage.getItem('access');
+  const access = localStorage.getItem('access');
 
   try {
     await axios.patch(

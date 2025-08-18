@@ -37,7 +37,7 @@ export default function ProductGrid({ filters }: ProductGridProps) {
   const handleAddToCart = async (productId: number) => {
     try {
       const url = `${BASE_URL}/api/cart/`;
-      let access = localStorage.getItem('access');
+      const access = localStorage.getItem('access');
       const payload = { cart_items: [{ product: productId, quantity: 1 }] };
       let response;
 

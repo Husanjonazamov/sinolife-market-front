@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 export default function TeamSection() {
   const team = [
     {
@@ -45,13 +47,16 @@ export default function TeamSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {team.map((member, index) => (
             <div key={index} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden">
-              <div className="relative">
-                <img
+              <div className="relative w-full h-64">
+                <Image
                   src={member.image}
                   alt={member.name}
-                  className="w-full h-64 object-cover object-top"
+                  layout="fill"
+                  objectFit="cover"
+                  objectPosition="top"
+                  className="rounded-t-2xl"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-t-2xl"></div>
               </div>
               
               <div className="p-6">
@@ -60,9 +65,9 @@ export default function TeamSection() {
                 <p className="text-gray-600 text-sm leading-relaxed mb-4">{member.bio}</p>
                 
                 <div className="flex space-x-3">
-                  <button className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center hover:bg-green-700 transition-colors cursor-pointer">
+                  <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center hover:bg-green-700 transition-colors">
                     <i className="ri-linkedin-fill text-white text-sm"></i>
-                  </button>
+                  </a>
                   <button className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center hover:bg-green-700 transition-colors cursor-pointer">
                     <i className="ri-mail-line text-white text-sm"></i>
                   </button>

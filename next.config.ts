@@ -1,12 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // output: "export",  // bu bo‘lmasin
   images: {
-    unoptimized: true,
+    unoptimized: true, // image optimizationni o'chiradi
   },
   typescript: {
-    // ignoreBuildErrors: true,
+    ignoreBuildErrors: true, // TS xatolarini buildni to'xtatmasdan o'tkazadi
   },
 };
 

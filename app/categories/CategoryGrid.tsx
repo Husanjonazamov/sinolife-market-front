@@ -58,7 +58,7 @@ export default function CategoryGrid() {
         const json = await res.json();
 
         if (json.status && json.data && Array.isArray(json.data.results)) {
-          let results: Category[] = json.data.results;
+          const results: Category[] = json.data.results;
 
           const randomCats = getRandomItems(results, 6);
 

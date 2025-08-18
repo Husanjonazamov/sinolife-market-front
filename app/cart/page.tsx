@@ -52,7 +52,7 @@ export default function CartPage() {
   }, []);
 
   const fetchCart = async () => {
-    let access = localStorage.getItem('access');
+    const access = localStorage.getItem('access');
 
     // Agar foydalanuvchi login qilmagan bo‘lsa
     if (!access) {
