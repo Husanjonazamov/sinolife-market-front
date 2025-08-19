@@ -5,7 +5,7 @@ import Link from "next/link";
 <Link href="/" className="flex items-center space-x-2">
   <div className="w-10 h-10 flex items-center justify-center">
     <Image
-      src="/images/logo.png"
+      src="/images/logo2.png"
       alt="SinoLife Logo"
       width={40}
       height={40}

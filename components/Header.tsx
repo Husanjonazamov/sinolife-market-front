@@ -92,10 +92,10 @@ export default function Header() {
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
-          <div className="w-10 h-10 flex items-center justify-center">
-            <Image src="/images/logo.png" alt="SinoLife Logo" width={40} height={40} className="rounded-full object-cover" />
+          <div className="w-14 h-14 flex items-center justify-center">
+            <Image src="/images/logo.png" alt="SinoLife Logo" width={60} height={60} className="rounded-full object-cover" />
           </div>
-          <span className="text-2xl font-pacifico text-green-700">SinoLife</span>
+          {/* <span className="text-2xl font-pacifico text-green-700">SinoLife</span> */}
         </Link>
 
         {/* Search (desktop) */}
