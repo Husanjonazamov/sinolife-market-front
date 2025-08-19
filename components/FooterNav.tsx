@@ -18,7 +18,7 @@ export default function MobileFooterNav({ cartCount }: { cartCount: number }) {
           </Link>
         </li>
         <li className="flex flex-col items-center text-gray-700 hover:text-green-600">
-          <Link href="/brand">
+          <Link href="/categories">
             <AiOutlineTags size={24} />
             <span className="text-xs mt-1">Brand</span>
           </Link>

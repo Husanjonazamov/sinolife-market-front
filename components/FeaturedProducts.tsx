@@ -79,8 +79,17 @@ export default function FeaturedProducts() {
     fetchProducts();
   }, []);
 
-  if (loading) return <section className="py-12 bg-gray-50"><div className="container mx-auto px-4 text-center text-gray-600">Yuklanmoqda...</div></section>;
-  if (products.length === 0) return <section className="py-12 bg-gray-50"><div className="container mx-auto px-4 text-center text-gray-600">Mahsulotlar topilmadi.</div></section>;
+  // Skeleton card
+  const SkeletonCard = () => (
+    <div className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse flex flex-col h-full">
+      <div className="w-full h-40 sm:h-48 md:h-40 lg:h-48 bg-gray-200"></div>
+      <div className="p-3 flex flex-col flex-grow gap-2">
+        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+        <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+        <div className="h-3 bg-gray-200 rounded w-full mt-auto"></div>
+      </div>
+    </div>
+  );
 
   return (
     <section className="py-12 bg-gray-50 relative">
@@ -94,51 +103,43 @@ export default function FeaturedProducts() {
 
         {/* Kartalar */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
-          {products.map((product) => {
-            const hasDiscount = product.discounted_price && product.discounted_price !== product.price;
+          {loading
+            ? Array.from({ length: 10 }).map((_, idx) => <SkeletonCard key={idx} />)
+            : products.map((product) => {
+                const hasDiscount = product.discounted_price && product.discounted_price !== product.price;
+                const words = product.description.split(" ");
+                const shortDesc = words.slice(0, 10).join(" ") + (words.length > 10 ? "..." : "");
 
-            // Description 10 ta so'z bilan kesiladi
-            const words = product.description.split(" ");
-            const shortDesc = words.slice(0, 10).join(" ") + (words.length > 10 ? "..." : "");
+                return (
+                  <Link key={product.id} href={`/products/${product.id}`}>
+                    <div className="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer flex flex-col h-full hover:shadow-lg transition">
+                      
+                      <div className="relative w-full h-40 sm:h-48 md:h-40 lg:h-48 overflow-hidden">
+                        <img src={product.image} alt={product.title} className="w-full h-full object-contain" />
+                      </div>
 
-            return (
-              <Link key={product.id} href={`/products/${product.id}`}>
-                <div className="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer flex flex-col h-full hover:shadow-lg transition">
-                  
-                  {/* Rasm container */}
-                  <div className="relative w-full h-40 sm:h-48 md:h-40 lg:h-48 overflow-hidden">
-                    <img src={product.image} alt={product.title} className="w-full h-full object-contain" />
-                  </div>
-
-                  {/* Card content */}
-                  <div className="p-3 flex flex-col flex-grow">
-                    <h3 className="text-sm sm:text-base font-semibold text-gray-800 mb-1 line-clamp-2">{product.title}</h3>
-
-                    {/* Narxlar */}
-                    <div className="mb-1 flex flex-col">
-                      <span className="text-sm font-bold text-green-600">{product.price.toLocaleString('uz-UZ')} UZS</span>
-                      {hasDiscount && (
-                        <span className="text-xs text-gray-500 line-through">{product.discounted_price.toLocaleString('uz-UZ')} UZS</span>
-                      )}
+                      <div className="p-3 flex flex-col flex-grow">
+                        <h3 className="text-sm sm:text-base font-semibold text-gray-800 mb-1 line-clamp-2">{product.title}</h3>
+                        <div className="mb-1 flex flex-col">
+                          <span className="text-sm font-bold text-green-600">{product.price.toLocaleString('uz-UZ')} UZS</span>
+                          {hasDiscount && (
+                            <span className="text-xs text-gray-500 line-through">{product.discounted_price.toLocaleString('uz-UZ')} UZS</span>
+                          )}
+                        </div>
+                        <p className="text-xs sm:text-sm mt-1 text-gray-500">{shortDesc}</p>
+                        <div className="flex flex-col sm:flex-row gap-1 mt-auto">
+                          <button
+                            onClick={(e) => { e.preventDefault(); handleAddToCart(product.id); }}
+                            className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors"
+                          >
+                            {t("add_to_cart")}
+                          </button>
+                        </div>
+                      </div>
                     </div>
-
-                    {/* Description */}
-                    <p className="text-xs sm:text-sm mt-1 text-gray-500">{shortDesc}</p>
-
-                    {/* Tugma */}
-                    <div className="flex flex-col sm:flex-row gap-1 mt-auto">
-                      <button
-                        onClick={(e) => { e.preventDefault(); handleAddToCart(product.id); }}
-                        className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors"
-                      >
-                        {t("add_to_cart")}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
+                  </Link>
+                );
+              })}
         </div>
 
         <div className="text-center mt-8">

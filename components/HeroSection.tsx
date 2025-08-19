@@ -7,12 +7,18 @@ import BASE_URL from '@/app/config';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useRouter } from 'next/navigation';
 
 type BannerType = {
   title: string;
   subtitle: string;
   desc: string;
   image: string;
+};
+
+type BrandType = {
+  id: number;
+  title: string;
 };
 
 const DEFAULT_IMAGE =
@@ -33,25 +39,18 @@ const DEFAULT_BANNERS: BannerType[] = [
   },
 ];
 
-// Static kategoriyalar
-const STATIC_CATEGORIES = [
-  'Ichimliklar',
-  'Tabiiy yog‘lar',
-  'Vitaminlar',
-  'Choylar',
-  'Shifobaxsh o‘simliklar',
-  'Asal mahsulotlari',
-  'Organik kosmetika',
-];
-
 export default function HeroSection() {
   const [banners, setBanners] = useState<BannerType[]>(DEFAULT_BANNERS);
+  const [brands, setBrands] = useState<BrandType[]>([]);
   const { language } = useLanguage();
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchBanners() {
       try {
-        const response = await axios.get(`${BASE_URL}/api/banner/?lang=${language}`);
+        const response = await axios.get(`${BASE_URL}/api/banner/`, {
+          headers: { 'Accept-Language': language },
+        });
         if (response.data.status && response.data.data.results.length > 0) {
           const homeBanners = response.data.data.results.filter((b: any) => b.type === 'home');
           if (homeBanners.length > 0) {
@@ -72,7 +71,25 @@ export default function HeroSection() {
         setBanners(DEFAULT_BANNERS);
       }
     }
+
+    async function fetchBrands() {
+      try {
+        const res = await axios.get(`${BASE_URL}/api/brend/`, {
+          headers: { 'Accept-Language': language },
+        });
+        if (res.data.status && res.data.data.results.length > 0) {
+          setBrands(res.data.data.results.map((b: any) => ({ id: b.id, title: b.title })));
+        } else {
+          setBrands([]);
+        }
+      } catch (error) {
+        console.error('Brendlarni olishda xatolik:', error);
+        setBrands([]);
+      }
+    }
+
     fetchBanners();
+    fetchBrands();
   }, [language]);
 
   const sliderSettings = {
@@ -80,30 +97,35 @@ export default function HeroSection() {
     infinite: true,
     autoplay: true,
     autoplaySpeed: 4000,
-    speed: 500, // Silliq harakat uchun
+    speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false,
-    cssEase: 'ease-in-out', // Sekinroq va silliq o‘tish
+    cssEase: 'ease-in-out',
   };
 
-  // Desc qisqartirish funksiyasi
   const shortDesc = (text: string, wordLimit = 10) => {
     const words = text.split(' ');
     if (words.length <= wordLimit) return text;
     return words.slice(0, wordLimit).join(' ') + '...';
   };
 
+  const handleBrandClick = (brandTitle: string) => {
+    // Brandga bosilganda /products/?brand=title sahifasiga redirect
+    router.push(`/products/?brand=${encodeURIComponent(brandTitle)}`);
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 mt-4">
-      {/* Static kategoriyalar — faqat desktop */}
+      {/* Brendlar — faqat desktop */}
       <div className="hidden sm:flex gap-6 overflow-x-auto pb-2 scrollbar-hide">
-        {STATIC_CATEGORIES.map((cat, idx) => (
+        {brands.map((brand) => (
           <button
-            key={idx}
+            key={brand.id}
+            onClick={() => handleBrandClick(brand.title)}
             className="relative flex-shrink-0 px-4 py-2 text-gray-700 font-medium transition-colors after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-green-600 after:transition-all after:duration-300 hover:after:w-full"
           >
-            {cat}
+            {brand.title}
           </button>
         ))}
       </div>
@@ -112,17 +134,13 @@ export default function HeroSection() {
       <section className="mt-4">
         <Slider {...sliderSettings}>
           {banners.map((banner, i) => (
-            <div key={i} className="px-1"> {/* Oraliq qo'shildi */}
+            <div key={i} className="px-1">
               <div
                 className="relative h-[160px] sm:h-[450px] overflow-hidden rounded-xl bg-cover bg-center"
                 style={{ backgroundImage: `url(${banner.image})` }}
               >
-                {/* Kuchliroq qora overlay */}
                 <div className="absolute inset-0 bg-black/60 rounded-xl"></div>
-
-                {/* Matn joylashuvi */}
-                <div className="absolute inset-0 flex flex-col justify-end items-start p-4 z-10 text-white 
-                                sm:translate-y-[-10%]">
+                <div className="absolute inset-0 flex flex-col justify-end items-start p-4 z-10 text-white sm:translate-y-[-10%]">
                   <h1 className="text-sm sm:text-4xl font-bold leading-snug text-left w-full">
                     {banner.title}
                   </h1>
@@ -135,8 +153,6 @@ export default function HeroSection() {
                     {shortDesc(banner.desc, 10)}
                   </p>
                 </div>
-
-
               </div>
             </div>
           ))}

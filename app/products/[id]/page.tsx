@@ -264,10 +264,15 @@ export default function ProductDetail({ params }: ProductDetailProps) {
             </div>
 
             {/* Mahsulot haqida */}
-            <div className="mt-8 bg-white rounded-2xl shadow p-4 sm:p-6">
-              <h2 className="text-lg font-semibold mb-2">{t('about_product')}</h2>
-              <p className="text-gray-700">{product.description}</p>
+            <div className="mt-8 bg-white rounded-2xl shadow-lg p-6 text-justify">
+              <h2 className="text-xl font-bold mb-3 text-green-700">{t('about_product')}</h2>
+              <p className="text-gray-800 text-base leading-relaxed">
+                {product.description}
+              </p>
             </div>
+
+
+
 
             {/* Commentlar */}
           </div>

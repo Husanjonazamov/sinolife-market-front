@@ -3,8 +3,6 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import BASE_URL from '@/app/config';
-
-
 import { useLanguage } from '@/lib/LanguageContext';
 
 type Category = {
@@ -35,11 +33,22 @@ function getRandomItems<T>(arr: T[], n: number): T[] {
   return shuffled.slice(0, n);
 }
 
+// Skeleton card
+const SkeletonCard = () => (
+  <div className="bg-white rounded-2xl shadow-lg animate-pulse overflow-hidden flex flex-col h-full">
+    <div className="w-full h-48 bg-gray-200"></div>
+    <div className="p-6 flex flex-col gap-2 flex-grow">
+      <div className="h-5 bg-gray-200 rounded w-3/4"></div>
+      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+      <div className="h-4 bg-gray-200 rounded w-full mt-auto"></div>
+    </div>
+  </div>
+);
+
 export default function CategoryGrid() {
   const [categories, setCategories] = useState<(Category & { color: string })[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const { language, setLanguage, t } = useLanguage();
+  const { t } = useLanguage();
 
   useEffect(() => {
     async function fetchCategories() {
@@ -50,7 +59,6 @@ export default function CategoryGrid() {
 
         if (json.status && json.data && Array.isArray(json.data.results)) {
           const results: Category[] = json.data.results;
-
           const randomCats = getRandomItems(results, 6);
 
           const catsWithColors = randomCats.map((cat, i) => ({
@@ -73,14 +81,6 @@ export default function CategoryGrid() {
     fetchCategories();
   }, []);
 
-  if (loading) {
-    return <div className="py-16 text-center text-gray-600 text-xl">Yuklanmoqda...</div>;
-  }
-
-  if (categories.length === 0) {
-    return <div className="py-16 text-center text-gray-600 text-xl">Kategoriya topilmadi.</div>;
-  }
-
   return (
     <section className="py-16">
       <div className="container mx-auto px-4">
@@ -92,44 +92,42 @@ export default function CategoryGrid() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {categories.map((category) => (
-            <Link
-              key={category.id}
-              href={`/products?category_ids=${category.id}`}
-            >
-              <div className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden cursor-pointer">
-                <div className="relative h-48 overflow-hidden bg-white">
-                  <img
-                    src={category.image}
-                    alt={category.title}
-                    className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <div className="flex items-center justify-between text-white">
-                      <span className="text-sm font-medium bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
-                        {category.product_count} {t("products")}
-                      </span>
+          {loading
+            ? Array.from({ length: 6 }).map((_, idx) => <SkeletonCard key={idx} />)
+            : categories.map((category) => (
+                <Link key={category.id} href={`/products?category_ids=${category.id}`}>
+                  <div className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden cursor-pointer">
+                    <div className="relative h-48 overflow-hidden bg-white">
+                      <img
+                        src={category.image}
+                        alt={category.title}
+                        className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                      <div className="absolute bottom-4 left-4 right-4">
+                        <div className="flex items-center justify-between text-white">
+                          <span className="text-sm font-medium bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+                            {category.product_count} {t("products")}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-6">
+                      <h3 className="text-xl font-semibold text-gray-800 mb-3 group-hover:text-green-600 transition-colors">
+                        {category.title}
+                      </h3>
+                      <p className="text-gray-600 mb-4 leading-relaxed">
+                        {t("explore_products_in_this_category")}
+                      </p>
+                      <div className="flex items-center text-green-600 group-hover:text-green-700 transition-colors">
+                        <span className="font-medium">{t("shop_now")}</span>
+                        <i className="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform"></i>
+                      </div>
                     </div>
                   </div>
-                </div>
-
-
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-3 group-hover:text-green-600 transition-colors">
-                    {category.title}
-                  </h3>
-                  <p className="text-gray-600 mb-4 leading-relaxed">
-                    {t("explore_products_in_this_category")}
-                  </p>
-                  <div className="flex items-center text-green-600 group-hover:text-green-700 transition-colors">
-                    <span className="font-medium">{t("shop_now")}</span>
-                    <i className="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform"></i>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
+                </Link>
+              ))}
         </div>
       </div>
     </section>

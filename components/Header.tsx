@@ -91,12 +91,24 @@ export default function Header() {
       {/* Main header */}
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center space-x-2">
-          <div className="w-14 h-14 flex items-center justify-center">
-            <Image src="/images/logo.png" alt="SinoLife Logo" width={60} height={60} className="rounded-full object-cover" />
-          </div>
-          {/* <span className="text-2xl font-pacifico text-green-700">SinoLife</span> */}
-        </Link>
+       <Link href="/" className="flex items-center space-x-2 pl-2">
+        {/* Text vertikal qator */}
+        <div className="flex flex-col leading-none">
+          <span className="text-xl font-semibold text-green-700">SINOLIFE</span>
+          {/* <span className="text-sm text-green-700">Lorem, ipsum.</span> */}
+        </div>
+
+        {/* Logo */}
+        <div className="w-14 h-14 flex items-center justify-center">
+          <Image
+            src="/images/logo.png"
+            alt="SinoLife Logo"
+            width={50}
+            height={50}
+            className="rounded-full object-cover"
+          />
+        </div>
+      </Link>
 
         {/* Search (desktop) */}
         <div className="hidden md:flex flex-1 max-w-[180px] md:max-w-md mx-4">
