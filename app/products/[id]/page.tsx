@@ -14,10 +14,25 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { refreshToken } from '@/app/register/refresh';
 import { useLanguage } from '@/lib/LanguageContext';
+import CommentSection from '../CommentSection';
 
 interface Category {
   id: number;
   title: string;
+}
+
+interface User {
+  id: number;
+  first_name: string;
+  last_name: string;
+  username: string;
+}
+
+interface Comment {
+  id: number;
+  user: User;
+  product: number;
+  message: string;
 }
 
 interface Product {
@@ -30,6 +45,7 @@ interface Product {
   quantity: number;
   category: Category;
   images: string[];
+  comments: Comment[]; // 🔑 qo‘shildi
 }
 
 interface ProductDetailProps {
@@ -200,10 +216,10 @@ export default function ProductDetail({ params }: ProductDetailProps) {
                   {product.discounted_price && product.discounted_price !== product.price ? (
                     <>
                       <span className="text-2xl sm:text-3xl font-bold text-green-600">
-                        {product.price.toLocaleString('uz-UZ')} UZS
+                        {product.discounted_price.toLocaleString('uz-UZ')} UZS
                       </span>
                       <span className="text-base sm:text-lg line-through text-gray-400">
-                        {product.discounted_price.toLocaleString('uz-UZ')} UZS
+                        {product.price.toLocaleString('uz-UZ')} UZS
                       </span>
                       {discountPercent > 0 && (
                         <span className="bg-red-500 text-white px-2 py-1 text-xs sm:text-sm rounded-lg">
@@ -252,8 +268,12 @@ export default function ProductDetail({ params }: ProductDetailProps) {
               <h2 className="text-lg font-semibold mb-2">{t('about_product')}</h2>
               <p className="text-gray-700">{product.description}</p>
             </div>
+
+            {/* Commentlar */}
           </div>
         </main>
+
+            <CommentSection productId={product.id} initialComments={product.comments || []} />
 
         {/* Mobile fixed tugmalar */}
         <div className="sm:hidden fixed bottom-16 left-0 w-full p-3 bg-white z-50 shadow flex gap-2">

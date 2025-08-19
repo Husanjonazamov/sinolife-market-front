@@ -78,11 +78,11 @@ export default function Header() {
       <div className="hidden md:flex bg-zinc-100 rounded-sm text-zinc-700 text-sm py-1">
         <div className="container mx-auto px-4 flex justify-between items-center text-xs sm:text-sm">
           <div className="flex space-x-2 md:space-x-4">
-            <span>📞 +998 90 123 45 67</span>
-            <span>📍 Toshkent, Chilonzor tumani</span>
+            <span>📞 +998 55 500 77 27</span>
+            {/* <span>📍 Toshkent, Chilonzor tumani</span> */}
           </div>
           <div className="flex space-x-2 md:space-x-4">
-            <a href="mailto:info@sinolife.uz" className="hover:underline">✉ info@sinolife.uz</a>
+            <a href="mailto:sinolifeuz@gmail.com" className="hover:underline">✉ sinolifeuz@gmail.com</a>
             <Link href="/contact" className="hover:underline">{t('contact')}</Link>
           </div>
         </div>
@@ -176,10 +176,10 @@ export default function Header() {
           {/* Cart Button (desktop) */}
           <button
             onClick={() => router.push('/cart')}
-            className="hidden md:flex p-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition relative items-center"
+            className="hidden md:flex p-2  bg-green-600 text-white rounded-lg hover:bg-green-700 transition relative items-center"
           >
             <i className="ri-shopping-cart-line text-xl"></i>
-            <span className="ml-2 font-medium">Savatcha</span>
+            <span className="ml-2 font-medium">{t("cart")}</span>
             {cartCount > 0 && (
               <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{cartCount}</span>
             )}
