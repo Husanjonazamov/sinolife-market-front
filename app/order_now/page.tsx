@@ -464,39 +464,51 @@ const PaymentForm = ({ paymentMethod, setPaymentMethod, shippingInfo, cartItems,
       setIsProcessing(false);
     }
   };
-
+  const paymentLabels = {
+        payme: "Payme",
+        click: "Click",
+        cash: t("cash"), // tarjima ishlatiladi
+      };
+      
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">
       <h2 className="text-xl font-semibold text-gray-900 mb-6">{t('payment_method')}</h2>
       
-      <div className="space-y-4">
-        {['payme', 'click'].map((method) => (
-          <div key={method} className="border border-gray-200 rounded-lg p-4">
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="radio"
-                name="payment"
-                value={method}
-                checked={paymentMethod === method}
-                onChange={(e) => setPaymentMethod(e.target.value)}
-                className="w-4 h-4 text-green-600"
-              />
-              <div className="ml-3 flex items-center">
-                <Image
-                  src={`/images/${method}.png`}
-                  alt={method}
-                  width={48}
-                  height={32}
-                  className="object-contain"
-                />
-                <span className="ml-3 font-medium text-teal-700 capitalize">
-                  {method}
-                </span>
-              </div>
-            </label>
-          </div>
-        ))}
-      </div>
+     <div className="space-y-4">
+           {["payme", "click", "cash"].map((method) => (
+             <div key={method} className="border border-gray-200 rounded-lg p-4">
+               <label className="flex items-center cursor-pointer">
+                 <input
+                   type="radio"
+                   name="payment"
+                   value={method}
+                   checked={paymentMethod === method}
+                   onChange={(e) => setPaymentMethod(e.target.value)}
+                   className="w-4 h-4 text-green-600"
+                 />
+                 <div className="ml-3 flex items-center">
+                   {method !== "cash" ? (
+                     <Image
+                       src={`/images/${method}.png`}
+                       alt={method}
+                       width={48}
+                       height={32}
+                       className="object-contain"
+                     />
+                   ) : (
+                     <span className="w-12 h-8 flex items-center justify-center bg-yellow-100 text-yellow-700 font-semibold rounded">
+                       💵
+                     </span>
+                   )}
+                   <span className="ml-3 font-medium text-teal-700">
+                     {paymentLabels[method]}
+                   </span>
+                 </div>
+               </label>
+             </div>
+           ))}
+         </div>
+     
 
       {error && <p className="text-red-500 text-sm mt-4">{error}</p>}
 

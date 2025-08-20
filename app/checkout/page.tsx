@@ -44,11 +44,12 @@ export default function CheckoutPage() {
     firstName: '',
     phone: '',
     lat: '',
-    long: '',
+    lon: '',
     address: '',
+    region: '',
+    district: '',
   });
   const [cartCount, setCartCount] = useState(0);
-
 
   useEffect(() => {
     const access = localStorage.getItem('access');
@@ -140,8 +141,10 @@ export default function CheckoutPage() {
         first_name: shippingInfo.firstName,
         phone: shippingInfo.phone,
         payment_type: paymentMethod,
+        region: shippingInfo.region,
+        district: shippingInfo.district,
         lat: parseFloat(shippingInfo.lat) || 0,
-        lon: parseFloat(shippingInfo.long) || 0,
+        lon: parseFloat(shippingInfo.lon) || 0,
         order_item: cartItems.map((item) => ({
           product: parseInt(item.id),
           quantity: item.quantity,
@@ -157,10 +160,17 @@ export default function CheckoutPage() {
         },
       });
 
-      const { id, created_at, status, payment_status } = response.data.data;
-      router.push(
-        `/order-success?id=${id}&created_at=${encodeURIComponent(created_at)}&status=${status}&payment_status=${payment_status}`
-      );
+      const { id, created_at, status, payment_status, pay_link } = response.data.data;
+
+      if (paymentMethod === 'cash') {
+        router.push(
+          `/order-success?id=${id}&created_at=${encodeURIComponent(created_at)}&status=${status}&payment_status=${payment_status}`
+        );
+      } else if (pay_link && pay_link !== 'https://') {
+        window.location.href = pay_link;
+      } else {
+        throw new Error('Invalid payment link');
+      }
     } catch (error: any) {
       console.error('Order Error:', error);
       const errorMessage =
@@ -206,7 +216,7 @@ export default function CheckoutPage() {
                   shippingInfo={shippingInfo}
                   cartItems={cartItems}
                   onBack={() => setCurrentStep(1)}
-                  onNext={() => setCurrentStep(3)} // Kept for compatibility, but overridden in PaymentForm
+                  onNext={() => setCurrentStep(3)}
                 />
               )}
 
@@ -228,9 +238,8 @@ export default function CheckoutPage() {
           </div>
         </div>
         <Footer />
-            <MobileFooterNav cartCount={cartCount} />
-        
-        </div>
+        <MobileFooterNav cartCount={cartCount} />
+      </div>
     </div>
   );
 }
@@ -279,186 +288,149 @@ const ShippingForm = ({ shippingInfo, setShippingInfo, onNext }: any) => {
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">
       <h2 className="text-xl font-semibold text-gray-900 mb-6">{t("shipping_info_title")}</h2>
-    <form className="space-y-6">
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div>
-      <label className="block text-sm text-gray-800 font-medium mb-2">
-        {t("first_name_label")}
-      </label>
-      <input
-        type="text"
-        value={shippingInfo.firstName}
-        onChange={(e) =>
-          setShippingInfo({ ...shippingInfo, firstName: e.target.value })
-        }
-        className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-        placeholder={t("first_name_placeholder")}
-        required
-      />
-    </div>
+      <form className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm text-gray-800 font-medium mb-2">
+              {t("first_name_label")}
+            </label>
+            <input
+              type="text"
+              value={shippingInfo.firstName}
+              onChange={(e) =>
+                setShippingInfo({ ...shippingInfo, firstName: e.target.value })
+              }
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+              placeholder={t("first_name_placeholder")}
+              required
+            />
+          </div>
 
-    <div>
-      <label className="block text-sm text-gray-800 font-medium mb-2">
-        {t("phone_number_label")}
-      </label>
-      <IMaskInput
-        mask="+998-00-000-00-00"
-        definitions={{
-          "0": /[0-9]/,
-        }}
-        lazy={false}
-        overwrite
-        value={shippingInfo.phone}
-        onAccept={(value: string) => handlePhoneChange(value)}
-        placeholder="+998-__-___-__-__"
-        className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-      />
-      {phoneError && (
-        <p className="text-red-500 text-sm mt-1">{phoneError}</p>
-      )}
-    </div>
-  </div>
+          <div>
+            <label className="block text-sm text-gray-800 font-medium mb-2">
+              {t("phone_number_label")}
+            </label>
+            <IMaskInput
+              mask="+998-00-000-00-00"
+              definitions={{
+                "0": /[0-9]/,
+              }}
+              lazy={false}
+              overwrite
+              value={shippingInfo.phone}
+              onAccept={(value: string) => handlePhoneChange(value)}
+              placeholder="+998-__-___-__-__"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+            {phoneError && (
+              <p className="text-red-500 text-sm mt-1">{phoneError}</p>
+            )}
+          </div>
+        </div>
 
-  {/* Viloyat select */}
-  <div>
-    <label className="block text-sm text-gray-800 font-medium mb-2">
-      {t("region_label") || "Viloyat"}
-    </label>
-    <select
-      value={shippingInfo.region || ""}
-      onChange={(e) =>
-        setShippingInfo({ ...shippingInfo, region: e.target.value })
-      }
-      className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500"
-      required
-    >
-      <option value="">{t("select_region") || "Viloyatni tanlang"}</option>
-      <option value="Andijon">Andijon</option>
-      <option value="Buxoro">Buxoro</option>
-      <option value="Fargʻona">Fargʻona</option>
-      <option value="Jizzax">Jizzax</option>
-      <option value="Xorazm">Xorazm</option>
-      <option value="Namangan">Namangan</option>
-      <option value="Navoiy">Navoiy</option>
-      <option value="Qashqadaryo">Qashqadaryo</option>
-      <option value="Qoraqalpogʻiston">Qoraqalpogʻiston</option>
-      <option value="Samarqand">Samarqand</option>
-      <option value="Sirdaryo">Sirdaryo</option>
-      <option value="Surxondaryo">Surxondaryo</option>
-      <option value="Toshkent">Toshkent</option>
-    </select>
-  </div>
+        {/* Viloyat select */}
+        <div>
+          <label className="block text-sm text-gray-800 font-medium mb-2">
+            {t("region_label") || "Viloyat"}
+          </label>
+          <select
+            value={shippingInfo.region || ""}
+            onChange={(e) =>
+              setShippingInfo({ ...shippingInfo, region: e.target.value })
+            }
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500"
+            required
+          >
+            <option value="">{t("select_region") || "Viloyatni tanlang"}</option>
+            <option value="Andijon">Andijon</option>
+            <option value="Buxoro">Buxoro</option>
+            <option value="Fargʻona">Fargʻona</option>
+            <option value="Jizzax">Jizzax</option>
+            <option value="Xorazm">Xorazm</option>
+            <option value="Namangan">Namangan</option>
+            <option value="Navoiy">Navoiy</option>
+            <option value="Qashqadaryo">Qashqadaryo</option>
+            <option value="Qoraqalpogʻiston">Qoraqalpogʻiston</option>
+            <option value="Samarqand">Samarqand</option>
+            <option value="Sirdaryo">Sirdaryo</option>
+            <option value="Surxondaryo">Surxondaryo</option>
+            <option value="Toshkent">Toshkent</option>
+          </select>
+        </div>
 
-  {/* Tuman */}
-  <div>
-    <label className="block text-sm text-gray-800 font-medium mb-2">
-      {t("district_label") || "Tuman"}
-    </label>
-    <input
-      type="text"
-      value={shippingInfo.district || ""}
-      onChange={(e) =>
-        setShippingInfo({ ...shippingInfo, district: e.target.value })
-      }
-      className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-      placeholder={t("district_placeholder") || "Tumanni kiriting"}
-      required
-    />
-  </div>
+        {/* Tuman */}
+        <div>
+          <label className="block text-sm text-gray-800 font-medium mb-2">
+            {t("district_label") || "Tuman"}
+          </label>
+          <input
+            type="text"
+            value={shippingInfo.district || ""}
+            onChange={(e) =>
+              setShippingInfo({ ...shippingInfo, district: e.target.value })
+            }
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder={t("district_placeholder") || "Tumanni kiriting"}
+            required
+          />
+        </div>
 
-  {/* Aniq manzil */}
-  <div>
-    <label className="block text-sm text-gray-800 font-medium mb-2">
-      {t("address_label") || "Manzil"}
-    </label>
-    <input
-      type="text"
-      value={shippingInfo.address}
-      onChange={(e) =>
-        setShippingInfo({ ...shippingInfo, address: e.target.value })
-      }
-      className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-      placeholder={t("address_placeholder") || "Ko‘cha, uy raqami va h.k."}
-      required
-    />
-  </div>
+        {/* Aniq manzil */}
+        <div>
+          <label className="block text-sm text-gray-800 font-medium mb-2">
+            {t("address_label") || "Manzil"}
+          </label>
+          <input
+            type="text"
+            value={shippingInfo.address}
+            onChange={(e) =>
+              setShippingInfo({ ...shippingInfo, address: e.target.value })
+            }
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder={t("address_placeholder") || "Ko‘cha, uy raqami va h.k."}
+            required
+          />
+        </div>
 
-  <button
-    type="button"
-    onClick={onNext}
-    className="w-full bg-green-600 text-white py-3 rounded-xl hover:bg-green-700 font-semibold shadow-md transition-all text-base"
-    disabled={
-      !shippingInfo.firstName ||
-      !shippingInfo.phone ||
-      !shippingInfo.region ||
-      !shippingInfo.district ||
-      !shippingInfo.address ||
-      phoneError !== null
-    }
-  >
-    {t("continue_to_payment")}
-  </button>
-    </form>
+        {/* CustomSearchMap integration (assuming it sets lat, lon, address) */}
+        {/* <div>
+          <label className="block text-sm text-gray-800 font-medium mb-2">
+            {t("location_label") || "Joylashuvni tanlang"}
+          </label>
+          <CustomSearchMap 
+            onLocationSelect={(lat: string, lon: string, address: string) => 
+              setShippingInfo({ ...shippingInfo, lat, lon, address })
+            } 
+          />
+        </div> */}
 
+        <button
+          type="button"
+          onClick={onNext}
+          className="w-full bg-green-600 text-white py-3 rounded-xl hover:bg-green-700 font-semibold shadow-md transition-all text-base"
+          disabled={
+            !shippingInfo.firstName ||
+            !shippingInfo.phone ||
+            !shippingInfo.region ||
+            !shippingInfo.district ||
+            !shippingInfo.address ||
+            phoneError !== null
+          }
+        >
+          {t("continue_to_payment")}
+        </button>
+      </form>
     </div>
   );
 };
 
 const PaymentForm = ({ paymentMethod, setPaymentMethod, shippingInfo, cartItems, onNext, onBack }: any) => {
   const { t } = useLanguage();
-  const router = useRouter();
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const handleGetPayLink = async () => {
-    setIsProcessing(true);
-    setError(null);
-
-    try {
-      const access = await refreshToken();
-      if (!access) {
-        throw new Error('Authentication failed');
-      }
-
-      const orderData = {
-        first_name: shippingInfo.firstName,
-        phone: shippingInfo.phone,
-        payment_type: paymentMethod,
-        lat: parseFloat(shippingInfo.lat) || 0,
-        lon: parseFloat(shippingInfo.long) || 0,
-        order_item: cartItems.map((item: CartItem) => ({
-          product: parseInt(item.id),
-          quantity: item.quantity,
-        })),
-        address: shippingInfo.address,
-      };
-
-      console.log('Order Payload for Pay Link:', JSON.stringify(orderData, null, 2));
-
-      const response = await axios.post(`${BASE_URL}/api/order/`, orderData, {
-        headers: {
-          Authorization: `Bearer ${access}`,
-        },
-      });
-
-      const { pay_link } = response.data.data;
-
-      if (pay_link) {
-        window.location.href = pay_link; // Redirect to payment provider
-      } else {
-        throw new Error('Payment link not provided in response');
-      }
-    } catch (error: any) {
-      console.error('Payment Link Error:', error);
-      const errorMessage =
-        error.response?.data?.detail ||
-        error.response?.data?.message ||
-        Object.values(error.response?.data || {}).join(', ') ||
-        'Toʻlov havolasini olishda xatolik yuz berdi.';
-      setError(errorMessage);
-    } finally {
-      setIsProcessing(false);
-    }
+  const paymentLabels = {
+    payme: "Payme",
+    click: "Click",
+    cash: t("cash"),
   };
 
   return (
@@ -466,7 +438,7 @@ const PaymentForm = ({ paymentMethod, setPaymentMethod, shippingInfo, cartItems,
       <h2 className="text-xl font-semibold text-gray-900 mb-6">{t("payment_method")}</h2>
       
       <div className="space-y-4">
-        {["payme", "click"].map((method) => (
+        {["payme", "click", "cash"].map((method) => (
           <div key={method} className="border border-gray-200 rounded-lg p-4">
             <label className="flex items-center cursor-pointer">
               <input
@@ -478,15 +450,21 @@ const PaymentForm = ({ paymentMethod, setPaymentMethod, shippingInfo, cartItems,
                 className="w-4 h-4 text-green-600"
               />
               <div className="ml-3 flex items-center">
-                <Image
-                  src={`/images/${method}.png`}
-                  alt={method}
-                  width={48}
-                  height={32}
-                  className="object-contain"
-                />
-                <span className="ml-3 font-medium text-teal-700 capitalize">
-                  {method}
+                {method !== "cash" ? (
+                  <Image
+                    src={`/images/${method}.png`}
+                    alt={method}
+                    width={48}
+                    height={32}
+                    className="object-contain"
+                  />
+                ) : (
+                  <span className="w-12 h-8 flex items-center justify-center bg-yellow-100 text-yellow-700 font-semibold rounded">
+                    💵
+                  </span>
+                )}
+                <span className="ml-3 font-medium text-teal-700">
+                  {paymentLabels[method]}
                 </span>
               </div>
             </label>
@@ -494,77 +472,26 @@ const PaymentForm = ({ paymentMethod, setPaymentMethod, shippingInfo, cartItems,
         ))}
       </div>
 
-      {error && <p className="text-red-500 text-sm mt-4">{error}</p>}
-
       <div className="flex space-x-4 mt-6">
         <button
           onClick={onBack}
           className="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 font-medium"
-          disabled={isProcessing}
         >
           {t("back_button")}
         </button>
         <button
-              onClick={onNext} // faqat bosqichni o'zgartiradi
-              className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 font-medium disabled:opacity-50"
-              disabled={isProcessing}
-            >
-              {t("continue_to_review")}
-          </button>
-
+          onClick={onNext}
+          className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 font-medium"
+        >
+          {t("continue_to_review")}
+        </button>
       </div>
     </div>
   );
 };
 
-const ReviewOrder = ({ shippingInfo, cartItems, paymentMethod, onBack, isProcessing }: any) => {
+const ReviewOrder = ({ shippingInfo, cartItems, paymentMethod, onBack, onPlaceOrder, isProcessing }: any) => {
   const { t } = useLanguage();
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-
-  const handlePlaceOrder = async () => {
-    setLoading(true);
-    try {
-      const access = await refreshToken();
-      if (!access) throw new Error("Authentication failed");
-
-      const orderData = {
-        first_name: shippingInfo.firstName,
-        phone: shippingInfo.phone,
-        payment_type: paymentMethod,
-        lat: parseFloat(shippingInfo.lat) || 0,
-        lon: parseFloat(shippingInfo.long) || 0,
-        order_item: cartItems.map((item: CartItem) => ({
-          product: parseInt(item.id),
-          quantity: item.quantity,
-        })),
-        address: shippingInfo.address,
-      };
-
-      const response = await axios.post(`${BASE_URL}/api/order/`, orderData, {
-        headers: {
-          Authorization: `Bearer ${access}`,
-        },
-      });
-
-      const { pay_link } = response.data.data;
-
-      if (pay_link) {
-        window.location.href = pay_link;
-      } else {
-        alert("Toʻlov havolasi topilmadi.");
-      }
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.detail ||
-        error.response?.data?.message ||
-        Object.values(error.response?.data || {}).join(', ') ||
-        'Buyurtma yuborishda xatolik yuz berdi.';
-      alert(`Xatolik: ${errorMessage}`);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">
@@ -613,26 +540,26 @@ const ReviewOrder = ({ shippingInfo, cartItems, paymentMethod, onBack, isProcess
         <button
           onClick={onBack}
           className="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 font-medium"
-          disabled={loading}
+          disabled={isProcessing}
         >
           {t("back_button")}
         </button>
         <button
-          onClick={handlePlaceOrder}
+          onClick={onPlaceOrder}
           className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 font-medium disabled:opacity-50"
-          disabled={loading}
+          disabled={isProcessing}
         >
-          {loading ? t("processing") : t("place_order_button")}
+          {isProcessing ? t("processing") : t("place_order_button")}
         </button>
       </div>
     </div>
   );
 };
-const OrderSummary = ({ cartItems }: any) => {
+
+const OrderSummary = ({ cartItems, total }: any) => {
   const { t } = useLanguage();
 
-  const total = cartItems.reduce((acc: number, item: CartItem) => acc + item.price * item.quantity, 0);
-
+  const calculatedTotal = cartItems.reduce((acc: number, item: CartItem) => acc + item.price * item.quantity, 0);
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 sticky top-8">
@@ -658,7 +585,7 @@ const OrderSummary = ({ cartItems }: any) => {
         <div className="flex justify-between">
           <span className="text-gray-600">{t("total")}</span>
           <span className="font-medium">
-            {total.toLocaleString('uz-UZ')} UZS
+            {calculatedTotal.toLocaleString('uz-UZ')} UZS
           </span>
         </div>
 
@@ -666,7 +593,7 @@ const OrderSummary = ({ cartItems }: any) => {
           <div className="flex justify-between text-lg font-semibold">
             <span>{t("total_label")}</span>
             <span>
-              {total.toLocaleString('uz-UZ')} UZS
+              {calculatedTotal.toLocaleString('uz-UZ')} UZS
             </span>
           </div>
         </div>
