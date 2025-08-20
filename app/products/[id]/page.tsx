@@ -263,13 +263,43 @@ export default function ProductDetail({ params }: ProductDetailProps) {
               </div>
             </div>
 
-            {/* Mahsulot haqida */}
-            <div className="mt-8 bg-white rounded-2xl shadow-lg p-6 text-justify">
+           {/* Mahsulot haqida */}
+            <div className="mt-8 bg-white rounded-2xl shadow-lg p-6">
               <h2 className="text-xl font-bold mb-3 text-green-700">{t('about_product')}</h2>
-              <p className="text-gray-800 text-base leading-relaxed">
-                {product.description}
-              </p>
+              
+              <div className="text-gray-800 text-base leading-relaxed space-y-2">
+                {product.description.includes("✅") ? (
+                  <>
+                    {/* ✅ dan oldingi qismi */}
+                    <p>
+                      {product.description.split("✅")[0].trim()}
+                    </p>
+
+                    {/* ✅ larni ro'yxat qilish */}
+                    <ul className="list-none space-y-2 mt-2">
+                      {product.description
+                        .split("✅")
+                        .slice(1) // birinchi qismi chiqarib bo‘ldik
+                        .map((item, idx) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <span>✅</span>
+                            <span>{item.trim()}</span>
+                          </li>
+                        ))}
+                    </ul>
+                  </>
+                ) : (
+                  // Agar umuman ✅ bo‘lmasa oddiy bo‘lib chiqsin
+                  product.description
+                    .split('.')
+                    .filter(sentence => sentence.trim() !== '')
+                    .map((sentence, idx) => (
+                      <p key={idx}>{sentence.trim()}.</p>
+                    ))
+                )}
+              </div>
             </div>
+
 
 
 
