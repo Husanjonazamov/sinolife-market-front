@@ -216,10 +216,10 @@ export default function ProductDetail({ params }: ProductDetailProps) {
                   {product.discounted_price && product.discounted_price !== product.price ? (
                     <>
                       <span className="text-2xl sm:text-3xl font-bold text-green-600">
-                        {product.discounted_price.toLocaleString('uz-UZ')} UZS
+                        {product.price.toLocaleString('uz-UZ')} UZS
                       </span>
                       <span className="text-base sm:text-lg line-through text-gray-400">
-                        {product.price.toLocaleString('uz-UZ')} UZS
+                        {product.discounted_price.toLocaleString('uz-UZ')} UZS
                       </span>
                       {discountPercent > 0 && (
                         <span className="bg-red-500 text-white px-2 py-1 text-xs sm:text-sm rounded-lg">
