@@ -1,0 +1,242 @@
+{
+  "sinolife": {
+    "welcome_back": "С возвращением",
+    "sign_in_to_account": "Войдите в свой аккаунт Sinolife",
+    "phone_number": "Номер телефона",
+    "password": "Введите пароль",
+    "sign_in": "Войти",
+    "no_account": "Нет аккаунта?",
+    "sign_up_here": "Зарегистрируйтесь здесь",
+
+    "sms_verify": "Подтверждение по SMS",
+    "enter_code": "Введите 4-значный код, отправленный на ваш номер",
+    "submit": "Подтвердить",
+    "resend_code": "получить новый код",
+    "code_expired": "Код истек",
+    "code_expires_in": "До истечения кода: ",
+    "oclock": "секунд",
+    "order_items": "Товары в заказе",
+    "continue_to_review": "Просмотреть заказ",
+
+    "create_account": "Создать аккаунт",
+    "join_herbastore": "Присоединяйтесь к Sinolife и начните свой путь к естественному оздоровлению",
+    "first_name": "Имя",
+    "enter_first_name": "Введите имя",
+    "create_account_button": "Создать аккаунт",
+    "already_have_account": "Уже есть аккаунт?",
+    "sign_in_here": "Войдите здесь",
+
+    "product_search": "Поиск товаров...",
+    "home": "Главная",
+    "product": "Товары",
+    "category": "Бренд",
+    "contact": "Контакты",
+    "lang": "Язык",
+    "my_orders": "Мои заказы",
+    "logout": "Выход из системы",
+    "empty_cart_title": "Ваша корзина пуста",
+        "empty_cart_subtitle": "Добавьте товары, чтобы начать",
+
+    "best_seller": "Хит продаж",
+    "new": "Новинка",
+        "no_products_found": "Продукты не найдены",
+            "order_now": "Заказать сейчас",
+            "cart": "В корзину",
+    "order": "Заказать",
+    "region_label": "Регион",
+    "select_region": "Выберите регион",
+    "district_label": "Район",
+        "district_placeholder": "Выберите район",
+        "comments": "Комментарии",
+        "write_comment": "Напишите комментарий...",
+        "send": "Отправить",
+        "sending": "Отправка...",
+        "empty_comment": "Комментарий не может быть пустым",
+        "comment_added": "Комментарий добавлен",
+        "comment_error": "Ошибка при добавлении комментария",
+        "no_comments": "Комментариев нет",
+
+
+    "not_found": "Товар не найден.",
+    "available": "шт. в наличии",
+    "about_product": "О товаре",
+    "login_required": "Сначала войдите в систему!",
+    "session_expired": "Сессия истекла. Пожалуйста, войдите снова.",
+    "added_to_cart": "✅ Товар добавлен в корзину!",
+    "add_error": "❌ Ошибка при добавлении товара",
+    "cash": "Наличные",
+
+    "sale": "Скидка",
+    "add_to_cart": "В корзину",
+    "explore_products_in_this_category": "Изучите продукты в этой Бренд",
+
+    "shop_now": "Купить сейчас",
+    "products": "Продукты",
+
+    "shop_show": "Просмотреть товары",
+    "featured_product": "Популярные товары",
+    "featured_products_description": "Откройте для себя самые популярные растительные добавки, тщательно отобранные за качество и эффективность.",
+    "view_all_product": "Смотреть все товары",
+    "categories_title": "Бренд по здоровью",
+    "categories_description": "Изучите нашу коллекцию растительных продуктов, организованных по целям в области здоровья.",
+    "natural_title": "100% Натуральные",
+    "natural_description": "Все наши продукты изготовлены из чистых, органических ингредиентов от проверенных поставщиков.",
+
+    "shipping_title": "Бесплатная доставка",
+    "shipping_description": "Бесплатная и быстрая доставка для заказов свыше $50.",
+
+    "support_title": "Помощь экспертов",
+    "support_description": "Наши специалисты по здоровью помогут вам выбрать подходящие продукты под ваши нужды.",
+    "newsletter_title": "Будьте в курсе здоровья",
+    "newsletter_description": "Получайте советы по здоровью, новости о продуктах и эксклюзивные предложения на ваш email.",
+
+    "brand_tagline": "Ваш надежный партнер для качественных травяных продуктов и решений для естественного оздоровления.",
+    "quick_links_title": "Быстрые ссылки",
+    "quick_links_0": "Все товары",
+    "quick_links_1": "Категории",
+    "quick_links_2": "Специальные предложения",
+    "quick_links_3": "Блог о здоровье",
+
+    "customer_care_title": "Поддержка клиентов",
+    "customer_care_links_0": "Центр помощи",
+    "customer_care_links_1": "Информация о доставке",
+    "customer_care_links_2": "Возвраты",
+    "customer_care_links_3": "Связаться с нами",
+
+    "newssletter_title": "Подпишитесь на рассылку",
+    "newssletter_description": "Подпишитесь, чтобы получать советы по здоровью и эксклюзивные предложения",
+    "email_placeholder": "Ваш email",
+
+    "copyright": "© 2025 Sinolife. Все права защищены.",
+    "privacy_policy": "Политика конфиденциальности",
+    "terms_of_service": "Условия обслуживания",
+
+    "all_products": "Все товары",
+    "categories": "Бренд",
+    "price_range": "Ценовой диапазон",
+    "price_from": "от",
+    "price_to": "до",
+    "clear_all_filters": "Очистить все фильтры",
+
+    "why_choose_us_title": "Почему выбирают нас",
+    "why_choose_us_description": "Каждая категория тщательно подобрана из высококачественных продуктов.",
+    "quality_tested_title": "Проверенное качество",
+    "quality_tested_description": "Протестировано независимыми лабораториями на чистоту и эффективность.",
+    "natural_sourcing_title": "Натуральные источники",
+    "natural_sourcing_description": "Ингредиенты получены с устойчивых и этичных ферм.",
+    "expert_curated_title": "Выбор экспертов",
+    "expert_curated_description": "Подобрано профессиональными травниками.",
+
+    "contact_title": "Связаться с нами",
+
+    "full_name_label": "Полное имя *",
+    "full_name_placeholder": "Ваше полное имя",
+    "phone_number_placeholder": "998940014741",
+    "phone_number_note": "Введите только цифры. Минимум 8 символов.",
+    "message_label": "Сообщение *",
+    "message_placeholder": "Расскажите, как мы можем вам помочь...",
+    "message_char_count": "0/500 символов",
+    "submit_button": "Отправить сообщение",
+
+    "contact_info_title": "Контактная информация",
+
+    "label": "Телефон",
+    "value": "+998 91-723-34-84",
+    "note": "Звоните в любое время",
+
+    "telegram_label": "Телеграм",
+    "telegram_note": "Напишите в Телеграм",
+
+    "address_label": "Адрес",
+    "address_note": "Посетите наш офис",
+
+    "cart_title": "Корзина",
+    "cart_description": "Проверьте ваши товары и перейдите к оплате",
+
+    "cart_empty_message": "Ваша корзина пуста",
+    "cart_empty_subtext": "Добавьте товары, чтобы начать покупки",
+
+    "continue_shopping_button": "Продолжить покупки",
+
+    "product_added_success": "✅ Товар добавлен в корзину",
+
+    "cart_items_title": "Товары в корзине",
+    "continue_shopping": "Продолжить покупки",
+    "subtotal": "Промежуточный итог",
+    "total": "Итого",
+
+    "quantity": "Количество",
+
+
+    "shipping": "Доставка",
+    "payment": "Оплата",
+    "review": "Обзор",
+
+    "proceed_to_checkout": "Перейти к оплате",
+
+    "checkout_title": "Оформление заказа",
+    "steps": {
+        "step_1": "1 Доставка",
+        "step_2": "2 Оплата",
+        "step_3": "3 Подтверждение"
+    },
+
+    "shipping_info_title": "Информация о доставке",
+    "first_name_label": "Имя",
+    "first_name_placeholder": "Ваше имя",
+    "phone_number_label": "Телефон",
+    "address_placeholder": "Введите адрес (например, Ургенч)",
+    "search_button": "Поиск",
+    "selected_address": "Выбранный адрес: ",
+
+    "continue_to_payment": "Перейти к оплате",
+
+    "order_summary_title": "Сводка заказа",
+    "product_name": "Капсулы с куркумой",
+    "quantity_label": "Количество: 1",
+    "subtotal_label": "Итого",
+    "total_label": "Общая сумма",
+    "payment_method": "Способ оплаты",
+
+    "order_review_title": "Подтверждение заказа",
+    "recipient_label": "Получатель",
+    "payment_method_label": "Способ оплаты",
+    "back_button": "Назад",
+    "place_order_button": "Оформить заказ",
+
+    "order_success_title": "Заказ успешно оформлен!",
+    "order_success_message": "Спасибо за покупку! Ваш заказ принят и скоро будет обработан.",
+
+    "order_number_label": "Номер заказа",
+    "order_number_value": "50",
+    "created_date_label": "Дата оформления",
+    "created_date_value": "23.07.2025",
+    "delivery_date_label": "Дата доставки",
+    "delivery_date_value": "28.07.2025, Понедельник",
+    "payment_status_label": "Статус оплаты",
+    "payment_status_value": "Не оплачено",
+    "order_status_label": "Статус заказа",
+    "order_status_value": "Ожидает обработки",
+
+    "my_orders_button": "Мои заказы",
+    "my_orders_title": "Мои заказы",
+    "my_orders_subtitle": "Отслеживайте и управляйте вашими заказами в Sinolife",
+
+    "filter_all": "Все заказы",
+    "filter_pending": "Ожидаются",
+    "filter_accepted": "Приняты",
+    "filter_rejected": "Отклонены",
+
+    "order_date_label": "Дата заказа:",
+    "no_orders": "Заказ не найден",
+    "start_shopping": "Начните покупки, и ваши заказы будут отображаться здесь",
+    
+    "pending": "Ожидается",
+    "processing": "В процессе",
+    "shipped": "Отправлено",
+    "delivered": "Доставлено",
+    "cancelled": "Отменено",
+    "paid": "Оплачено"
+    }
+
+}

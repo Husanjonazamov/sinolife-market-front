@@ -1,0 +1,255 @@
+{
+    "sinolife": {
+        "welcome_back": "Xush kelibsiz",
+        "sign_in_to_account": "Sinolife hisobingizga kiring",
+        "phone_number": "Telefon raqam",
+        "password": "Parolni kiriting",
+        "sign_in": "Kirish",
+        "no_account": "Hisobingiz yo‘qmi?",
+        "sign_up_here": "Bu yerda ro‘yxatdan o‘ting",
+
+        "sms_verify": "SMS tasdiqlash",
+        "enter_code": "Telefon raqamingizga yuborilgan 4 xonali kodni kiriting",
+        "submit": "Tasdiqlash",
+        "resend_code": "Yangi kod olish",
+        "code_expired": "Kod eskirgan",
+        "code_expires_in": "Kod eskirguncha: ",
+        "oclock": "soniya",
+        "create_account": "Hisob yaratish",
+        "join_herbastore": "Sinolife qo‘shiling va tabiiy sog‘lomlik sayohatingizni boshlang",
+        "first_name": "Ismingiz",
+        "enter_first_name": "Ismingizni kiriting",
+        "create_account_button": "Hisob yaratish",
+        "already_have_account": "Hisobingiz bormi?",
+        "sign_in_here": "Bu yerda kiring",
+
+        "product_search": "Mahsulotlarni qidiring...",
+        "home": "Bosh sahifa",
+        "product": "Mahsulotlar",
+        "category": "Brend",
+        "contact": "Aloqa",
+        "lang": "Til",
+        "my_orders": "Buyurtmalarim",
+
+        "logout": "Tizimdan chiqish",
+        "explore_products_in_this_category": "Ushbu toifadagi mahsulotlarni ko‘rib chiqing",
+        "no_products_found": "Mahsulot topilmadi",
+        "order_now": "buyurtma berish",
+
+
+        "best_seller": "Eng ko‘p sotilgan",
+        "new": "Yangi",
+        "sale": "Chegirma",
+
+        "shop_now": "Hozir xarid qiling",
+        "products": "Mahsulotlar",
+        "empty_cart_title": "Savatingiz bo‘sh",
+        "empty_cart_subtitle": "Boshlash uchun mahsulotlar qo‘shing",
+
+        "shop_show": "Mahsulotlarni ko'rish",
+        "featured_product": "Mashhur mahsulotlar",
+        "featured_products_description": "Sifati va samaradorligi uchun ehtiyotkorlik bilan tanlangan eng mashhur o'simlik qo'shimchalarini kashf eting.",
+        "view_all_product": "Barcha Mahsulotlarni ko'rish",
+        "categories_title": "Sog‘liq bo‘yicha toifalar",
+        "categories_description": "Muayyan sog‘liq maqsadlari bo‘yicha tartiblangan o‘simlik mahsulotlari to‘plamimizni ko‘zdan kechiring.",
+        "natural_title": "100% Tabiiy",
+        "natural_description": "Barcha mahsulotlarimiz ishonchli yetkazib beruvchilardan olingan sof, organik ingredientlardan tayyorlangan.",
+
+        "shipping_title": "Bepul Yetkazib Berish",
+        "shipping_description": "$50 dan ortiq barcha buyurtmalarda bepul, tez va xavfsiz yetkazib berish xizmati.",
+
+        "support_title": "Mutaxassis Yordam",
+        "support_description": "Sog‘lig‘ingiz uchun to‘g‘ri mahsulotlarni tanlashda sizga yordam berishga tayyor wellness mutaxassislarimiz bor.",
+        "newsletter_title": "Sog‘liq yangiliklaridan xabardor bo‘ling",
+        "newsletter_description": "So‘nggi sog‘liq bo‘yicha maslahatlar, mahsulot yangiliklari va maxsus takliflarni emailingizga oling.",
+
+
+        "brand_tagline": "Ishonchli hamkoringiz — yuqori sifatli o‘simlik mahsulotlari va tabiiy sog‘lomlik yechimlari uchun.",
+        "quick_links_title": "Tezkor havolalar",
+        "quick_links_0": "Barcha mahsulotlar",
+        "quick_links_1": "Toifalar",
+        "quick_links_2": "Maxsus chegirmalar",
+        "quick_links_3": "Sog‘liq blogi",
+
+        "customer_care_title": "Mijozlarga xizmat",
+        "customer_care_links_0": "Yordam markazi",
+        "customer_care_links_1": "Yetkazib berish haqida",
+        "customer_care_links_2": "Qaytarishlar",
+        "customer_care_links_3": "Biz bilan bog‘laning",
+
+        "newssletter_title": "Yangiliklarga obuna bo‘ling",
+        "newssletter_description": "Sog‘liq bo‘yicha maslahatlar va maxsus takliflarni olish uchun obuna bo‘ling",
+        "email_placeholder": "Email manzilingiz",
+    "cart": "Savatchaga",
+    "order": "Buyurtma",
+        "region_label": "Viloyat",
+    "select_region": "Viloyatni tanlang",
+    "district_label": "Tuman",
+        "district_placeholder": "Tumanni tanlang",
+        "cash": "Naqt pul",
+        "comments": "Sharhlar",
+        "write_comment": "Sharh yozing...",
+        "send": "Yuborish",
+        "sending": "Yuborilmoqda...",
+        "empty_comment": "Sharh bo'sh bo'lishi mumkin emas",
+        "comment_added": "Sharh qo'shildi",
+        "comment_error": "Sharh qo'shishda xatolik",
+        "no_comments": "Sharhlar mavjud emas",
+        
+        "copyright": "© 2024 HerbaStore. Barcha huquqlar himoyalangan.",
+        "privacy_policy": "Maxfiylik siyosati",
+        "terms_of_service": "Xizmat ko‘rsatish shartlari",
+
+        "all_products": "Barcha mahsulotlar",
+        "categories": "Toifalar",
+        "price_range": "Narx oralig‘i",
+        "price_from": "dan",
+        "price_to": "gacha",
+        "clear_all_filters": "Barcha filtrlarni tozalash",
+
+        "not_found": "Mahsulot topilmadi.",
+        "available": "dona mavjud",
+        "about_product": "Mahsulot haqida",
+        "login_required": "Avval tizimga kiring!",
+        "session_expired": "Sessiya tugadi. Iltimos, qaytadan tizimga kiring.",
+        "added_to_cart": "✅ Mahsulot savatchaga qo‘shildi!",
+        "add_error": "❌ Mahsulot qo‘shishda xatolik",
+
+        "why_choose_us_title": "Nega bizni tanlaysiz?",
+        "why_choose_us_description": "Har bir toifa ehtiyotkorlik bilan tanlangan, yuqori sifatli mahsulotlardan iborat.",
+        "quality_tested_title": "Sifat nazorati",
+        "quality_tested_description": "Uchinchi tomonlar tomonidan tozaligi va ta’siri bo‘yicha sinovdan o‘tkazilgan.",
+        "natural_sourcing_title": "Tabiiy manbalar",
+        "natural_sourcing_description": "Barqaror va etik fermalardan olingan ingredientlar.",
+        "expert_curated_title": "Mutaxassislar tanlovi",
+        "expert_curated_description": "Professional o‘simlikshunoslar tomonidan tanlab olingan mahsulotlar.",
+        
+        "contact_title": "Bog‘laning",
+        
+        "                                                                                                                                                                       ": "To‘liq ism *",
+        "full_name_placeholder": "To‘liq ismingiz",
+        
+        "phone_number_placeholder": "998940014741",
+        "phone_number_note": "Faqat raqam kiriting. Kamida 8 ta raqam bo‘lishi kerak.",
+        
+        "message_label": "Xabar *",
+        "message_placeholder": "Qanday yordam bera olishimizni yozing...",
+        "message_char_count": "500 ta belgi",
+
+        "submit_button": "Xabarni yuborish",
+
+        "contact_info_title": "Aloqa ma’lumotlari",
+
+        "label": "Telefon",
+        "note": "Istalgan vaqtda qo‘ng‘iroq qiling",
+
+        "telegram_label": "Telegram",
+        "telegram_note": "Telegram’da yozing",
+
+        "address_label": "Manzil",
+        "address_note": "Ofisimizga tashrif buyuring",
+
+        "add_to_cart": "Savatchaga",
+
+
+        "cart_title": "Savatcha",
+        "cart_description": "Mahsulotlaringizni ko‘rib chiqing va to‘lovga o‘ting",
+
+        "cart_empty_message": "Savatchangiz bo‘sh",
+        "cart_empty_subtext": "Boshlash uchun bir nechta mahsulot qo‘shing",
+
+        "continue_shopping_button": "Xaridni davom ettirish",
+
+        "product_added_success": "✅ Mahsulot savatchaga qo‘shildi",
+
+        "cart_items_title": "Savatchadagi mahsulotlar",
+        "continue_shopping": "Xaridni davom ettirish",
+        "subtotal": "Jami oraliq narx",
+        "total": "Jami",
+
+        "shipping": "Yetkazib berish",
+        "payment": "To‘lov",
+        "review": "Sharh",
+
+        "proceed_to_checkout": "To‘lovga o‘tish",
+
+        "checkout_title": "Buyurtma",
+        "steps": {
+            "step_1": "1 Yetkazib berish",
+            "step_2": "2 To‘lov",
+            "step_3": "3 Ko‘rib chiqish"
+        },
+
+        "shipping_info_title": "Yetkazib berish ma’lumotlari",
+        "first_name_label": "Ism",
+        "first_name_placeholder": "Ismingiz",
+        "phone_number_label": "Telefon raqami",
+        "address_placeholder": "Manzil qidiring (masalan, Urganch)",
+        "search_button": "Qidirish",
+        "selected_address": "Tanlangan manzil:",
+
+
+        "quantity": "Miqdor",
+
+
+        "continue_to_payment": "To‘lovga o‘tish",
+
+        "order_summary_title": "Buyurtma tafsilotlari",
+        "product_name": "Organik zerdechal kapsulalari",
+        "quantity_label": "Soni: 1",
+        "subtotal_label": "Jami",
+        "total_label": "Umumiy",
+        "payment_method": "To‘lov usuli",
+
+        "order_review_title": "Buyurtmani ko‘rib chiqish",
+    
+        "recipient_label": "Oluvchi",
+        
+        "payment_method_label": "To‘lov usuli",
+
+        "back_button": "Orqaga",
+        "place_order_button": "Buyurtma berish",
+
+        "order_success_title": "Buyurtma muvaffaqiyatli qabul qilindi!",
+        "order_success_message": "Xaridingiz uchun tashakkur. Buyurtmangiz qabul qilindi va tez orada ko‘rib chiqiladi.",
+
+        "order_number_label": "Buyurtma raqami",
+        "order_number_value": "50",
+
+        "created_date_label": "Yaratilgan sana",
+        "created_date_value": "2025 M07 23",
+
+        "delivery_date_label": "Yetkazib berish sanasi",
+        "delivery_date_value": "2025 M07 28, Dushanba",
+
+        "payment_status_label": "To‘lov holati",
+        "payment_status_value": "To‘lanmagan",
+
+        "order_status_label": "Buyurtma holati",
+        "order_status_value": "Kutilmoqda",
+
+        "my_orders_button": "Buyurtmalarim",
+        "my_orders_title": "Buyurtmalarim",
+        "my_orders_subtitle": "Sinolife'dagi buyurtmalaringizni kuzatib boring va boshqaring",
+
+        "filter_all": "Barcha buyurtmalar",
+        "filter_pending": "Kutilmoqda",
+        "filter_accepted": "Qabul qilinganlar",
+        "filter_rejected": "Rad etilganlar",
+
+        "order_date_label": "Berilgan sana:",
+        "order_status_pending": "Kutilmoqda",
+        "no_orders": "Buyurtma topilmadi",
+        "start_shopping": "Xarid qilishni boshlang va buyurtmalaringizni bu yerda ko‘ring",
+
+        "pending": "Kutilmoqda",
+        "processing": "Jarayonda",
+        "shipped": "Yuborilgan",
+        "delivered": "Yetkazilgan",
+        "cancelled": "Bekor qilingan",
+        "paid": "To‘langan"
+
+    }
+
+
+}
