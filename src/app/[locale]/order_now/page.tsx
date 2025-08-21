@@ -554,16 +554,19 @@ const ReviewOrder = ({ shippingInfo, cartItems, paymentMethod, onBack, onPlaceOr
           </div>
         </div>
 
-        <div>
+         <div>
           <h3 className="text-lg font-semibold text-gray-700 mb-4">
-            <i className="ri-wallet-3-line text-blue-500"></i> {t('payment_method')}
+            <i className="ri-wallet-3-line text-blue-500"></i>{" "}
+            {t("payment_method")}
           </h3>
-          <p className="text-gray-600 pl-6 capitalize">{paymentMethod}</p>
+          <p className="text-gray-600 pl-6 capitalize">
+            {paymentMethod === "cash" ? t("cash") : paymentMethod}
+          </p>
         </div>
 
         <div>
           <h3 className="text-lg font-semibold text-gray-700 mb-4">
-            <i className="ri-shopping-cart-2-line text-purple-500"></i> {t('order_items')}
+            <i className="ri-shopping-cart-2-line text-purple-500"></i> {t('order')}
           </h3>
 
           <div className="divide-y divide-gray-200 rounded-lg border overflow-hidden">
