@@ -1,33 +1,25 @@
 import type { Metadata } from "next";
-import { Poppins, Roboto } from "next/font/google";
+import { Inter } from "next/font/google";
 import { LanguageProvider } from '@/lib/LanguageContext';
 import Script from "next/script";
 import "./globals.css";
 import 'leaflet/dist/leaflet.css';
-
 import { NextIntlClientProvider } from "next-intl";
 
-// Google Fonts
-const poppins = Poppins({
+// Google Fonts: Inter
+const inter = Inter({
   weight: ['400', '500', '600', '700'],
-  subsets: ['latin', 'latin-ext'], // faqat latin
+  subsets: ['latin', 'latin-ext', 'cyrillic', 'cyrillic-ext'],
   display: 'swap',
-  variable: '--font-poppins',
-});
-
-const roboto = Roboto({
-  weight: ['400', '500', '700'],
-  subsets: ['cyrillic', 'cyrillic-ext'], // faqat ruscha
-  display: 'swap',
-  variable: '--font-roboto',
+  variable: '--font-inter',
 });
 
 export const metadata: Metadata = {
   title: "SinoLife",
   description: "Sinolife",
   icons: {
-    icon: "/images/logo.png",          // public/images/logo4.png faylini ishlatamiz
-    apple: "/images/logo.png",         // Apple devices uchun ham
+    icon: "/images/logo.png",
+    apple: "/images/logo.png",
   },
 };
 
@@ -47,9 +39,9 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
   return (
     <html lang={params.locale || 'uz'} suppressHydrationWarning={true}>
       <body
-        className={`${poppins.variable} ${roboto.variable}`}
+        className={`${inter.variable}`}
         style={{
-          fontFamily: `'var(--font-poppins)', 'var(--font-roboto)', sans-serif`,
+          fontFamily: "var(--font-inter), sans-serif",
         }}
       >
         <NextIntlClientProvider locale={params.locale || 'uz'} messages={messages}>

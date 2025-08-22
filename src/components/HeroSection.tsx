@@ -141,7 +141,7 @@ export default function HeroSection() {
                 className="relative h-[160px] sm:h-[450px] overflow-hidden rounded-xl bg-cover bg-center"
                 style={{ backgroundImage: `url(${banner.image})` }}
               >
-                <div className="absolute inset-0 bg-black/60 rounded-xl"></div>
+                <div className="absolute inset-0 bg-black/40 rounded-xl"></div>
                 <div className="absolute inset-0 flex flex-col justify-end items-start p-4 z-10 text-white sm:translate-y-[-10%]">
                   <h1 className="text-sm sm:text-4xl font-bold leading-snug text-left w-full">
                     {banner.title}
