@@ -66,7 +66,7 @@ export default function FeaturedProducts() {
         const response = await axios.get(`${BASE_URL}/api/product/`);
         if (response.data.status) {
           const allProducts = response.data.data.results as ProductType[];
-          const randomProducts = getRandomItems(allProducts, 510);
+          const randomProducts = getRandomItems(allProducts, 120);
           setProducts(randomProducts);
         }
       } catch (error) {
