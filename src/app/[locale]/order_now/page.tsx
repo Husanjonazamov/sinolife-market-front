@@ -34,6 +34,9 @@ interface ShippingInfo {
   region: string;
   district: string;
   address: string;
+  lat: string;
+  long: string;
+
 }
 
 export default function OrderNowPage() {
@@ -52,6 +55,8 @@ export default function OrderNowPage() {
     region: '',
     district: '',
     address: '',
+    lat: '',
+    long: ''
   });
   const [cartCount, setCartCount] = useState(0);
 
@@ -108,7 +113,7 @@ export default function OrderNowPage() {
         phone: shippingInfo.phone,
         payment_type: paymentMethod,
         region: shippingInfo.region,    
-        district: shippingInfo.district,
+        district:  parseInt(shippingInfo.district) || 0,
         order_item: [
           {
             product: orderItem?.id,
@@ -116,6 +121,8 @@ export default function OrderNowPage() {
           },
         ],
         address: shippingInfo.address,
+        lat: parseFloat(shippingInfo.lat) || 0,
+        lon: parseFloat(shippingInfo.long) || 0,
       };
 
 
