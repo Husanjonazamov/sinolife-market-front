@@ -112,8 +112,8 @@ export default function OrderNowPage() {
         first_name: shippingInfo.firstName,
         phone: shippingInfo.phone,
         payment_type: paymentMethod,
-        region: shippingInfo.region,    
-        district:  parseInt(shippingInfo.district) || 0,
+        region: shippingInfo.region,
+        district: parseInt(shippingInfo.district) || 0,
         order_item: [
           {
             product: orderItem?.id,
@@ -125,32 +125,39 @@ export default function OrderNowPage() {
         lon: parseFloat(shippingInfo.long) || 0,
       };
 
-
       console.log('Order Payload:', JSON.stringify(orderData, null, 2));
 
       const response = await axios.post(`${BASE_URL}/api/order/`, orderData, {
         headers: { Authorization: `Bearer ${access}` },
       });
 
-      const { pay_link } = response.data.data;
+      const { pay_link, id, created_at, status, payment_status } =
+        response.data.data;
 
-      if (pay_link) {
+      if (paymentMethod === "cash") {
+        // Naqd to‘lov bo‘lsa shu sahifaga yo‘naltiramiz
+        router.push(
+          `/order-success?id=${id}&created_at=${encodeURIComponent(created_at)}&status=${status}&payment_status=${payment_status}`
+        );
+      } else if (pay_link) {
+        // Online to‘lov bo‘lsa
         window.location.href = pay_link;
       } else {
-        alert('Toʻlov havolasi topilmadi.');
+        alert("Toʻlov havolasi topilmadi.");
       }
     } catch (error: any) {
-      console.error('Order Error:', error);
+      console.error("Order Error:", error);
       const errorMessage =
         error.response?.data?.detail ||
         error.response?.data?.message ||
-        Object.values(error.response?.data || {}).join(', ') ||
-        'Buyurtma yuborishda xatolik yuz berdi.';
+        Object.values(error.response?.data || {}).join(", ") ||
+        "Buyurtma yuborishda xatolik yuz berdi.";
       alert(`Xatolik: ${errorMessage}`);
     } finally {
       setIsProcessing(false);
     }
   };
+
 
   if (loading) {
     return (
@@ -245,6 +252,8 @@ export default function OrderNowPage() {
     </div>
   );
 }
+
+
 
 // --- Components ---
 
